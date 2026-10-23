@@ -21,6 +21,8 @@ check("meta description is 70-170 chars", description.length >= 70 && descriptio
 check("canonical is an absolute https URL", /^https:\/\/[^/]+\/.*/.test(canonical));
 check("exactly one h1", (html.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("calculator form exists", /<form[^>]*id="rate-form"/i.test(html));
+const h1Html = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html)?.[1] ?? "";
+check("h1 line breaks are preceded by a space (plain text reads correctly)", !/\S<br\s*\/?>/i.test(h1Html));
 
 const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("element ids are unique", new Set(ids).size === ids.length);
