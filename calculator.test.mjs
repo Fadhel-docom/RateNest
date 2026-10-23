@@ -145,3 +145,91 @@ test("formatNumber and formulaSteps present the calculation in plain language", 
     "Hourly rate: $66,000 ÷ 1,152 hrs = $57.29/hr"
   ]);
 });
+
+// ---- Phase 2: optional fee and buffer --------------------------------------
+import { applyAdjustments, validateAdjustments, adjustmentSteps, MAX_FEE_PERCENT, MAX_BUFFER_PERCENT } from "./calculator.mjs";
+
+const baseRate = calculateHourlyRate(defaults).hourlyRate;
+
+test("adjustments default to zero and leave the base rate unchanged", () => {
+  const none = applyAdjustments(baseRate);
+  assert.equal(none.adjustedRate, baseRate);
+  assert.equal(none.isAdjusted, false);
+  assert.equal(none.bufferPerHour, 0);
+  assert.equal(none.feePerHour, 0);
+  assert.equal(applyAdjustments(baseRate, { feePercent: 0, bufferPercent: 0 }).adjustedRate, baseRate);
+});
+
+test("a buffer multiplies the base rate by (1 + buffer%)", () => {
+  const r = applyAdjustments(100, { bufferPercent: 10 });
+  assert.ok(Math.abs(r.adjustedRate - 110) < 1e-9);
+  assert.ok(Math.abs(r.bufferPerHour - 10) < 1e-9);
+  assert.equal(r.feePerHour, 0);
+});
+
+test("a platform fee grosses the price up so the freelancer keeps the target after the fee", () => {
+  const r = applyAdjustments(90, { feePercent: 10 });
+  assert.ok(Math.abs(r.adjustedRate - 100) < 1e-9);
+  assert.ok(Math.abs(r.feePerHour - 10) < 1e-9);
+  // After the platform keeps its share, the freelancer is left with the base rate.
+  assert.ok(Math.abs(r.adjustedRate * (1 - 0.1) - 90) < 1e-9);
+});
+
+test("buffer and fee combine in a fixed order and stay internally consistent", () => {
+  for (const [fee, buffer] of [[0, 0], [5, 0], [0, 15], [10, 10], [20, 25], [MAX_FEE_PERCENT, MAX_BUFFER_PERCENT]]) {
+    const r = applyAdjustments(57.29, { feePercent: fee, bufferPercent: buffer });
+    assert.ok(Math.abs(r.adjustedRate - 57.29 * (1 + buffer / 100) / (1 - fee / 100)) < 1e-9);
+    assert.ok(Math.abs((r.adjustedRate - r.feePerHour) - r.bufferedRate) < 1e-9);
+    assert.ok(Math.abs(r.adjustedRate * (1 - fee / 100) - r.baseRate * (1 + buffer / 100)) < 1e-9);
+    assert.ok(r.adjustedRate >= r.baseRate);
+  }
+});
+
+test("applyAdjustments rejects invalid inputs", () => {
+  assert.throws(() => applyAdjustments(100, { feePercent: -1 }), RangeError);
+  assert.throws(() => applyAdjustments(100, { feePercent: MAX_FEE_PERCENT + 1 }), RangeError);
+  assert.throws(() => applyAdjustments(100, { feePercent: 100 }), RangeError); // would divide by zero
+  assert.throws(() => applyAdjustments(100, { bufferPercent: -5 }), RangeError);
+  assert.throws(() => applyAdjustments(100, { bufferPercent: MAX_BUFFER_PERCENT + 1 }), RangeError);
+  assert.throws(() => applyAdjustments(Number.NaN), TypeError);
+  assert.throws(() => applyAdjustments(100, { feePercent: "10" }), TypeError);
+  assert.throws(() => applyAdjustments(-1), RangeError);
+});
+
+test("no fee percentage is built into the library", () => {
+  // Omitting the options must never introduce a fee: the default is exactly zero.
+  assert.equal(applyAdjustments(80, {}).feePerHour, 0);
+  assert.equal(applyAdjustments(80, undefined).adjustedRate, 80);
+});
+
+test("validateAdjustments treats blank as zero and parses numbers", () => {
+  assert.deepEqual(validateAdjustments({}), { ok: true, values: { feePercent: 0, bufferPercent: 0 }, errors: {} });
+  assert.deepEqual(validateAdjustments({ feePercent: "", bufferPercent: " " }).values, { feePercent: 0, bufferPercent: 0 });
+  const ok = validateAdjustments({ feePercent: "12.5", bufferPercent: "10" });
+  assert.equal(ok.ok, true);
+  assert.deepEqual(ok.values, { feePercent: 12.5, bufferPercent: 10 });
+});
+
+test("validateAdjustments reports friendly errors for bad values", () => {
+  const bad = validateAdjustments({ feePercent: "abc", bufferPercent: "-3" });
+  assert.equal(bad.ok, false);
+  assert.match(bad.errors.feePercent, /valid percentage/);
+  assert.match(bad.errors.bufferPercent, /negative/);
+  const big = validateAdjustments({ feePercent: "51", bufferPercent: "101" });
+  assert.match(big.errors.feePercent, /50% or less/);
+  assert.match(big.errors.bufferPercent, /100% or less/);
+  assert.equal(validateAdjustments({ feePercent: "1e2" }).ok, false);
+  assert.equal(validateAdjustments({ feePercent: "0x10" }).ok, false);
+});
+
+test("adjustmentSteps only lists the adjustments that are switched on", () => {
+  const opts = { currency: "USD", locale: "en-US" };
+  const both = { feePercent: 10, bufferPercent: 10 };
+  const adj = applyAdjustments(baseRate, both);
+  assert.deepEqual(adjustmentSteps(adj, { feePercent: 0, bufferPercent: 0 }, opts), []);
+  const steps = adjustmentSteps(adj, both, opts);
+  assert.equal(steps.length, 2);
+  assert.match(steps[0], /^Buffer: \$57\.29 × \(1 \+ 10%\) = \$63\.02\/hr$/);
+  assert.match(steps[1], /^Platform fee: \$63\.02 ÷ \(1 − 10%\) = \$70\.02\/hr$/);
+  assert.equal(adjustmentSteps(applyAdjustments(baseRate, { feePercent: 10 }), { feePercent: 10, bufferPercent: 0 }, opts).length, 1);
+});

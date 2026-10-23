@@ -132,3 +132,71 @@ export function formulaSteps(values, result, { currency = "USD", locale } = {}) 
     `Hourly rate: ${money(result.annualRequired)} ÷ ${num(result.billableHours)} hrs = ${rate(result.hourlyRate)}/hr`
   ];
 }
+
+// ---------------------------------------------------------------------------
+// Phase 2: optional platform/payment fee and profit/safety buffer.
+// Both are entered manually by the user; there is deliberately NO default fee rate.
+// They never change the base calculation above — they adjust the finished base rate.
+// ---------------------------------------------------------------------------
+
+/** Sanity caps (not tax or platform rules): values above these are almost certainly typing mistakes. */
+export const MAX_FEE_PERCENT = 50;
+export const MAX_BUFFER_PERCENT = 100;
+
+/**
+ * Adjust a base hourly rate.
+ *  - buffer:  extra margin on top of the base rate  -> base × (1 + buffer%)
+ *  - fee:     share of the client's price that the platform/payment provider keeps,
+ *             so the client price must be higher -> buffered ÷ (1 − fee%)
+ * With both at 0 the adjusted rate equals the base rate.
+ */
+export function applyAdjustments(baseRate, { feePercent = 0, bufferPercent = 0 } = {}) {
+  for (const [name, value] of Object.entries({ baseRate, feePercent, bufferPercent })) {
+    if (typeof value !== "number" || !Number.isFinite(value)) throw new TypeError(`${name} must be a finite number`);
+  }
+  if (baseRate < 0) throw new RangeError("baseRate must be at least 0");
+  if (feePercent < 0 || feePercent > MAX_FEE_PERCENT) throw new RangeError(`feePercent must be between 0 and ${MAX_FEE_PERCENT}`);
+  if (bufferPercent < 0 || bufferPercent > MAX_BUFFER_PERCENT) throw new RangeError(`bufferPercent must be between 0 and ${MAX_BUFFER_PERCENT}`);
+
+  const bufferedRate = baseRate * (1 + bufferPercent / 100);
+  const adjustedRate = bufferedRate / (1 - feePercent / 100);
+  return {
+    baseRate,
+    bufferedRate,
+    adjustedRate,
+    bufferPerHour: bufferedRate - baseRate,
+    feePerHour: adjustedRate - bufferedRate,
+    isAdjusted: feePercent > 0 || bufferPercent > 0
+  };
+}
+
+/** Validate the two optional adjustment fields. Blank means 0. Returns friendly field-level messages. */
+export function validateAdjustments(raw) {
+  const errors = {};
+  const values = { feePercent: 0, bufferPercent: 0 };
+  const field = (key, max, label) => {
+    if (isBlank(raw[key])) return;
+    const n = readNumber(raw[key]);
+    if (Number.isNaN(n)) errors[key] = "Enter a valid percentage, like 10.";
+    else if (n < 0) errors[key] = "This can't be negative.";
+    else if (n > max) errors[key] = `${label} should be ${max}% or less.`;
+    else values[key] = n;
+  };
+  field("feePercent", MAX_FEE_PERCENT, "A platform or payment fee");
+  field("bufferPercent", MAX_BUFFER_PERCENT, "A buffer");
+  return { ok: Object.keys(errors).length === 0, values, errors };
+}
+
+/** Plain-language lines for the adjustments that are switched on (empty array when both are 0). */
+export function adjustmentSteps(adjustment, { feePercent = 0, bufferPercent = 0 }, { currency = "USD", locale } = {}) {
+  const rate = (v) => formatCurrency(v, currency, locale);
+  const pct = (v) => `${formatNumber(v, locale)}%`;
+  const steps = [];
+  if (bufferPercent > 0) {
+    steps.push(`Buffer: ${rate(adjustment.baseRate)} × (1 + ${pct(bufferPercent)}) = ${rate(adjustment.bufferedRate)}/hr`);
+  }
+  if (feePercent > 0) {
+    steps.push(`Platform fee: ${rate(adjustment.bufferedRate)} ÷ (1 − ${pct(feePercent)}) = ${rate(adjustment.adjustedRate)}/hr`);
+  }
+  return steps;
+}

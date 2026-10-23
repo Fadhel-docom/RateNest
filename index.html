@@ -85,19 +85,41 @@
           <p class="field-error" id="billable-error" hidden></p>
           <div class="range-ends"><span>10% billable</span><span>100% billable</span></div>
         </div>
+        <details class="adjustments" id="adjustments">
+          <summary>Optional: platform fee and safety buffer</summary>
+          <p class="field-help adjustments-intro">Both start at 0%. They are applied to your base rate and shown separately, so the base calculation never changes.</p>
+          <div class="field">
+            <label for="fee">Platform or payment fee (%)</label>
+            <p class="field-help" id="fee-help">The share of your client's payment that a platform or payment provider keeps. Fees vary, so check their current fee page.</p>
+            <input id="fee" name="fee" type="number" min="0" max="50" step="any" value="0" inputmode="decimal" aria-describedby="fee-help fee-error">
+            <p class="field-error" id="fee-error" hidden></p>
+          </div>
+          <div class="field">
+            <label for="buffer">Profit or safety buffer (%)</label>
+            <p class="field-help" id="buffer-help">Extra margin on top of your costs for slow months, late payments, or profit.</p>
+            <input id="buffer" name="buffer" type="number" min="0" max="100" step="any" value="0" inputmode="decimal" aria-describedby="buffer-help buffer-error">
+            <p class="field-error" id="buffer-error" hidden></p>
+          </div>
+        </details>
         <button class="calculate-button" type="submit">Calculate my hourly rate <span aria-hidden="true">→</span></button>
         <p class="privacy-note"><span aria-hidden="true">⌑</span> Your numbers stay in your browser.</p>
       </form>
       <section class="result-card" aria-labelledby="result-heading">
         <h2 id="result-heading" class="sr-only">Your result</h2>
-        <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">YOUR SUGGESTED RATE</span></div>
+        <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span id="result-label" class="result-label">YOUR SUGGESTED RATE</span></div>
         <p id="rate-result" class="rate-result">$57.29<span>/hr</span></p>
         <p id="result-summary" class="result-summary">Based on 60% billable time and 48 working weeks per year.</p>
         <div class="result-divider"></div>
         <div class="result-stat"><span>Annual income + expenses</span><strong id="annual-total">$66,000</strong></div>
         <div class="result-stat"><span>Billable hours per year</span><strong id="billable-hours">1,152 hrs</strong></div>
         <div class="result-stat"><span>Working weeks per year</span><strong id="working-weeks">48 weeks</strong></div>
-        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This estimate excludes personal income tax, payment fees, and a profit buffer. Consider these before setting your final rate.</p></div>
+        <div id="adjusted-block" class="adjusted-block" hidden>
+          <p class="adjusted-label">RATE TO QUOTE, WITH YOUR FEE AND BUFFER</p>
+          <p id="adjusted-rate" class="adjusted-rate"></p>
+          <div class="result-stat"><span>Safety buffer included</span><strong id="buffer-amount"></strong></div>
+          <div class="result-stat"><span>Platform keeps at this price</span><strong id="fee-amount"></strong></div>
+        </div>
+        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This estimate excludes personal income tax. Unless you add them above, it also excludes payment fees and a profit buffer.</p></div>
         <button id="copy-result" class="copy-button" type="button">Copy rate summary</button>
         <p id="copy-status" class="copy-status" role="status"></p>
       </section>
@@ -120,10 +142,10 @@
 
     <section class="explainer scenarios" aria-labelledby="scenario-heading">
       <h2 id="scenario-heading">How billable time changes your rate</h2>
-      <p>Most freelancers can't bill every working hour—admin, sales, and learning take time. Here is your rate at three billable levels, keeping your other numbers the same.</p>
+      <p>Most freelancers can't bill every working hour—admin, sales, and learning take time. Here is your base rate at three billable levels, keeping your other numbers the same (before any fee or buffer you add).</p>
       <div class="table-scroll" role="region" aria-labelledby="scenario-heading" tabindex="0">
       <table class="scenario-table">
-        <thead><tr><th scope="col">Billable share</th><th scope="col">Billable hours per year</th><th scope="col">Hourly rate</th></tr></thead>
+        <thead><tr><th scope="col">Billable share</th><th scope="col">Billable hours per year</th><th scope="col">Base hourly rate</th></tr></thead>
         <tbody id="scenario-rows">
           <tr><th scope="row">40% billable</th><td>768 hrs</td><td>$85.94/hr</td></tr>
           <tr><th scope="row">60% billable</th><td>1,152 hrs</td><td>$57.29/hr</td></tr>
@@ -145,7 +167,11 @@
       </details>
       <details>
         <summary>Does the rate include platform or payment fees?</summary>
-        <p>No. If a marketplace or payment provider keeps a percentage of what you charge, your rate needs to be higher to take home the same amount. Fees vary by platform and sometimes by contract, so check the platform's own current fee page.</p>
+        <p>Only if you add one. Open "Optional: platform fee and safety buffer" and enter the percentage your platform or payment provider keeps. RateNest has no built-in fee, because fees vary by platform and sometimes by contract; check the platform's own current fee page. The calculator then shows the rate to quote so you still keep your base rate after the fee.</p>
+      </details>
+      <details>
+        <summary>What is the safety buffer for?</summary>
+        <p>A percentage added on top of your base rate to cover slow months, late payments, or profit. It starts at 0%, so choose a number that fits your situation.</p>
       </details>
       <details>
         <summary>Why is my result higher than an employee hourly wage?</summary>
