@@ -7,22 +7,34 @@
   <meta name="description" content="Find a sustainable freelance hourly rate with this free calculator. Account for your income goal, business expenses, time off, and non-billable work.">
   <title>Freelance Hourly Rate Calculator — RateNest</title>
   <link rel="canonical" href="https://fadhel-docom.github.io/RateNest/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23176b50'/%3E%3Ctext x='16' y='23' font-size='19' font-weight='700' text-anchor='middle' fill='white' font-family='sans-serif'%3ER%3C/text%3E%3C/svg%3E">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RateNest">
+  <meta property="og:title" content="Freelance Hourly Rate Calculator — RateNest">
+  <meta property="og:description" content="Find a sustainable freelance hourly rate that covers your income goal, business costs, and unpaid time.">
+  <meta property="og:url" content="https://fadhel-docom.github.io/RateNest/">
+  <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="./styles.css">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "RateNest Freelance Hourly Rate Calculator",
+    "url": "https://fadhel-docom.github.io/RateNest/",
     "applicationCategory": "FinanceApplication",
     "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
     "description": "A free calculator to estimate a sustainable freelance hourly rate."
   }
   </script>
   <script type="module" src="./app.mjs"></script>
 </head>
 <body>
+  <a class="skip-link" href="#rate-form">Skip to the calculator</a>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="RateNest home"><span class="brand-mark">R</span> RateNest</a>
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a>
     <span class="header-note">Free tools for freelancers</span>
   </header>
   <main>
@@ -31,66 +43,118 @@
       <h1>Your skills deserve<br><span>a sustainable rate.</span></h1>
       <p class="hero-copy">Find an hourly rate that covers your income goal, business costs, and the hours you actually bill—not just the hours you work.</p>
     </section>
+    <noscript><p class="noscript-note">The calculator needs JavaScript. The figures below show an example using the default numbers.</p></noscript>
     <section class="calculator-layout" aria-label="Hourly rate calculator">
-      <form id="rate-form" class="calculator-card">
+      <form id="rate-form" class="calculator-card" novalidate aria-labelledby="form-title">
         <div class="section-heading">
-          <div><p class="eyebrow">YOUR NUMBERS</p><h2>Build your rate</h2></div>
+          <div><p class="eyebrow">YOUR NUMBERS</p><h2 id="form-title">Build your rate</h2></div>
           <label class="currency-control" for="currency"><span>Currency</span>
             <select id="currency" name="currency">
-              <option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="TND">TND د.ت</option><option value="CAD">CAD $</option><option value="AUD">AUD $</option>
+              <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="TND">TND</option><option value="CAD">CAD</option><option value="AUD">AUD</option>
             </select>
           </label>
         </div>
         <div class="field">
-          <label for="income">Target annual income <span class="required">*</span></label>
-          <p class="field-help">The yearly income you want to earn, before personal income tax.</p>
-          <input id="income" name="income" type="number" min="0" max="1000000000" step="any" value="60000" required inputmode="decimal">
+          <label for="income">Target annual income <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="income-help">The yearly income you want to earn, before personal income tax.</p>
+          <input id="income" name="income" type="number" min="0" max="1000000000" step="any" value="60000" required inputmode="decimal" aria-describedby="income-help income-error">
+          <p class="field-error" id="income-error" hidden></p>
         </div>
         <div class="field">
           <label for="expenses">Annual business expenses</label>
-          <p class="field-help">Software, equipment, insurance, and other business costs.</p>
-          <input id="expenses" name="expenses" type="number" min="0" max="1000000000" step="any" value="6000" required inputmode="decimal">
+          <p class="field-help" id="expenses-help">Software, equipment, insurance, and other business costs. Leave blank if none.</p>
+          <input id="expenses" name="expenses" type="number" min="0" max="1000000000" step="any" value="6000" inputmode="decimal" aria-describedby="expenses-help expenses-error">
+          <p class="field-error" id="expenses-error" hidden></p>
         </div>
         <div class="field-row">
           <div class="field">
             <label for="hours">Work hours per week</label>
-            <input id="hours" name="hours" type="number" min="1" max="168" step="1" value="40" required inputmode="numeric">
+            <input id="hours" name="hours" type="number" min="0" max="168" step="any" value="40" required inputmode="decimal" aria-describedby="hours-error">
+            <p class="field-error" id="hours-error" hidden></p>
           </div>
           <div class="field">
             <label for="weeks-off">Weeks off per year</label>
-            <input id="weeks-off" name="weeksOff" type="number" min="0" max="51" step="1" value="4" required inputmode="numeric">
+            <input id="weeks-off" name="weeksOff" type="number" min="0" max="51" step="1" value="4" required inputmode="numeric" aria-describedby="weeks-off-error">
+            <p class="field-error" id="weeks-off-error" hidden></p>
           </div>
         </div>
         <div class="field">
           <div class="range-label"><label for="billable">Billable time</label><output id="billable-output" for="billable">60%</output></div>
-          <p class="field-help">The share of your working time you can charge clients for.</p>
-          <input id="billable" name="billable" type="range" min="10" max="100" step="5" value="60">
+          <p class="field-help" id="billable-help">The share of your working time you can charge clients for.</p>
+          <input id="billable" name="billable" type="range" min="10" max="100" step="5" value="60" aria-describedby="billable-help billable-error">
+          <p class="field-error" id="billable-error" hidden></p>
           <div class="range-ends"><span>10% billable</span><span>100% billable</span></div>
         </div>
         <button class="calculate-button" type="submit">Calculate my hourly rate <span aria-hidden="true">→</span></button>
         <p class="privacy-note"><span aria-hidden="true">⌑</span> Your numbers stay in your browser.</p>
       </form>
-      <aside class="result-card" aria-live="polite" aria-atomic="true">
+      <section class="result-card" aria-labelledby="result-heading">
+        <h2 id="result-heading" class="sr-only">Your result</h2>
         <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">YOUR SUGGESTED RATE</span></div>
         <p id="rate-result" class="rate-result">$57.29<span>/hr</span></p>
-        <p id="result-summary" class="result-summary">A starting point for reaching your income goal.</p>
+        <p id="result-summary" class="result-summary">Based on 60% billable time and 48 working weeks per year.</p>
         <div class="result-divider"></div>
-        <div class="result-stat"><span>Annual income + expenses</span><strong id="annual-total"> $66,000</strong></div>
+        <div class="result-stat"><span>Annual income + expenses</span><strong id="annual-total">$66,000</strong></div>
         <div class="result-stat"><span>Billable hours per year</span><strong id="billable-hours">1,152 hrs</strong></div>
         <div class="result-stat"><span>Working weeks per year</span><strong id="working-weeks">48 weeks</strong></div>
         <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This estimate excludes personal income tax, payment fees, and a profit buffer. Consider these before setting your final rate.</p></div>
         <button id="copy-result" class="copy-button" type="button">Copy rate summary</button>
         <p id="copy-status" class="copy-status" role="status"></p>
-      </aside>
+      </section>
+      <p id="sr-announce" class="sr-only" role="status" aria-live="polite"></p>
     </section>
+
     <section class="explainer">
       <p class="eyebrow">A SIMPLE FORMULA</p>
       <h2>Know what goes into your rate</h2>
       <p>We add your target annual income to business expenses, then divide by the number of hours you expect to bill in a year.</p>
-      <div class="formula"><span>Target income + business expenses</span><span class="formula-line">÷</span><span>Weekly hours × working weeks × billable share</span></div>
+      <div class="formula"><span>Target income + business expenses</span><span class="formula-line" aria-hidden="true">÷</span><span>Weekly hours × working weeks × billable share</span></div>
+      <h3>Your numbers, step by step</h3>
+      <ol id="formula-steps" class="steps">
+        <li>Required revenue: $60,000 income + $6,000 expenses = $66,000</li>
+        <li>Billable hours: 40 hrs × 48 weeks × 60% = 1,152 hrs</li>
+        <li>Hourly rate: $66,000 ÷ 1,152 hrs = $57.29/hr</li>
+      </ol>
       <p class="fine-print">This is a planning estimate, not tax or financial advice. Your actual rate may need to be higher depending on taxes, market demand, experience, and project risk.</p>
     </section>
+
+    <section class="explainer scenarios" aria-labelledby="scenario-heading">
+      <h2 id="scenario-heading">How billable time changes your rate</h2>
+      <p>Most freelancers can't bill every working hour—admin, sales, and learning take time. Here is your rate at three billable levels, keeping your other numbers the same.</p>
+      <table class="scenario-table">
+        <thead><tr><th scope="col">Billable share</th><th scope="col">Billable hours per year</th><th scope="col">Hourly rate</th></tr></thead>
+        <tbody id="scenario-rows">
+          <tr><th scope="row">40% billable</th><td>768 hrs</td><td>$85.94/hr</td></tr>
+          <tr><th scope="row">60% billable</th><td>1,152 hrs</td><td>$57.29/hr</td></tr>
+          <tr><th scope="row">80% billable</th><td>1,536 hrs</td><td>$42.97/hr</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="explainer faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Common questions</h2>
+      <details>
+        <summary>Is this rate before or after tax?</summary>
+        <p>Your target income is treated as income before personal income tax, and the calculator does not estimate tax. Tax rules differ by country and situation, so check local rules or ask an accountant before finalizing a rate.</p>
+      </details>
+      <details>
+        <summary>What counts as billable time?</summary>
+        <p>Time you can charge a client for, such as project work or consulting calls. Admin, invoicing, finding clients, and learning are real work but usually unbilled, which is why billable time is often well below your total working hours.</p>
+      </details>
+      <details>
+        <summary>Does the rate include platform or payment fees?</summary>
+        <p>No. If a marketplace or payment provider keeps a percentage of what you charge, your rate needs to be higher to take home the same amount. Fees vary by platform and sometimes by contract, so check the platform's own current fee page.</p>
+      </details>
+      <details>
+        <summary>Why is my result higher than an employee hourly wage?</summary>
+        <p>Employees are paid for time off and non-billable hours, and employers cover many business costs. As a freelancer, your billable hours have to fund all of that.</p>
+      </details>
+      <details>
+        <summary>Are my numbers saved or sent anywhere?</summary>
+        <p>No. The calculation runs in your browser, and RateNest does not send or store the numbers you enter.</p>
+      </details>
+    </section>
   </main>
-  <footer><a class="brand footer-brand" href="./"><span class="brand-mark">R</span> RateNest</a><span>Price smarter. Work better.</span><span>Free pricing tools for freelancers.</span></footer>
+  <footer><a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a><span>Price smarter. Work better.</span><span>Free pricing tools for freelancers.</span></footer>
 </body>
 </html>

@@ -1,0 +1,8 @@
+# Opens pull requests when the GitHub Actions used by the workflows have updates,
+# so action versions are reviewed and bumped deliberately.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
