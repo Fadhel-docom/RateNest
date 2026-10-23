@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102c26">
+  <meta name="description" content="Find a sustainable freelance hourly rate with this free calculator. Account for your income goal, business expenses, time off, and non-billable work.">
+  <title>Freelance Hourly Rate Calculator — RateNest</title>
+  <link rel="canonical" href="https://ratenest.com/">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "RateNest Freelance Hourly Rate Calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "description": "A free calculator to estimate a sustainable freelance hourly rate."
+  }
+  </script>
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="RateNest home"><span class="brand-mark">R</span> RateNest</a>
+    <span class="header-note">Free tools for freelancers</span>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">PRICE WITH CONFIDENCE</p>
+      <h1>Your skills deserve<br><span>a sustainable rate.</span></h1>
+      <p class="hero-copy">Find an hourly rate that covers your income goal, business costs, and the hours you actually bill—not just the hours you work.</p>
+    </section>
+    <section class="calculator-layout" aria-label="Hourly rate calculator">
+      <form id="rate-form" class="calculator-card">
+        <div class="section-heading">
+          <div><p class="eyebrow">YOUR NUMBERS</p><h2>Build your rate</h2></div>
+          <label class="currency-control" for="currency"><span>Currency</span>
+            <select id="currency" name="currency">
+              <option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option><option value="TND">TND د.ت</option><option value="CAD">CAD $</option><option value="AUD">AUD $</option>
+            </select>
+          </label>
+        </div>
+        <div class="field">
+          <label for="income">Target annual income <span class="required">*</span></label>
+          <p class="field-help">The yearly income you want to earn, before personal income tax.</p>
+          <input id="income" name="income" type="number" min="0" max="1000000000" step="any" value="60000" required inputmode="decimal">
+        </div>
+        <div class="field">
+          <label for="expenses">Annual business expenses</label>
+          <p class="field-help">Software, equipment, insurance, and other business costs.</p>
+          <input id="expenses" name="expenses" type="number" min="0" max="1000000000" step="any" value="6000" required inputmode="decimal">
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="hours">Work hours per week</label>
+            <input id="hours" name="hours" type="number" min="1" max="168" step="1" value="40" required inputmode="numeric">
+          </div>
+          <div class="field">
+            <label for="weeks-off">Weeks off per year</label>
+            <input id="weeks-off" name="weeksOff" type="number" min="0" max="51" step="1" value="4" required inputmode="numeric">
+          </div>
+        </div>
+        <div class="field">
+          <div class="range-label"><label for="billable">Billable time</label><output id="billable-output" for="billable">60%</output></div>
+          <p class="field-help">The share of your working time you can charge clients for.</p>
+          <input id="billable" name="billable" type="range" min="10" max="100" step="5" value="60">
+          <div class="range-ends"><span>10% billable</span><span>100% billable</span></div>
+        </div>
+        <button class="calculate-button" type="submit">Calculate my hourly rate <span aria-hidden="true">→</span></button>
+        <p class="privacy-note"><span aria-hidden="true">⌑</span> Your numbers stay in your browser.</p>
+      </form>
+      <aside class="result-card" aria-live="polite" aria-atomic="true">
+        <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">YOUR SUGGESTED RATE</span></div>
+        <p id="rate-result" class="rate-result">$67.31<span>/hr</span></p>
+        <p id="result-summary" class="result-summary">A starting point for reaching your income goal.</p>
+        <div class="result-divider"></div>
+        <div class="result-stat"><span>Annual income + expenses</span><strong id="annual-total">$66,000</strong></div>
+        <div class="result-stat"><span>Billable hours per year</span><strong id="billable-hours">780 hrs</strong></div>
+        <div class="result-stat"><span>Working weeks per year</span><strong id="working-weeks">48 weeks</strong></div>
+        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This estimate excludes personal income tax, payment fees, and a profit buffer. Consider these before setting your final rate.</p></div>
+        <button id="copy-result" class="copy-button" type="button">Copy rate summary</button>
+        <p id="copy-status" class="copy-status" role="status"></p>
+      </aside>
+    </section>
+    <section class="explainer">
+      <p class="eyebrow">A SIMPLE FORMULA</p>
+      <h2>Know what goes into your rate</h2>
+      <p>We add your target annual income to business expenses, then divide by the number of hours you expect to bill in a year.</p>
+      <div class="formula"><span>Target income + business expenses</span><span class="formula-line">÷</span><span>Weekly hours × working weeks × billable share</span></div>
+      <p class="fine-print">This is a planning estimate, not tax or financial advice. Your actual rate may need to be higher depending on taxes, market demand, experience, and project risk.</p>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="./"><span class="brand-mark">R</span> RateNest</a><span>Price smarter. Work better.</span><span>Free pricing tools for freelancers.</span></footer>
+</body>
+</html>
