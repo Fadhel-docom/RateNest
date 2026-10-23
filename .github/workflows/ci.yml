@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   test:
-    name: Unit tests and site smoke checks
+    name: Unit tests and site checks
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -22,32 +22,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Run unit tests
         run: node --test
-      - name: Check required site files
-        run: |
-          test -s index.html
-          test -s styles.css
-          test -s app.mjs
-          test -s calculator.mjs
-      - name: Check HTML metadata and calculator form
-        run: |
-          node --input-type=module -e '
-            import { readFileSync } from "node:fs";
-            const html = readFileSync("index.html", "utf8");
-            for (const [label, pattern] of [
-              ["page title", /<title>.*RateNest.*<\/title>/i],
-              ["meta description", /<meta name="description"/i],
-              ["responsive viewport", /name="viewport"/i],
-              ["calculator form", /id="rate-form"/i],
-              ["calculator script", /src="\.\/app\.mjs"/i]
-            ]) {
-              if (!pattern.test(html)) {
-                console.error("Missing " + label);
-                process.exitCode = 1;
-              } else {
-                console.log("OK: " + label);
-              }
-            }
-          '
+      - name: Run static site checks
+        run: node scripts/check-site.mjs
