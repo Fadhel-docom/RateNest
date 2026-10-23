@@ -88,6 +88,7 @@ function renderEmpty() {
   stepsList.replaceChildren();
   scenarioRows.replaceChildren();
   copyButton.disabled = true;
+  copyStatus.textContent = "";
 }
 
 function renderSteps(values, result) {

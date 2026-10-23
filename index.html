@@ -81,7 +81,8 @@
         <div class="field">
           <div class="range-label"><label for="billable">Billable time</label><output id="billable-output" for="billable">60%</output></div>
           <p class="field-help" id="billable-help">The share of your working time you can charge clients for.</p>
-          <input id="billable" name="billable" type="range" min="10" max="100" step="5" value="60" aria-describedby="billable-help">
+          <input id="billable" name="billable" type="range" min="10" max="100" step="5" value="60" aria-describedby="billable-help billable-error">
+          <p class="field-error" id="billable-error" hidden></p>
           <div class="range-ends"><span>10% billable</span><span>100% billable</span></div>
         </div>
         <button class="calculate-button" type="submit">Calculate my hourly rate <span aria-hidden="true">→</span></button>
