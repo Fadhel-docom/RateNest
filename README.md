@@ -14,12 +14,23 @@ billable hours per year = weekly hours × (52 − weeks off) × billable share
 suggested hourly rate   = required annual revenue ÷ billable hours per year
 ```
 
-This is a planning estimate. It does not calculate personal income tax, platform or payment fees, or a profit buffer.
+This is a planning estimate. It does not calculate personal income tax.
+
+### Optional fee and buffer (Phase 2)
+
+Two optional inputs, both **0% by default and entered by you** — RateNest has no built-in platform fee, because fees vary by platform and sometimes by contract. They adjust the finished base rate and are shown separately, so the base calculation never changes:
+
+```text
+with buffer    = base rate × (1 + buffer%)
+rate to quote  = with buffer ÷ (1 − platform fee%)     # so you keep the base rate after the platform's share
+```
+
+Sanity limits: fee 0–50%, buffer 0–100% (typing-mistake guards, not platform or tax rules).
 
 - No framework or runtime dependencies
 - Responsive, accessible static website
 - Calculations run locally in your browser
-- Unit tests using Node's built-in test runner
+- Unit tests (29) using Node's built-in test runner
 - Static site checks (`scripts/check-site.mjs`) that also confirm the no-JavaScript default numbers match the calculator
 - GitHub Actions checks on pushes, pull requests, and a daily schedule
 

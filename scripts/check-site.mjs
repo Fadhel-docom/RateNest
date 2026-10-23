@@ -24,6 +24,10 @@ check("calculator form exists", /<form[^>]*id="rate-form"/i.test(html));
 const h1Html = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html)?.[1] ?? "";
 check("h1 line breaks are preceded by a space (plain text reads correctly)", !/\S<br\s*\/?>/i.test(h1Html));
 
+check("fee and buffer inputs default to 0 (no built-in fee rate)",
+  /<input id="fee"[^>]*value="0"/.test(html) && /<input id="buffer"[^>]*value="0"/.test(html));
+check("adjusted-result block is hidden by default", /<div id="adjusted-block"[^>]*\shidden/.test(html));
+
 const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("element ids are unique", new Set(ids).size === ids.length);
 

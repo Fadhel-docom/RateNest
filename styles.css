@@ -39,3 +39,13 @@ input[type=range]:focus-visible{outline:3px solid #8ac8a7;outline-offset:4px}
 a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3px;border-radius:6px}
 .skip-link:focus-visible{outline-color:#fff;outline-offset:-4px}
 .hero h1{overflow-wrap:break-word}
+/* --- Phase 2: optional adjustments --- */
+.adjustments{border:1px solid var(--line);border-radius:12px;padding:0 14px;margin:0 0 20px;background:#fcfdfb}
+.adjustments summary{cursor:pointer;font-weight:700;font-size:.9rem;padding:12px 0;min-height:44px;display:flex;align-items:center}
+.adjustments[open] summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+.adjustments-intro{margin:0 0 14px!important}
+.adjusted-block{border-top:1px solid #ffffff25;margin:4px 0 16px;padding-top:16px}
+.adjusted-label{font-size:.7rem;letter-spacing:.11em;font-weight:800;color:#c5d9ce;margin:0}
+.adjusted-rate{font-size:clamp(1.9rem,4vw,2.4rem);letter-spacing:-.05em;line-height:1.15;font-weight:800;margin:8px 0 14px;overflow-wrap:anywhere}
+.adjusted-rate span{font-size:.95rem;letter-spacing:0;color:#c5d9ce;font-weight:500;margin-left:5px}
+.adjusted-block[hidden]{display:none}
