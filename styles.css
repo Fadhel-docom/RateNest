@@ -32,3 +32,10 @@ input[type=range]:focus-visible{outline:3px solid #8ac8a7;outline-offset:4px}
 @media(max-width:740px){.scenario-table th,.scenario-table td{padding:10px 8px;font-size:.8rem}}
 @media print{.site-header,.skip-link,.calculate-button,.privacy-note,.copy-button,.copy-status,footer,.faq{display:none!important}body{background:#fff}.calculator-layout{grid-template-columns:1fr 1fr}.calculator-card,.result-card{box-shadow:none}.result-card{background:#fff;color:#000;border:1px solid #999}.result-card *{color:#000!important}.hero{padding:16px 0}}
 @media(max-width:740px){.field-row .field label{display:block;min-height:3em}}
+/* Reflow and focus fixes found in the accessibility measurements */
+.site-header{flex-wrap:wrap}
+.table-scroll{overflow-x:auto}
+.table-scroll:focus-visible{outline:3px solid #8ac8a7;outline-offset:2px}
+a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3px;border-radius:6px}
+.skip-link:focus-visible{outline-color:#fff;outline-offset:-4px}
+.hero h1{overflow-wrap:break-word}
