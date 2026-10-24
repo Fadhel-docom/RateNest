@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102c26">
+  <meta name="description" content="Estimate a fair fixed-price freelance project quote from hours, your hourly rate, direct costs, and a clearly explained uncertainty buffer.">
+  <title>Freelance Project Quote Calculator — RateNest</title>
+  <link rel="canonical" href="https://fadhel-docom.github.io/RateNest/project-pricing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RateNest">
+  <meta property="og:title" content="Freelance Project Quote Calculator — RateNest">
+  <meta property="og:description" content="Build a transparent fixed-price project estimate from effort, direct costs, and an uncertainty allowance.">
+  <meta property="og:url" content="https://fadhel-docom.github.io/RateNest/project-pricing.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "RateNest Freelance Project Quote Calculator",
+    "url": "https://fadhel-docom.github.io/RateNest/project-pricing.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "A free client-side calculator for estimating a fixed-price freelance project quote."
+  }
+  </script>
+  <script type="module" src="./project-pricing.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#project-form">Skip to the calculator</a>
+  <header class="site-header">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a>
+    <nav aria-label="Pricing tools"><a href="./">Hourly rate calculator</a><span class="header-note">Free tools for freelancers</span></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">QUOTE WITH CLARITY</p>
+      <h1>Turn your estimate into <br><span>a clear project quote.</span></h1>
+      <p class="hero-copy">Estimate a fixed project price from the hours you expect to work, your sustainable hourly rate, direct project costs, and a buffer for uncertainty or revisions.</p>
+    </section>
+    <noscript><p class="noscript-note">JavaScript is required to calculate a quote. Your numbers are processed locally in your browser.</p></noscript>
+    <section class="calculator-layout" aria-label="Fixed-price project quote calculator">
+      <form id="project-form" class="calculator-card" novalidate aria-labelledby="form-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">PROJECT ASSUMPTIONS</p><h2 id="form-title">Build your quote</h2></div>
+          <label class="currency-control" for="currency"><span>Currency</span>
+            <select id="currency" name="currency">
+              <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="TND">TND</option><option value="CAD">CAD</option><option value="AUD">AUD</option>
+            </select>
+          </label>
+        </div>
+        <div class="field">
+          <label for="projectTitle">Project name <span class="field-help">(optional)</span></label>
+          <input id="projectTitle" name="projectTitle" type="text" maxlength="120" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="estimatedHours">Estimated project hours <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="estimatedHours-help">Total hours you expect to spend on this project. Must be greater than zero.</p>
+          <input id="estimatedHours" name="estimatedHours" type="number" min="0.01" max="100000" step="any" value="20" required inputmode="decimal" aria-describedby="estimatedHours-help estimatedHours-error">
+          <p class="field-error" id="estimatedHours-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="hourlyRate">Hourly rate to use <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a>. This value is not imported automatically.</p>
+          <input id="hourlyRate" name="hourlyRate" type="number" min="0" max="1000000000" step="any" value="60" required inputmode="decimal" aria-describedby="hourlyRate-help hourlyRate-error">
+          <p class="field-error" id="hourlyRate-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="directExpenses">Direct project expenses</label>
+          <p class="field-help" id="directExpenses-help">Project-specific materials, subcontractors, or other costs you want to include. Blank means zero.</p>
+          <input id="directExpenses" name="directExpenses" type="number" min="0" max="1000000000" step="any" value="150" inputmode="decimal" aria-describedby="directExpenses-help directExpenses-error">
+          <p class="field-error" id="directExpenses-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="bufferPercent">Uncertainty / revision buffer (%)</label>
+          <p class="field-help" id="bufferPercent-help">An allowance applied to labour only, for uncertain scope or revisions. This is a markup allowance, not a true profit-margin calculation; starts at 25% as an editable planning example.</p>
+          <input id="bufferPercent" name="bufferPercent" type="number" min="0" max="100" step="any" value="25" inputmode="decimal" aria-describedby="bufferPercent-help bufferPercent-error">
+          <p class="field-error" id="bufferPercent-error" hidden></p>
+        </div>
+        <button class="calculate-button" type="submit">Calculate project quote <span aria-hidden="true">→</span></button>
+        <p class="privacy-note"><span aria-hidden="true">⌑</span> Your numbers stay in your browser.</p>
+      </form>
+      <section class="result-card" aria-labelledby="result-heading">
+        <h2 id="result-heading" class="sr-only">Your project quote</h2>
+        <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">SUGGESTED FIXED-PRICE QUOTE</span></div>
+        <p id="quote-total" class="rate-result">$1,650.00</p>
+        <p id="quote-summary" class="result-summary">Based on 20 estimated hours, a 25% labour-only uncertainty allowance, and $150.00 in direct expenses.</p>
+        <div class="result-divider"></div>
+        <div class="result-stat"><span>Labour subtotal</span><strong id="labour-total">$1,200.00</strong></div>
+        <div class="result-stat"><span>Uncertainty allowance</span><strong id="buffer-total">$300.00</strong></div>
+        <div class="result-stat"><span>Direct expenses</span><strong id="expenses-total">$150.00</strong></div>
+        <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$82.50/hr</strong></div>
+        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of profit. Taxes and platform/payment fees are excluded unless you include them in direct expenses. Confirm scope, deliverables, and revision limits with your client.</p></div>
+        <button id="copy-quote" class="copy-button" type="button">Copy quote summary</button>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+      </section>
+    </section>
+    <section class="explainer">
+      <p class="eyebrow">A TRANSPARENT FORMULA</p>
+      <h2>See how the quote is built</h2>
+      <div class="formula"><span>Estimated hours × hourly rate</span><span class="formula-line" aria-hidden="true">+</span><span>Labour buffer + direct expenses</span></div>
+      <ol class="steps">
+        <li><strong>Labour subtotal</strong> = estimated hours × selected hourly rate.</li>
+        <li><strong>Uncertainty allowance</strong> = labour subtotal × buffer percentage. It applies to labour only.</li>
+        <li><strong>Suggested quote</strong> = labour subtotal + uncertainty allowance + direct project expenses.</li>
+        <li><strong>Effective hourly rate</strong> = suggested quote ÷ estimated hours. This includes direct expenses, so it is not the same as your labour rate or profit.</li>
+      </ol>
+      <p class="fine-print">The buffer is a markup allowance, not a true target profit margin. A true profit-margin calculation uses a different formula. This tool does not estimate taxes, market rates, or whether a client will accept the quote.</p>
+      <p><a href="./">Need to calculate your sustainable hourly rate first? Use the hourly rate calculator.</a></p>
+    </section>
+    <section class="explainer faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Common questions</h2>
+      <details><summary>Should I include direct expenses?</summary><p>Include project-specific costs that you want the client price to cover, such as materials or subcontractors. Avoid counting the same expense twice if your hourly rate already accounts for it.</p></details>
+      <details><summary>Is the uncertainty buffer profit margin?</summary><p>No. This calculator adds a percentage of the labour subtotal. That is a markup-style allowance for uncertain work or revisions, not a true profit margin. A true target margin requires dividing cost by one minus the margin percentage.</p></details>
+      <details><summary>Does the quote include tax or platform fees?</summary><p>No automatic tax or fee is applied. Rules and platform fees vary. Add a known direct project cost only when appropriate, and confirm any required tax or fee treatment for your situation.</p></details>
+      <details><summary>Are my inputs saved or sent anywhere?</summary><p>No. Calculations run in your browser. RateNest does not send or store the values you enter.</p></details>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a><span>Price smarter. Work better.</span><span>Free pricing tools for freelancers.</span></footer>
+</body>
+</html>
