@@ -59,7 +59,15 @@ try:
         ctx = b.new_context(viewport={"width": 320, "height": 800}); pg = ctx.new_page(); pg.goto(URL)
         pg.add_style_tag(content="html{font-size:200%}"); pg.wait_for_timeout(200)
         ok("320px with 200% text: no horizontal scroll", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"))
-        ctx.close(); b.close()
+        ctx.close()
+        # Realistic larger quotes (six and seven figures) must also reflow at 320px with 200% text.
+        for label, vals in (("six-figure", (500, 150, 25000, 30)), ("seven-figure", (4000, 250, 100000, 25))):
+            ctx = b.new_context(viewport={"width": 320, "height": 800}); pg = ctx.new_page(); pg.goto(URL); pg.wait_for_timeout(200)
+            for key, val in zip(("estimatedHours", "hourlyRate", "directExpenses", "bufferPercent"), vals): pg.fill(f"#{key}", str(val))
+            pg.add_style_tag(content="html{font-size:200%}"); pg.wait_for_timeout(200)
+            ok(f"320px with 200% text, {label} quote: no horizontal scroll", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"), pg.evaluate("document.documentElement.scrollWidth+'>'+document.documentElement.clientWidth") + " " + pg.inner_text("#quote-total"))
+            ctx.close()
+        b.close()
 finally: srv.terminate()
 for n, c, d in r: print(("PASS" if c else "FAIL"), n, (f"[{d}]" if d else ""))
 print(sum(1 for _, c, _ in r if c), "passed,", sum(1 for _, c, _ in r if not c), "failed")

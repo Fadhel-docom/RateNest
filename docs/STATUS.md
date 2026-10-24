@@ -7,6 +7,13 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-24 — "ابدأ الآن" resume: review of PRs #11/#13/#14 and a reflow fix (Claude)
+- Re-checked live state: `main` = `4ab4053` (deploy green); open drafts #11 (research), #13 (project quote calculator), #14 (review fixes stacked on #13). Reviewed the #13 and #14 diffs and the #11 research doc, then **re-ran** tests and real-browser suites on #14's head myself.
+- Found a real bug: at 320 px with 200 % text, a six-figure quote (e.g. $122,500.00) overflowed horizontally (338 > 320) because `.result-stat strong{white-space:nowrap}`; the default $1,650 hid it. Fixed in a stacked branch `fix/project-quote-large-value-reflow` (base = #14's branch); two regression checks were added to `project-pricing.py` and failed before the fix (29 pass / 2 fail), pass after (31/31).
+- Evidence (local headless Chromium + Node): `node --test` 36/36, `check-site.mjs` clean, browser suites 31/42/6/13 all pass, a11y measurements clean. **Not run:** CI on this stacked branch, axe-core/Lighthouse, screen reader, Safari/Firefox, real devices; competitor pages cited in #11 were not re-fetched.
+- Merge-order analysis (nothing merged): dry-run merges show #13 and #14 merge cleanly into `main`; #11 conflicts with `main` only in `docs/STATUS.md`. Suggested: fold this PR → #14 → #13, merge #13, then rebase #11 and resolve the docs conflict.
+- Open for owner/ChatGPT: the project page pre-fills a 25 % uncertainty buffer, while the project rule says fee/buffer percentages are always entered by the user (Phase 2 defaults to 0 %). Not changed; needs a scope decision.
+
 ### 2026-10-24 — Independent review of PR #13 (Claude)
 - Reviewed the full PR #13 diff (project quote calculator, 11 files) and ran it in real headless Chromium at 320/375/1280 px using the new `tools/browser-checks/project-pricing.py` (29 checks). Formula hand-checked: 20 h × 60 = 1,200 + 25% = 300 + 150 expenses = 1,650; effective 82.50/hr.
 - Found and fixed (stacked PR into PR #13's branch): focus stolen to the first invalid field on every keystroke; unstyled `type=text` project-name input causing horizontal overflow at 320 px with 200% text; awkward "must be 100%." message; unstyled header nav link.
@@ -42,7 +49,7 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-PR #11 (Phase 3 search-intent research) is open as a draft; its latest observed RateNest checks run is green, but the diff still needs review and it has not been merged. The owner explicitly authorized moving forward with development on 2026-10-24; after reviewing the research and checks, Phase 3 implementation may proceed in a separate branch + PR. The shared operations room is being added in its own docs PR. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
+Decide the merge order for the open drafts (#11 research, #13 project quote calculator, #14 review fixes, plus the small reflow-fix PR stacked on #14) — see the 2026-10-24 resume entry above and `docs/OPERATIONS-ROOM.md`; settle the 25 % pre-filled buffer question first. PR #11 (Phase 3 search-intent research) is open as a draft; its latest observed RateNest checks run is green, it conflicts with `main` only in this file, and it has not been merged. The owner explicitly authorized moving forward with development on 2026-10-24; after reviewing the research and checks, Phase 3 implementation may proceed in a separate branch + PR. The shared operations room is being added in its own docs PR. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
