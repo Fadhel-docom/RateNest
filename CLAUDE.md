@@ -4,7 +4,7 @@ RateNest: free pricing tools for freelancers ("Price smarter. Work better."). St
 Live: https://fadhel-docom.github.io/RateNest/ · Repo: https://github.com/Fadhel-docom/RateNest
 
 ## Start of every session
-1. Read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`.
+1. Read `docs/OPERATIONS-ROOM.md` first (shared hard rules and newest handoff log), then read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`.
 2. Re-check the real state — do not trust the docs blindly: open PRs, latest "RateNest checks" and "Deploy RateNest to GitHub Pages" runs, newest deployment status.
 3. Do the next useful in-scope work, test it, and update `docs/STATUS.md` (Session log) in the same PR.
 

@@ -6,6 +6,15 @@ Keep this file current so work can resume without repeating anything. It is **no
 _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root, which points here._
 
 ## Session log (newest first — add an entry at the end of every working session)
+
+### 2026-10-24 — Shared operations room
+- Owner established a shared, ongoing workflow for ChatGPT and Claude: no hierarchy, read-before-work, evidence-based quality rules, competitor benchmarking, and a durable handoff log.
+- Added `docs/OPERATIONS-ROOM.md` as the shared rules and work log; updated `CLAUDE.md` so every Claude session reads it first.
+- Work is on `docs/shared-operations-room`; no changes to `main`, no merge, and no deployment.
+- Verified current PR #11 is open as a draft and its `RateNest checks` run for head `bcccda37322c385b16d7f445777e0679f77bae65` completed successfully. This does not mean PR #11 was reviewed or merged.
+- No local tests were run for this documentation-only change. CI for this branch/PR must be checked after the PR is opened.
+- Handoff: Claude should read the operations room before starting new work and add a dated entry for each session. Owner's trigger “ابدأ الآن” means inspect the shared log and live repository state, then take the next useful in-scope action without routine questions.
+
 ### 2026-10-24
 - Owner re-confirmed approval of Phase 2 (already merged in PR #8 from the owner's account on 2026-10-23). Claude reviewed it independently instead of rebuilding it:
   adjustment formula checked by hand-computed values, 29 unit tests + static checks + 42/6/13 browser checks pass on `main`, no built-in fee, deploy of `b9ee807` succeeded.
@@ -18,7 +27,7 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-No required work is open. Candidates, each needing the owner's go-ahead (scope): Search Console sitemap submission (owner's Google account), Phase 3 after search-intent research, axe-core in CI if the registry becomes reachable.
+PR #11 (Phase 3 search-intent research) is open as a draft; its latest observed RateNest checks run is green, but the diff still needs review and it has not been merged. The owner explicitly authorized moving forward with development on 2026-10-24; after reviewing the research and checks, Phase 3 implementation may proceed in a separate branch + PR. The shared operations room is being added in its own docs PR. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
