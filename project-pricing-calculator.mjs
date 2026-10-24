@@ -37,7 +37,7 @@ export function validateProjectQuote(raw = {}) {
     }
     const text = String(rawValue).trim();
     // Reject hexadecimal, Infinity, and other JavaScript numeric syntaxes not intended for form input.
-    if (!/^(?:\d+\.?\d*|\.\d+)$/.test(text)) {
+    if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(text)) {
       errors[key] = `Enter a valid number for ${label.toLowerCase()}.`;
       return null;
     }
