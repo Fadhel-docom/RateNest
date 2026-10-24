@@ -6,6 +6,10 @@ Keep this file current so work can resume without repeating anything. It is **no
 _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root, which points here._
 
 ## Session log (newest first — add an entry at the end of every working session)
+### 2026-10-24 — independent review and Phase 3 discovery
+- Re-read `CLAUDE.md`, this status log, and the handoff. Confirmed no open PRs and reviewed the live page's fetched HTML plus calculator validation/formula code. Manual formula review agrees with `base × (1 + buffer%) ÷ (1 − fee%)`; 50% fee and 100% buffer are accepted boundaries in code. **No real phone/emulator interaction was performed in this session**, and browser edge cases were not claimed as passed.
+- Search-intent discovery for Phase 3 found distinct fixed-price project quote intent: estimated hours, direct costs, uncertainty/revision buffer, formula breakdown, effective rate and copyable summary. See `docs/phase-3-project-pricing-research.md` (research only; search volume/difficulty unknown; no Phase 3 UI implemented yet).
+- Opened branch `phase-3-project-pricing-research` for a docs-only PR. No changes to `main`, no deployment, no merge.
 ### 2026-10-24
 - Owner re-confirmed approval of Phase 2 (already merged in PR #8 from the owner's account on 2026-10-23). Claude reviewed it independently instead of rebuilding it:
   adjustment formula checked by hand-computed values, 29 unit tests + static checks + 42/6/13 browser checks pass on `main`, no built-in fee, deploy of `b9ee807` succeeded.
@@ -18,7 +22,7 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-No required work is open. Candidates, each needing the owner's go-ahead (scope): Search Console sitemap submission (owner's Google account), Phase 3 after search-intent research, axe-core in CI if the registry becomes reachable.
+Current work: review the docs-only Phase 3 search-intent research PR. If approved and CI passes, implementation can proceed in a separate small PR. Other candidates: Search Console sitemap submission (owner's Google account), axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
@@ -33,7 +37,7 @@ No required work is open. Candidates, each needing the owner's go-ahead (scope):
 | Phase 2 (optional fee % and buffer %) | Merged (PR #8) and deployed. Both inputs default to 0%; base rate stays the headline; "rate to quote" is shown separately. |
 | Unit tests | 29 pass (`node --test`), also green on GitHub Actions. |
 | Static site checks | `node scripts/check-site.mjs` passes, also green on GitHub Actions. |
-| Browser behaviour | Verified locally only (headless Chromium, 320/375/1280 px). Not part of CI. |
+| Browser behaviour | Previously verified locally only (headless Chromium, 320/375/1280 px). Not part of CI. Current independent review did not rerun these checks or test a real device. |
 | Deployment | **Live** at https://fadhel-docom.github.io/RateNest/ — see Deployment below. |
 | Dependabot | PRs #2–#6 merged one at a time on 2026-10-23; every push-triggered deploy succeeded. Actions now on checkout@v7, setup-node@v7, configure-pages@v6, upload-pages-artifact@v5, deploy-pages@v5. The Node 20 deprecation warnings are gone. No open PRs. |
 
