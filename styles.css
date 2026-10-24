@@ -49,3 +49,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .adjusted-rate{font-size:clamp(1.9rem,4vw,2.4rem);letter-spacing:-.05em;line-height:1.15;font-weight:800;margin:8px 0 14px;overflow-wrap:anywhere}
 .adjusted-rate span{font-size:.95rem;letter-spacing:0;color:#c5d9ce;font-weight:500;margin-left:5px}
 .adjusted-block[hidden]{display:none}
+
+/* Project quote tool discovery link */
+.tool-link{margin:18px 0 0;font-size:.9rem;font-weight:700}.tool-link a{color:var(--green);text-decoration-thickness:1px;text-underline-offset:3px}
+.tool-link a:focus-visible{outline:3px solid #176b50;outline-offset:3px;border-radius:4px}
