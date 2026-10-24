@@ -16,7 +16,6 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 - Handoff: Claude should read the operations room before starting new work and add a dated entry for each session. Owner's trigger “ابدأ الآن” means inspect the shared log and live repository state, then take the next useful in-scope action without routine questions.
 
 ### 2026-10-24
-### 2026-10-24
 - Owner re-confirmed approval of Phase 2 (already merged in PR #8 from the owner's account on 2026-10-23). Claude reviewed it independently instead of rebuilding it:
   adjustment formula checked by hand-computed values, 29 unit tests + static checks + 42/6/13 browser checks pass on `main`, no built-in fee, deploy of `b9ee807` succeeded.
 - PR #9 (docs) reviewed; two unverifiable claims corrected; merged (`61cea1b`), deploy `40084285197` succeeded. No open PRs.
