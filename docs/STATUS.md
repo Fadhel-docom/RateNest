@@ -8,7 +8,7 @@ _Last updated: 2026-10-23, after Phase 2 was merged and deployed._
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
 - Never claim a test, audit or deployment passed unless it was actually run and observed.
-- Phase 2 was approved by the owner on 2026-10-23 and is done. **Any further phase or scope change needs the owner's go-ahead.**
+- Phase 2 was merged from the owner's account on 2026-10-23 (PR #8) and the owner re-confirmed the approval to Claude on 2026-10-24; it is done. **Any further phase or scope change needs the owner's go-ahead.**
 - Fee and buffer percentages are always entered by the user: no default or hard-coded fee rate in the code (guarded by a unit test and a static check).
 
 ## Current state
@@ -33,7 +33,7 @@ _Last updated: 2026-10-23, after Phase 2 was merged and deployed._
   The tool returns text only, so the CSS/ARIA structure of the live page was not inspected there.
 
 ## Verification log
-- Local, real Chromium: 42-check behaviour suite, 6-check review-regression suite, 38-check Phase 2 suite, custom accessibility measurements
+- Local, real Chromium: 42-check behaviour suite, 6-check review-regression suite, 13-check Phase 2 UI suite (run 2026-10-24 by Claude: defaults, validation messages, adjusted result, copy summary, no overflow, no console errors), custom accessibility measurements
   (text contrast per element, accessible names, heading order, landmarks, focus rings, reflow at 320 px with 150%/200% text) — all pass, including the
   adjusted-result state.
 - **Not run:** axe-core / Lighthouse (the npm registry is blocked in the assistant's session), screen-reader testing, Safari/Firefox, real devices,

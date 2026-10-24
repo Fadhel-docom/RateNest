@@ -34,7 +34,7 @@ The base calculation is unchanged and stays the headline; the scenario table sta
 |---|---|---|
 | `node --test` (29 tests) | local + GitHub Actions | pass |
 | `node scripts/check-site.mjs` | local + GitHub Actions | pass |
-| 42-check behaviour suite, 6-check review-regression suite, 38-check Phase 2 suite, custom accessibility measurements | local headless Chromium only | pass |
+| 42-check behaviour suite, 6-check review-regression suite, 13-check Phase 2 UI suite (run 2026-10-24 by Claude: defaults, validation messages, adjusted result, copy summary, no overflow, no console errors), custom accessibility measurements | local headless Chromium only | pass |
 | axe-core, Lighthouse, screen reader, Safari/Firefox, real devices | — | **not run** (npm registry blocked in the assistant's session; no other tool available) |
 
 ## Next step
