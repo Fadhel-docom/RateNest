@@ -7,6 +7,15 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-24 — Phase 3 implementation started
+- **Owner trigger:** “ابدأ الآن”. Read the operations room, status log, handoff, Claude instructions, and current GitHub state. PR #12 (operations room) is merged as `4ab4053`; checks and the subsequent Pages deployment succeeded on `main`.
+- **Research review:** Reviewed the Phase 3 project-quote research file and PR #11 diff. The narrow calculator is scoped to estimated hours × entered hourly rate, a labour-only uncertainty allowance, direct expenses, a transparent fixed quote, effective hourly return, and a copyable summary. Search volume/difficulty remain unknown; no market-rate claims are added.
+- **Implementation:** Started `phase-3-project-quote-calculator` from current `main`. Added `project-pricing.html`, `project-pricing.mjs`, `project-pricing-calculator.mjs`, and unit tests; linked it from the homepage, added its URL to the sitemap, added the three public assets to the Pages staging allowlist, and extended static checks.
+- **Verification:** No local Node/browser runtime was available through this GitHub-only work session. Source was reviewed from GitHub; CI and tests are pending on the implementation branch. No merge or deployment was performed for this feature.
+- **Open before merge:** Review current diff, confirm all unit/static checks are green, and run browser checks at 320/375/1280 CSS px with no console errors. Check input validation and copy summary. Existing hourly calculator must remain unchanged.
+- **Handoff:** Claude: independently review the implementation and formula/validation, especially buffer semantics, keyboard/screen-reader behavior, and the Pages allowlist. Report findings here before any merge.
+- **Owner action required:** No.
+
 ### 2026-10-24 — Shared operations room
 - Owner established a shared, ongoing workflow for ChatGPT and Claude: no hierarchy, read-before-work, evidence-based quality rules, competitor benchmarking, and a durable handoff log.
 - Added `docs/OPERATIONS-ROOM.md` as the shared rules and work log; updated `CLAUDE.md` so every Claude session reads it first.
@@ -43,7 +52,8 @@ PR #11 (Phase 3 search-intent research) is open as a draft; its latest observed 
 | Unit tests | 29 pass (`node --test`), also green on GitHub Actions. |
 | Static site checks | `node scripts/check-site.mjs` passes, also green on GitHub Actions. |
 | Browser behaviour | Verified locally only (headless Chromium, 320/375/1280 px). Not part of CI. |
-| Deployment | **Live** at https://fadhel-docom.github.io/RateNest/ — see Deployment below. |
+| Phase 3 project quote calculator | Implementation in progress on `phase-3-project-quote-calculator`; not merged or deployed. CI/browser verification pending. |
+| Deployment | **Live** at https://fadhel-docom.github.io/RateNest/ — current production remains on main; Phase 3 page is not yet deployed. |
 | Dependabot | PRs #2–#6 merged one at a time on 2026-10-23; every push-triggered deploy succeeded. Actions now on checkout@v7, setup-node@v7, configure-pages@v6, upload-pages-artifact@v5, deploy-pages@v5. The Node 20 deprecation warnings are gone. No open PRs. |
 
 ## Deployment
@@ -74,5 +84,5 @@ PR #11 (Phase 3 search-intent research) is open as a draft; its latest observed 
 ## Backlog (none started; each needs the owner's go-ahead because it changes scope)
 1. Search Console: submit `sitemap.xml` (needs the owner's Google account) — optional, no code change.
 2. axe-core / Lighthouse in CI if the npm registry becomes reachable; otherwise keep the custom measurements.
-3. Phase 3 — project pricing calculator: do search-intent research first and only build it if it solves a distinct user need.
+3. Phase 3 — project pricing calculator: research reviewed; narrow implementation is in progress in a separate PR and must pass independent review and checks before merge.
 4. Later phases (retainer / quote generator, guides) — after Phase 3.
