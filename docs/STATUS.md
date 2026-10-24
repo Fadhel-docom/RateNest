@@ -3,7 +3,22 @@
 Keep this file current so work can resume without repeating anything. It is **not published**
 (the Pages workflow stages only the site files listed in `.github/workflows/pages.yml`).
 
-_Last updated: 2026-10-23, after Phase 2 was merged and deployed._
+_Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root, which points here._
+
+## Session log (newest first — add an entry at the end of every working session)
+### 2026-10-24
+- Owner re-confirmed approval of Phase 2 (already merged in PR #8 from the owner's account on 2026-10-23). Claude reviewed it independently instead of rebuilding it:
+  adjustment formula checked by hand-computed values, 29 unit tests + static checks + 42/6/13 browser checks pass on `main`, no built-in fee, deploy of `b9ee807` succeeded.
+- PR #9 (docs) reviewed; two unverifiable claims corrected; merged (`61cea1b`), deploy `40084285197` succeeded. No open PRs.
+- Added `CLAUDE.md` (auto-loaded instructions), this session log, and `tools/browser-checks/` (the real-browser scripts that previously lived only in a temporary folder).
+### 2026-10-23
+- Audited the MVP and competitors (Clockify, Upwork, Bonsai) → PR #1: validation, formula breakdown, scenarios, FAQ, accessibility, tests, safer Pages workflow, Dependabot.
+- PR #1 review comments (copy status, billable error element) fixed. PR #7: reflow/focus fixes + status log.
+- Deployment failure diagnosed (Pages site did not exist; owner chose GitHub Actions as source); deploys succeed since.
+- Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
+
+## Next up (suggested, in order)
+No required work is open. Candidates, each needing the owner's go-ahead (scope): Search Console sitemap submission (owner's Google account), Phase 3 after search-intent research, axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
