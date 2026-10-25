@@ -3,9 +3,16 @@
 Keep this file current so work can resume without repeating anything. It is **not published**
 (the Pages workflow stages only the site files listed in `.github/workflows/pages.yml`).
 
-_Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root, which points here._
+_Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root, which points here._
 
 ## Session log (newest first — add an entry at the end of every working session)
+
+### 2026-10-25 — Claude: PR #11 competitor scan expanded, PR #15 rebuilt on the feature branch
+- Owner trigger “ابدأ الآن”. Read the operations room, status, handoff and live GitHub state first (`main` `4ab4053`; PR #14 squash-merged into `phase-3-project-quote-calculator`; #11, #13, #15 open drafts; #11 conflicts with `main` in `docs/STATUS.md`). Full detail and the handoff to ChatGPT are in `docs/OPERATIONS-ROOM.md`.
+- **PR #11 (research):** pushed `7b6f56b` — the research doc now has a 22-row sourced table (pages read on 2026-10-25), cross-page patterns, ranked candidate improvements (not authorized) and scan limits. The six first-scan sources could not be re-verified (fetch tool refused them) and are labelled as such. Search volume/difficulty remain unknown.
+- **PR #15 (large-value reflow fix):** its base branch had been squash-merged, so it was orphaned. Merged the feature branch into it (no history rewrite) and retargeted it to `phase-3-project-quote-calculator`; the diff is now one CSS line plus two browser checks. Real bug: a six-figure quote (e.g. $122,500.00) overflowed at 320 px with 200% text (338 > 320).
+- Evidence: local `node --test` 36/36, `check-site.mjs` clean, Chromium project-pricing 31/31, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, a11y measurements clean. GitHub Actions (manual dispatch): [40172357583](https://github.com/Fadhel-docom/RateNest/actions/runs/40172357583) on the PR #15 branch and [40172406982](https://github.com/Fadhel-docom/RateNest/actions/runs/40172406982) on the PR #11 branch both passed. **Not run:** axe-core/Lighthouse, screen reader, Safari/Firefox, real devices. No competitor tool's computed output was verified (text-only fetch).
+- Nothing merged into `main`; no deployment. Open: the prefilled 25% uncertainty buffer vs the “percentages are entered by the user” rule (scope decision), PR #13's stale verification text, and resolving #11's `STATUS.md` conflict once #13 is on `main`.
 
 ### 2026-10-25 — PR #14 reviewed and integrated into Phase 3 branch
 - Reviewed the focus-handling, project-name input styling, responsive layout, and validation-copy fixes. Recorded a technical COMMENT review; GitHub rejected APPROVE because the connected account is the PR author.
@@ -49,7 +56,7 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-PR #11 (Phase 3 search-intent research) remains an open draft with green checks; its MVP scope is consistent with implementation, but the documented scan contains six competitor examples and needs an explicit coverage limitation or broader scan. PR #13 remains a draft against main; PR #14's fixes are now integrated into the feature branch. Phase 3 is not deployed. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
+PR #11 (Phase 3 search-intent research) remains an open draft; its scan now documents 22 pages read on 2026-10-25 (the six first-scan sources are marked unconfirmed) and awaits ChatGPT's review. PR #15 (large-value reflow fix) now targets the feature branch and should be merged there before PR #13 goes to main. PR #13 remains a draft against main; PR #14's fixes are integrated into the feature branch. Phase 3 is not deployed. Open decision: the prefilled 25% uncertainty buffer. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
