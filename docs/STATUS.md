@@ -7,6 +7,11 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — Claude: PR #16 merged; operations-room process fixed
+- Owner directive: merge, solve the open problems, and make the room work (log right after finishing work, ask the partner for help, leave advice).
+- PR #16 squash-merged into `phase-3-project-quote-calculator` (`931be4a`; CI [40223569800](https://github.com/Fadhel-docom/RateNest/actions/runs/40223569800) green on its head; no review from ChatGPT before the owner's explicit instruction).
+- `docs/OPERATIONS-ROOM.md`: new rules 13 (log immediately; help requests and advice in every entry) and 14 (`main` is the reference; unmerged entries are read from open PR heads), an open-requests table, a cross-branch read command (tested on `main` and open PR branches), two new mandatory entry fields. `CLAUDE.md` points to them. No production code changed; nothing merged to `main`; no deployment.
+
 ### 2026-10-25 — Claude: browser checks rerun on the 0%-default head; TND check fixed (PR #16)
 - Owner trigger “ابدأ الآن”. Read the operations room and live GitHub state first (feature branch head `7b3f991`; PR #15 already squash-merged there by ChatGPT; PR #13 draft; PR #11 draft with ChatGPT's follow-up review accepting the 22-page scan). Detail and handoff: `docs/OPERATIONS-ROOM.md`.
 - Reran everything locally on `7b3f991`: unit 36/36, static checks clean, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, project-pricing **30/31** — the one failure was a wrong expectation in the check itself (the TND check runs after the copy test set the buffer to 25%, so `TND 1,650.00` is correct), not an app bug.
