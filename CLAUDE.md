@@ -4,9 +4,10 @@ RateNest: free pricing tools for freelancers ("Price smarter. Work better."). St
 Live: https://fadhel-docom.github.io/RateNest/ · Repo: https://github.com/Fadhel-docom/RateNest
 
 ## Start of every session
-1. Read `docs/OPERATIONS-ROOM.md` first (shared hard rules and newest handoff log), then read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`.
+1. Read `docs/OPERATIONS-ROOM.md` first (shared hard rules, the **open-requests table**, and the newest handoff log), then read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`. Newer entries can sit in an open PR branch, so also run the cross-branch read command in the room's session protocol (step 1ب).
 2. Re-check the real state — do not trust the docs blindly: open PRs, latest "RateNest checks" and "Deploy RateNest to GitHub Pages" runs, newest deployment status.
 3. Do the next useful in-scope work, test it, and update `docs/STATUS.md` (Session log) in the same PR.
+4. **Log in the room as soon as each task is done** (not only at session end): what was done, the evidence, what you could not do and why, an explicit help request to the partner or owner (also add it to the open-requests table), and advice for the partner. Answer the partner's open requests first. Make sure your latest entry is visible on the branch your partner will read (rules 13–14 in the room). The owner does not want to relay messages or re-explain this workflow.
 
 ## Hard rules (from the owner)
 - Work **only** in this repository. Never touch any other repository.
