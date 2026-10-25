@@ -54,13 +54,13 @@ function readForm() {
   return Object.fromEntries(["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent"].map((key) => [key, document.getElementById(key).value]));
 }
 
-function calculate() {
+function calculate({ focusFirstError = false } = {}) {
   const checked = validateProjectQuote(readForm());
   showErrors(checked.errors);
   if (!checked.ok) {
     clearResult();
-    const first = form.querySelector('[aria-invalid="true"]');
-    if (first) first.focus();
+    // Only move focus on an explicit submit; moving it while typing steals focus from the field being edited.
+    if (focusFirstError) form.querySelector('[aria-invalid="true"]')?.focus();
     return;
   }
   try {
@@ -73,7 +73,7 @@ function calculate() {
   }
 }
 
-form.addEventListener("submit", (event) => { event.preventDefault(); calculate(); });
+form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
 currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values)); });
 $("#copy-quote").addEventListener("click", async () => {

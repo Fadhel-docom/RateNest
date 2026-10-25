@@ -60,7 +60,7 @@ export function validateProjectQuote(raw = {}) {
     estimatedHours: parse("estimatedHours", "Estimated hours", { required: true, max: MAX_HOURS }),
     hourlyRate: parse("hourlyRate", "Hourly rate", { required: true, max: MAX_RATE }),
     directExpenses: parse("directExpenses", "Direct expenses", { max: MAX_EXPENSES }),
-    bufferPercent: parse("bufferPercent", "Uncertainty buffer", { max: MAX_BUFFER_PERCENT, maxLabel: "100%" })
+    bufferPercent: parse("bufferPercent", "Uncertainty buffer", { max: MAX_BUFFER_PERCENT, maxLabel: "at most 100%" })
   };
   const ok = Object.keys(errors).length === 0;
   return { ok, values: ok ? values : null, errors };

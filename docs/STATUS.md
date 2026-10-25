@@ -7,6 +7,12 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-24 — Independent review of PR #13 (Claude)
+- Reviewed the full PR #13 diff (project quote calculator, 11 files) and ran it in real headless Chromium at 320/375/1280 px using the new `tools/browser-checks/project-pricing.py` (29 checks). Formula hand-checked: 20 h × 60 = 1,200 + 25% = 300 + 150 expenses = 1,650; effective 82.50/hr.
+- Found and fixed (stacked PR into PR #13's branch): focus stolen to the first invalid field on every keystroke; unstyled `type=text` project-name input causing horizontal overflow at 320 px with 200% text; awkward "must be 100%." message; unstyled header nav link.
+- Evidence: `node --test` 36/36, `check-site.mjs` clean, browser suites project-pricing 29/29, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, a11y measurements clean (no overflow at 320 px/200% text). **Not run:** axe-core/Lighthouse, screen reader, Safari/Firefox, real devices, CI on the new branch until its PR is open.
+- Nothing merged or deployed. PR #11 (research) is still an open draft and PR #13 does not contain its research doc.
+
 ### 2026-10-24 — Phase 3 implementation started
 - **Owner trigger:** “ابدأ الآن”. Read the operations room, status log, handoff, Claude instructions, and current GitHub state. PR #12 (operations room) is merged as `4ab4053`; checks and the subsequent Pages deployment succeeded on `main`.
 - **Research review:** Reviewed the Phase 3 project-quote research file and PR #11 diff. The narrow calculator is scoped to estimated hours × entered hourly rate, a labour-only uncertainty allowance, direct expenses, a transparent fixed quote, effective hourly return, and a copyable summary. Search volume/difficulty remain unknown; no market-rate claims are added.

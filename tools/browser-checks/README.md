@@ -7,6 +7,7 @@ Real-browser checks used to verify the site. They need Python 3 with Playwright 
 python3 -I tools/browser-checks/behaviour.py          . 8801   # 42 checks: widths, validation, currency, copy, keyboard, no-JS
 python3 -I tools/browser-checks/review-regression.py  . 8802   # 6 checks from PR #1 review comments
 python3 -I tools/browser-checks/phase2-ui.py          . 8803   # 13 checks: fee/buffer inputs, errors, adjusted result, copy
+python3 -I tools/browser-checks/project-pricing.py     . 8805   # 29 checks: Phase 3 project quote page (needs PR #13 code)
 python3 -I tools/browser-checks/a11y-measurements.py  . 8804   # contrast, names, headings, focus rings, zoom reflow (NOT axe-core)
 ```
 
