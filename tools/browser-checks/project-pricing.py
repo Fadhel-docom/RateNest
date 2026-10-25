@@ -12,8 +12,8 @@ try:
             ctx = b.new_context(viewport={"width": w, "height": 800}, permissions=["clipboard-read", "clipboard-write"]); pg = ctx.new_page(); errs = []
             pg.on("pageerror", lambda e: errs.append(str(e))); pg.on("console", lambda m: errs.append(m.text) if m.type in ("error", "warning") else None)
             pg.goto(URL); pg.wait_for_timeout(400)
-            ok(f"[{w}px] default quote $1,650.00 after JS", pg.inner_text("#quote-total") == "$1,650.00", pg.inner_text("#quote-total"))
-            ok(f"[{w}px] defaults: labour/buffer/expenses/effective", (pg.inner_text("#labour-total"), pg.inner_text("#buffer-total"), pg.inner_text("#expenses-total"), pg.inner_text("#effective-rate")) == ("$1,200.00", "$300.00", "$150.00", "$82.50/hr"))
+            ok(f"[{w}px] default quote $1,350.00 after JS", pg.inner_text("#quote-total") == "$1,350.00", pg.inner_text("#quote-total"))
+            ok(f"[{w}px] defaults: labour/buffer/expenses/effective", (pg.inner_text("#labour-total"), pg.inner_text("#buffer-total"), pg.inner_text("#expenses-total"), pg.inner_text("#effective-rate")) == ("$1,200.00", "$0.00", "$150.00", "$67.50/hr"))
             ok(f"[{w}px] no horizontal overflow", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"), pg.evaluate("document.documentElement.scrollWidth+'>'+document.documentElement.clientWidth"))
             if w == 375:
                 # live recalculation
@@ -43,7 +43,7 @@ try:
                 pg.select_option("#currency", "EUR"); pg.wait_for_timeout(150)
                 ok("currency EUR re-renders quote", "€" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
                 pg.select_option("#currency", "TND"); pg.wait_for_timeout(150)
-                ok("currency TND renders without throwing", "1,650" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
+                ok("currency TND renders without throwing", "1,350" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
                 # keyboard: skip link target exists and tab order reaches the button
                 ok("skip link target exists", pg.evaluate("!!document.querySelector(document.querySelector('.skip-link').getAttribute('href'))"))
                 # homepage link + sitemap
@@ -53,7 +53,7 @@ try:
             ctx.close()
         # no-JS: static default numbers visible
         ctx = b.new_context(java_script_enabled=False); pg = ctx.new_page(); pg.goto(URL)
-        ok("no-JS: static default $1,650.00 visible", "$1,650.00" in pg.inner_text("#quote-total"))
+        ok("no-JS: static default $1,350.00 visible", "$1,350.00" in pg.inner_text("#quote-total"))
         ctx.close()
         # 320px + 200% text reflow
         ctx = b.new_context(viewport={"width": 320, "height": 800}); pg = ctx.new_page(); pg.goto(URL)
