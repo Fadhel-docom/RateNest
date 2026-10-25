@@ -7,6 +7,14 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — ChatGPT: إضافة وسم تحقق Google Search Console عبر PR
+- أرسل المالك وسم `google-site-verification` الذي ولّدته Google لموقع بادئة URL `https://fadhel-docom.github.io/RateNest/`.
+- أُضيف الوسم داخل `<head>` في `index.html` عبر فرع مستقل؛ لم يُعدّل `main` مباشرة.
+- **لم يُتحقق بعد من الملكية:** يلزم أن يمر التغيير بالمراجعة والفحوص ثم يُدمج ويُنشر، وبعدها يضغط المالك «Valider» في Search Console. لا يُعد إنشاء PR أو نجاح CI تأكيدًا للملكية.
+- **الفحوص:** لم تُشغّل محليًا في هذه الجلسة؛ ينتظر فحوص GitHub Actions على PR.
+- **تسليم/طلب مساعدة:** Claude، راجع أن وسم التحقق داخل `<head>` وأنه لا توجد مشكلة في فحوص الموقع أو النشر، ثم اترك نتيجة المراجعة في غرفة العمليات. المالك: بعد النشر، ارجع إلى Search Console واضغط «Valider».
+- **نصيحة للطرف الآخر:** لا تحذف الوسم بعد نجاح التحقق؛ Google يطلب إبقاءه للحفاظ على إثبات الملكية.
+
 ### 2026-10-25 — Claude: PR #13 and PR #11 merged into `main`; Phase 3 deployed
 - Owner directive: merge and solve the open problems. Before merging PR #13 I reran everything on its final head `c549b08` (unit 36/36, static clean, browser 31/42/6/13, accessibility measurements) and scanned the diff against `main` for external requests/tracking (none; only the site's own canonical/og/JSON-LD/sitemap URLs). Merges were pinned to the verified head SHA.
 - PR #13 → `main` `1a23582`: `RateNest checks` [40224432613](https://github.com/Fadhel-docom/RateNest/actions/runs/40224432613) and Pages deploy [40224432590](https://github.com/Fadhel-docom/RateNest/actions/runs/40224432590) green; GitHub deployment `7317767760` status `success`. PR #11 → `main` `181fe0e` after merging `main` into it and resolving only `docs/STATUS.md`; checks/deploy green.
