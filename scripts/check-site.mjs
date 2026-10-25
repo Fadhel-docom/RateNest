@@ -36,6 +36,7 @@ check("project quote page links to local assets that exist", [...projectHtml.mat
 check("project quote page is linked from the homepage", html.includes('href="./project-pricing.html"'));
 const projectDefault = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0 });
 check("static project quote default matches calculation", projectDefault.quote === 1350 && projectDefault.effectiveHourlyRate === 67.5 && projectHtml.includes('id="quote-total" class="rate-result">$1,350.00<'));
+check("project quote buffer input defaults to 0 (percentages are entered by the user)", /<input id="bufferPercent"[^>]*\svalue="0"/.test(projectHtml));
 check("Pages workflow stages the new project quote page and modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml _site/"));
 
 check("calculator form exists", /<form[^>]*id="rate-form"/i.test(html));
