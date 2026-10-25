@@ -7,6 +7,11 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — Claude: PR #13 and PR #11 merged into `main`; Phase 3 deployed
+- Owner directive: merge and solve the open problems. Before merging PR #13 I reran everything on its final head `c549b08` (unit 36/36, static clean, browser 31/42/6/13, accessibility measurements) and scanned the diff against `main` for external requests/tracking (none; only the site's own canonical/og/JSON-LD/sitemap URLs). Merges were pinned to the verified head SHA.
+- PR #13 → `main` `1a23582`: `RateNest checks` [40224432613](https://github.com/Fadhel-docom/RateNest/actions/runs/40224432613) and Pages deploy [40224432590](https://github.com/Fadhel-docom/RateNest/actions/runs/40224432590) green; GitHub deployment `7317767760` status `success`. PR #11 → `main` `181fe0e` after merging `main` into it and resolving only `docs/STATUS.md`; checks/deploy green.
+- **Not verified:** the live page content (the fetch tool refused `github.io` URLs and the page is not in search results) — logged as an open request. Not run: axe-core/Lighthouse, screen reader, Safari/Firefox, real devices. ChatGPT had not reviewed the final PR #13 head; a post-merge review is requested in the room.
+
 ### 2026-10-25 — Claude: PR #16 merged; operations-room process fixed
 - Owner directive: merge, solve the open problems, and make the room work (log right after finishing work, ask the partner for help, leave advice).
 - PR #16 squash-merged into `phase-3-project-quote-calculator` (`931be4a`; CI [40223569800](https://github.com/Fadhel-docom/RateNest/actions/runs/40223569800) green on its head; no review from ChatGPT before the owner's explicit instruction).
@@ -84,7 +89,7 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-PR #11 (Phase 3 search-intent research) remains an open draft; its scan now documents 22 pages read on 2026-10-25 (the six first-scan sources are marked unconfirmed) and awaits ChatGPT's review. PR #14 and PR #15 are integrated into the feature branch; the uncertainty buffer now defaults to 0%. PR #16 (check fix, 0% guard, a11y measurements for the project page) awaits ChatGPT's review and merge into the feature branch; after that, update PR #13's description with the final evidence, review the final diff and decide on merging PR #13 into `main`. Then rebase PR #11 on `main` (its `docs/STATUS.md` conflict) and gather the operations-room entries into `main`. Phase 3 is not deployed. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
+Phase 3 (project quote calculator, PR #13) and its research (PR #11) are merged into `main` and deployed (see the 2026-10-25 entries). Open, in order: (1) someone opens the live page https://fadhel-docom.github.io/RateNest/project-pricing.html and confirms it shows $1,350.00 with a 0% buffer — the assistant's fetch tool refused the live URL, so the deployment itself is verified only through GitHub's API; (2) ChatGPT's post-merge review of `1a23582`; (3) the open requests in `docs/OPERATIONS-ROOM.md` (screen-reader test, re-verifying the six first-scan sources, opinion on a possible "hours before your effective rate drops" output). Optional later work: Search Console sitemap submission (requires the owner's Google account), axe-core in CI if the registry becomes reachable. Any new phase or feature needs the owner's go-ahead.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
@@ -97,11 +102,11 @@ PR #11 (Phase 3 search-intent research) remains an open draft; its scan now docu
 |---|---|
 | Phase 1 calculator | Merged (PR #1). Default result $57.29/hr matches the formula (66,000 ÷ 1,152). |
 | Phase 2 (optional fee % and buffer %) | Merged (PR #8) and deployed. Both inputs default to 0%; base rate stays the headline; "rate to quote" is shown separately. |
-| Unit tests | 36 pass on the Phase 3 feature branch; latest observed GitHub Actions run 40171322667 is green. |
-| Static site checks | Latest observed Phase 3 run 40171322667 is green. |
-| Browser behaviour | Verified locally only (headless Chromium, 320/375/1280 px). Not part of CI. |
-| Phase 3 project quote calculator | Implemented on `phase-3-project-quote-calculator`; PR #14 fixes integrated; PR #13 remains draft and not deployed. CI green; browser evidence recorded in PR #14 but not rerun by ChatGPT. |
-| Deployment | **Live** at https://fadhel-docom.github.io/RateNest/ — current production remains on main; Phase 3 page is not yet deployed. |
+| Unit tests | 36 pass (`node --test`), also green on GitHub Actions (push run [40224625257](https://github.com/Fadhel-docom/RateNest/actions/runs/40224625257) on `main` `181fe0e`). |
+| Static site checks | Pass locally and on the same `main` run; include guards for the 0% project buffer default and the Pages allowlist. |
+| Browser behaviour | Verified locally only (headless Chromium, 320/375/1280 px), last full rerun 2026-10-25 on `c549b08`: project-pricing 31/31, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, accessibility measurements clean on both pages. Not part of CI. |
+| Phase 3 project quote calculator | Merged (PR #13 squash `1a23582`, with PR #14–#17) and deployed. Buffer defaults to 0%; default quote $1,350.00 ($67.50/hr effective). Live page content not verified by the assistant (fetch refused). |
+| Deployment | **Live** at https://fadhel-docom.github.io/RateNest/. Latest deploy of `main` `181fe0e`: run [40224625312](https://github.com/Fadhel-docom/RateNest/actions/runs/40224625312) green; GitHub deployment status `success` for `1a23582` (Phase 3). |
 | Dependabot | PRs #2–#6 merged one at a time on 2026-10-23; every push-triggered deploy succeeded. Actions now on checkout@v7, setup-node@v7, configure-pages@v6, upload-pages-artifact@v5, deploy-pages@v5. The Node 20 deprecation warnings are gone. No open PRs. |
 
 ## Deployment
@@ -118,6 +123,7 @@ PR #11 (Phase 3 search-intent research) remains an open draft; its scan now docu
 - Local, real Chromium: 42-check behaviour suite, 6-check review-regression suite, 13-check Phase 2 UI suite (run 2026-10-24 by Claude: defaults, validation messages, adjusted result, copy summary, no overflow, no console errors), custom accessibility measurements
   (text contrast per element, accessible names, heading order, landmarks, focus rings, reflow at 320 px with 150%/200% text) — all pass, including the
   adjusted-result state.
+- 2026-10-25 (Claude, on `c549b08`): project quote page — 31-check suite plus the other suites above, and accessibility measurements extended to `project-pricing.html` (0 contrast failures, 0 unnamed controls, no duplicate ids, no focus gaps, no overflow at 320 px with 200% text).
 - **Not run:** axe-core / Lighthouse (the npm registry is blocked in the assistant's session), screen-reader testing, Safari/Firefox, real devices,
   performance scores, Search Console.
 - Known limit: at 320 px with 300% text-only zoom the page still scrolls horizontally (beyond the WCAG 200% requirement).
@@ -132,5 +138,5 @@ PR #11 (Phase 3 search-intent research) remains an open draft; its scan now docu
 ## Backlog (none started; each needs the owner's go-ahead because it changes scope)
 1. Search Console: submit `sitemap.xml` (needs the owner's Google account) — optional, no code change.
 2. axe-core / Lighthouse in CI if the npm registry becomes reachable; otherwise keep the custom measurements.
-3. Phase 3 — project pricing calculator: implementation and browser verification evidence exist in PR #13/#14; research PR #11 needs competitor-coverage clarification, then final independent diff/CI review before merge.
-4. Later phases (retainer / quote generator, guides) — after Phase 3.
+3. ~~Phase 3 — project pricing calculator~~ — done 2026-10-25 (PR #13 and research PR #11 merged; post-merge review and live-page check still open).
+4. Later phases (retainer, guides, optional "hours before your effective rate drops" output) — each needs the owner's go-ahead.
