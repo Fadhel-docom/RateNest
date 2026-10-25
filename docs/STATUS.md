@@ -67,6 +67,11 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 - No local tests were run for this documentation-only change. CI for this branch/PR must be checked after the PR is opened.
 - Handoff: Claude should read the operations room before starting new work and add a dated entry for each session. Owner's trigger “ابدأ الآن” means inspect the shared log and live repository state, then take the next useful in-scope action without routine questions.
 
+### 2026-10-24 — independent review and Phase 3 discovery
+- Re-read `CLAUDE.md`, this status log, and the handoff. Confirmed no open PRs and reviewed the live page's fetched HTML plus calculator validation/formula code. Manual formula review agrees with `base × (1 + buffer%) ÷ (1 − fee%)`; 50% fee and 100% buffer are accepted boundaries in code. **No real phone/emulator interaction was performed in this session**, and browser edge cases were not claimed as passed.
+- Search-intent discovery for Phase 3 found distinct fixed-price project quote intent: estimated hours, direct costs, uncertainty/revision buffer, formula breakdown, effective rate and copyable summary. See `docs/phase-3-project-pricing-research.md` (research only; search volume/difficulty unknown; no Phase 3 UI implemented yet).
+- Opened branch `phase-3-project-pricing-research` for a docs-only PR. No changes to `main`, no deployment, no merge.
+
 ### 2026-10-24
 - Owner re-confirmed approval of Phase 2 (already merged in PR #8 from the owner's account on 2026-10-23). Claude reviewed it independently instead of rebuilding it:
   adjustment formula checked by hand-computed values, 29 unit tests + static checks + 42/6/13 browser checks pass on `main`, no built-in fee, deploy of `b9ee807` succeeded.
