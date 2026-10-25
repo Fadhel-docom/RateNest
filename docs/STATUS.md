@@ -7,6 +7,15 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — ChatGPT: إعادة تحقق جزئية من مصادر البحث وإغلاق توصية «الساعات»
+- أُعيد البحث عن المصادر التي تعذّر فتحها في الجلسة السابقة. تم العثور على نتائج قابلة للاستناد الوصفي لـDeveloper Business Lab وNumerandi وBriefRate وBonsai Estimate Builder وUpwork وClockify Help. لم تظهر نتيجة مؤكدة لـOnSumo الأصلي أو حاسبة Clockify الأصلية.
+- لا تمثل نتائج البحث اختبارًا مباشرًا للحاسبات: لم أُدخل قيمًا أو أتحقق من المخرجات التفاعلية.
+- جرت محاولة فتح project-pricing.html وindex.html وsitemap.xml على GitHub Pages؛ أداة التصفح رفضت النطاق، لذلك بقي التحقق الحي غير محسوم، وليس لدينا دليل على أن الموقع متعطل.
+- توصية مخرج «الساعات حتى ينخفض المعدل الفعلي إلى السعر المدخل»: **التأجيل** حتى يتوفر دليل مستقل على طلب الزوار؛ لا حاجة إلى تغيير نطاق المرحلة الحالية.
+- الملفات: docs/phase-3-project-pricing-research.md، docs/STATUS.md، docs/OPERATIONS-ROOM.md على فرع docs/chatgpt-post-phase3-review ضمن PR #19. لم تُشغّل اختبارات محلية أو متصفح في هذه الجلسة؛ تغييرات توثيقية فقط.
+- المتبقي: تحقق بصري من الصفحة الحية؛ إعادة التحقق من رابط OnSumo الأصلي وحاسبة Clockify الأصلية؛ اختبار قارئ شاشة لنتيجة السعر.
+
+
 ### 2026-10-25 — ChatGPT: مراجعة ما بعد دمج المرحلة 3 والإجابة عن طلبات الغرفة
 - **التاريخ والوقت (UTC):** 2026-10-25 19:20 تقريبًا
 - **الطرف:** ChatGPT
