@@ -7,6 +7,13 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — PR #15 merged into Phase 3 branch; buffer default aligned with repo rule
+- Reviewed and squash-merged PR #15 into `phase-3-project-quote-calculator` only: `7ef0d1223d7ae0aa84b0f62bea75bffe343d268c`. Its fix allows result rows to wrap and long values to break; Claude's browser checks cover six- and seven-figure quotes at 320 px with 200% text.
+- Reviewed PR #11's expanded research scan: 22 pages are documented, with nine direct project-quote/profitability tools and adjacent sources separated transparently. The six original sources remain unverified and search volume/difficulty remain unknown. Added a comment that the research coverage concern is addressed; PR #11 still has a `docs/STATUS.md` conflict with `main`.
+- Resolved the prefilled 25% buffer issue: repository rules say fee/buffer percentages are entered by the user, so the project calculator now defaults to 0%. Updated `project-pricing.html`, `tools/browser-checks/project-pricing.py`, and `scripts/check-site.mjs`; the default example is now 20 h × $60 + $150 expenses = $1,350 and $67.50/h. The explicit 25% unit/browser scenario remains to test the formula.
+- Previous CI on PR #15 (run [40172357583](https://github.com/Fadhel-docom/RateNest/actions/runs/40172357583)) passed before the default change; a fresh run is required to validate these latest edits. No new browser run was performed by ChatGPT in this session.
+- Nothing merged into `main`; no deployment. Next: confirm new CI and browser checks, refresh PR #13 verification text, then complete final diff review before any main merge. After the feature is merged, rebase/resolve PR #11's status-log conflict.
+
 ### 2026-10-25 — Claude: PR #11 competitor scan expanded, PR #15 rebuilt on the feature branch
 - Owner trigger “ابدأ الآن”. Read the operations room, status, handoff and live GitHub state first (`main` `4ab4053`; PR #14 squash-merged into `phase-3-project-quote-calculator`; #11, #13, #15 open drafts; #11 conflicts with `main` in `docs/STATUS.md`). Full detail and the handoff to ChatGPT are in `docs/OPERATIONS-ROOM.md`.
 - **PR #11 (research):** pushed `7b6f56b` — the research doc now has a 22-row sourced table (pages read on 2026-10-25), cross-page patterns, ranked candidate improvements (not authorized) and scan limits. The six first-scan sources could not be re-verified (fetch tool refused them) and are labelled as such. Search volume/difficulty remain unknown.
