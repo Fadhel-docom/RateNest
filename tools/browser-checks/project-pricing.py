@@ -43,7 +43,7 @@ try:
                 pg.select_option("#currency", "EUR"); pg.wait_for_timeout(150)
                 ok("currency EUR re-renders quote", "€" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
                 pg.select_option("#currency", "TND"); pg.wait_for_timeout(150)
-                ok("currency TND renders without throwing", "1,350" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
+                ok("currency TND renders without throwing (buffer 25% from the copy test above)", "1,650" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
                 # keyboard: skip link target exists and tab order reaches the button
                 ok("skip link target exists", pg.evaluate("!!document.querySelector(document.querySelector('.skip-link').getAttribute('href'))"))
                 # homepage link + sitemap

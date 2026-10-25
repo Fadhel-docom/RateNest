@@ -7,6 +7,13 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — Claude: browser checks rerun on the 0%-default head; TND check fixed (PR #16)
+- Owner trigger “ابدأ الآن”. Read the operations room and live GitHub state first (feature branch head `7b3f991`; PR #15 already squash-merged there by ChatGPT; PR #13 draft; PR #11 draft with ChatGPT's follow-up review accepting the 22-page scan). Detail and handoff: `docs/OPERATIONS-ROOM.md`.
+- Reran everything locally on `7b3f991`: unit 36/36, static checks clean, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, project-pricing **30/31** — the one failure was a wrong expectation in the check itself (the TND check runs after the copy test set the buffer to 25%, so `TND 1,650.00` is correct), not an app bug.
+- PR #16 (draft, base = feature branch): fixes that expectation, adds a static guard that the project page buffer defaults to 0 (verified it fails at 25), and extends `a11y-measurements.py` to the project page. After the fix: project-pricing 31/31; accessibility measurements show 0 contrast failures, 0 unnamed controls, no duplicate ids, no focus gaps and no overflow at 320 px with 200% text on both pages. CI (manual dispatch) [40173526561](https://github.com/Fadhel-docom/RateNest/actions/runs/40173526561) passed.
+- Hand check of the default: 20 × 60 = 1,200 + 0% + 150 = **$1,350.00**, effective **$67.50/hr**; the explicit 25% scenario ($1,650.00, $82.50/hr) stays covered.
+- **Not run:** axe-core/Lighthouse, screen reader, Safari/Firefox, real devices. Open, non-blocking: generic `catch` message placement, no `aria-live` for the quote result (untested with a screen reader), $0 quote at a 0 hourly rate. Nothing merged into `main`; no deployment.
+
 ### 2026-10-25 — Current Phase 3 CI passed after zero-buffer default
 - GitHub Actions run [40172949407](https://github.com/Fadhel-docom/RateNest/actions/runs/40172949407) completed successfully on current feature head `5e63824fdb6701573d741cc84ce1317dcd604e94` after the page default, browser expectations, static check, and handoff docs were updated.
 - This run does not include local Chromium browser suites. The default-zero change still needs browser suites re-run on the current head; PR #13 remains draft. No changes to `main`, no deployment.
@@ -67,7 +74,7 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-PR #11 (Phase 3 search-intent research) remains an open draft; its scan now documents 22 pages read on 2026-10-25 (the six first-scan sources are marked unconfirmed) and awaits ChatGPT's review. PR #15 (large-value reflow fix) now targets the feature branch and should be merged there before PR #13 goes to main. PR #13 remains a draft against main; PR #14's fixes are integrated into the feature branch. Phase 3 is not deployed. Open decision: the prefilled 25% uncertainty buffer. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
+PR #11 (Phase 3 search-intent research) remains an open draft; its scan now documents 22 pages read on 2026-10-25 (the six first-scan sources are marked unconfirmed) and awaits ChatGPT's review. PR #14 and PR #15 are integrated into the feature branch; the uncertainty buffer now defaults to 0%. PR #16 (check fix, 0% guard, a11y measurements for the project page) awaits ChatGPT's review and merge into the feature branch; after that, update PR #13's description with the final evidence, review the final diff and decide on merging PR #13 into `main`. Then rebase PR #11 on `main` (its `docs/STATUS.md` conflict) and gather the operations-room entries into `main`. Phase 3 is not deployed. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
