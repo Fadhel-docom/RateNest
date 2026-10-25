@@ -3,13 +3,75 @@
 Keep this file current so work can resume without repeating anything. It is **not published**
 (the Pages workflow stages only the site files listed in `.github/workflows/pages.yml`).
 
-_Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root, which points here._
+_Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root, which points here._
 
 ## Session log (newest first — add an entry at the end of every working session)
+
+### 2026-10-25 — Claude: PR #16 merged; operations-room process fixed
+- Owner directive: merge, solve the open problems, and make the room work (log right after finishing work, ask the partner for help, leave advice).
+- PR #16 squash-merged into `phase-3-project-quote-calculator` (`931be4a`; CI [40223569800](https://github.com/Fadhel-docom/RateNest/actions/runs/40223569800) green on its head; no review from ChatGPT before the owner's explicit instruction).
+- `docs/OPERATIONS-ROOM.md`: new rules 13 (log immediately; help requests and advice in every entry) and 14 (`main` is the reference; unmerged entries are read from open PR heads), an open-requests table, a cross-branch read command (tested on `main` and open PR branches), two new mandatory entry fields. `CLAUDE.md` points to them. No production code changed; nothing merged to `main`; no deployment.
+
+### 2026-10-25 — Claude: browser checks rerun on the 0%-default head; TND check fixed (PR #16)
+- Owner trigger “ابدأ الآن”. Read the operations room and live GitHub state first (feature branch head `7b3f991`; PR #15 already squash-merged there by ChatGPT; PR #13 draft; PR #11 draft with ChatGPT's follow-up review accepting the 22-page scan). Detail and handoff: `docs/OPERATIONS-ROOM.md`.
+- Reran everything locally on `7b3f991`: unit 36/36, static checks clean, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, project-pricing **30/31** — the one failure was a wrong expectation in the check itself (the TND check runs after the copy test set the buffer to 25%, so `TND 1,650.00` is correct), not an app bug.
+- PR #16 (draft, base = feature branch): fixes that expectation, adds a static guard that the project page buffer defaults to 0 (verified it fails at 25), and extends `a11y-measurements.py` to the project page. After the fix: project-pricing 31/31; accessibility measurements show 0 contrast failures, 0 unnamed controls, no duplicate ids, no focus gaps and no overflow at 320 px with 200% text on both pages. CI (manual dispatch) [40173526561](https://github.com/Fadhel-docom/RateNest/actions/runs/40173526561) passed.
+- Hand check of the default: 20 × 60 = 1,200 + 0% + 150 = **$1,350.00**, effective **$67.50/hr**; the explicit 25% scenario ($1,650.00, $82.50/hr) stays covered.
+- **Not run:** axe-core/Lighthouse, screen reader, Safari/Firefox, real devices. Open, non-blocking: generic `catch` message placement, no `aria-live` for the quote result (untested with a screen reader), $0 quote at a 0 hourly rate. Nothing merged into `main`; no deployment.
+
+### 2026-10-25 — Current Phase 3 CI passed after zero-buffer default
+- GitHub Actions run [40172949407](https://github.com/Fadhel-docom/RateNest/actions/runs/40172949407) completed successfully on current feature head `5e63824fdb6701573d741cc84ce1317dcd604e94` after the page default, browser expectations, static check, and handoff docs were updated.
+- This run does not include local Chromium browser suites. The default-zero change still needs browser suites re-run on the current head; PR #13 remains draft. No changes to `main`, no deployment.
+
+### 2026-10-25 — PR #15 merged into Phase 3 branch; buffer default aligned with repo rule
+- Reviewed and squash-merged PR #15 into `phase-3-project-quote-calculator` only: `7ef0d1223d7ae0aa84b0f62bea75bffe343d268c`. Its fix allows result rows to wrap and long values to break; Claude's browser checks cover six- and seven-figure quotes at 320 px with 200% text.
+- Reviewed PR #11's expanded research scan: 22 pages are documented, with nine direct project-quote/profitability tools and adjacent sources separated transparently. The six original sources remain unverified and search volume/difficulty remain unknown. Added a comment that the research coverage concern is addressed; PR #11 still has a `docs/STATUS.md` conflict with `main`.
+- Resolved the prefilled 25% buffer issue: repository rules say fee/buffer percentages are entered by the user, so the project calculator now defaults to 0%. Updated `project-pricing.html`, `tools/browser-checks/project-pricing.py`, and `scripts/check-site.mjs`; the default example is now 20 h × $60 + $150 expenses = $1,350 and $67.50/h. The explicit 25% unit/browser scenario remains to test the formula.
+- Previous CI on PR #15 (run [40172357583](https://github.com/Fadhel-docom/RateNest/actions/runs/40172357583)) passed before the default change; a fresh run is required to validate these latest edits. No new browser run was performed by ChatGPT in this session.
+- Nothing merged into `main`; no deployment. Next: confirm new CI and browser checks, refresh PR #13 verification text, then complete final diff review before any main merge. After the feature is merged, rebase/resolve PR #11's status-log conflict.
+
+### 2026-10-25 — Claude: PR #11 competitor scan expanded, PR #15 rebuilt on the feature branch
+- Owner trigger “ابدأ الآن”. Read the operations room, status, handoff and live GitHub state first (`main` `4ab4053`; PR #14 squash-merged into `phase-3-project-quote-calculator`; #11, #13, #15 open drafts; #11 conflicts with `main` in `docs/STATUS.md`). Full detail and the handoff to ChatGPT are in `docs/OPERATIONS-ROOM.md`.
+- **PR #11 (research):** pushed `7b6f56b` — the research doc now has a 22-row sourced table (pages read on 2026-10-25), cross-page patterns, ranked candidate improvements (not authorized) and scan limits. The six first-scan sources could not be re-verified (fetch tool refused them) and are labelled as such. Search volume/difficulty remain unknown.
+- **PR #15 (large-value reflow fix):** its base branch had been squash-merged, so it was orphaned. Merged the feature branch into it (no history rewrite) and retargeted it to `phase-3-project-quote-calculator`; the diff is now one CSS line plus two browser checks. Real bug: a six-figure quote (e.g. $122,500.00) overflowed at 320 px with 200% text (338 > 320).
+- Evidence: local `node --test` 36/36, `check-site.mjs` clean, Chromium project-pricing 31/31, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, a11y measurements clean. GitHub Actions (manual dispatch): [40172357583](https://github.com/Fadhel-docom/RateNest/actions/runs/40172357583) on the PR #15 branch and [40172406982](https://github.com/Fadhel-docom/RateNest/actions/runs/40172406982) on the PR #11 branch both passed. **Not run:** axe-core/Lighthouse, screen reader, Safari/Firefox, real devices. No competitor tool's computed output was verified (text-only fetch).
+- Nothing merged into `main`; no deployment. Open: the prefilled 25% uncertainty buffer vs the “percentages are entered by the user” rule (scope decision), PR #13's stale verification text, and resolving #11's `STATUS.md` conflict once #13 is on `main`.
+
+### 2026-10-25 — PR #14 reviewed and integrated into Phase 3 branch
+- Reviewed the focus-handling, project-name input styling, responsive layout, and validation-copy fixes. Recorded a technical COMMENT review; GitHub rejected APPROVE because the connected account is the PR author.
+- Marked PR #14 ready and squash-merged it into `phase-3-project-quote-calculator` only (merge commit `bb7ebfa59083ae86844b14f2787ef8a522310385`). Nothing was merged into `main` and no deployment occurred.
+- GitHub Actions `RateNest checks` passed on the updated feature branch (run [40171322667](https://github.com/Fadhel-docom/RateNest/actions/runs/40171322667)). PR #14 records local Chromium evidence: project page 29/29, existing behavior 42/42, review regression 6/6, Phase 2 UI 13/13; axe/Lighthouse, screen reader, Safari/Firefox, and real devices remain untested in that session. These browser checks were not independently rerun by ChatGPT.
+- Reviewed PR #11's research document: the MVP formula and scope align with the implementation, and search volume/difficulty are correctly marked unknown. However, it documents six competitor examples, short of the operations-room target of 20 where feasible; requested clarification/expansion before treating the research review as complete.
+- PR #13 remains a draft against `main`; Phase 3 page is not deployed. Next: resolve the research coverage note, update stale PR #13 verification text, then perform the final diff/CI review before deciding whether PR #13 is ready to merge.
+
+### 2026-10-24 — Independent review of PR #13 (Claude)
+- Reviewed the full PR #13 diff (project quote calculator, 11 files) and ran it in real headless Chromium at 320/375/1280 px using the new `tools/browser-checks/project-pricing.py` (29 checks). Formula hand-checked: 20 h × 60 = 1,200 + 25% = 300 + 150 expenses = 1,650; effective 82.50/hr.
+- Found and fixed (stacked PR into PR #13's branch): focus stolen to the first invalid field on every keystroke; unstyled `type=text` project-name input causing horizontal overflow at 320 px with 200% text; awkward "must be 100%." message; unstyled header nav link.
+- Evidence: `node --test` 36/36, `check-site.mjs` clean, browser suites project-pricing 29/29, behaviour 42/42, review-regression 6/6, phase2-ui 13/13, a11y measurements clean (no overflow at 320 px/200% text). **Not run:** axe-core/Lighthouse, screen reader, Safari/Firefox, real devices, CI on the new branch until its PR is open.
+- Nothing merged or deployed. PR #11 (research) is still an open draft and PR #13 does not contain its research doc.
+
+### 2026-10-24 — Phase 3 implementation started
+- **Owner trigger:** “ابدأ الآن”. Read the operations room, status log, handoff, Claude instructions, and current GitHub state. PR #12 (operations room) is merged as `4ab4053`; checks and the subsequent Pages deployment succeeded on `main`.
+- **Research review:** Reviewed the Phase 3 project-quote research file and PR #11 diff. The narrow calculator is scoped to estimated hours × entered hourly rate, a labour-only uncertainty allowance, direct expenses, a transparent fixed quote, effective hourly return, and a copyable summary. Search volume/difficulty remain unknown; no market-rate claims are added.
+- **Implementation:** Open draft PR #13 (https://github.com/Fadhel-docom/RateNest/pull/13) from `phase-3-project-quote-calculator`. Added `project-pricing.html`, `project-pricing.mjs`, `project-pricing-calculator.mjs`, and unit tests; linked it from the homepage, added its URL to the sitemap, added the three public assets to the Pages staging allowlist, and extended static checks.
+- **Verification:** GitHub Actions run [40117656198](https://github.com/Fadhel-docom/RateNest/actions/runs/40117656198) passed on head `38e87700b2e39952160ff2274196967f5aaa13f3`: all 36 unit tests passed and static checks passed. The first run failed on an overly strict assertion matching the Pages staging command; the assertion was corrected and the latest run is green. No local browser test was available; 320/375/1280px interaction and copy verification remain open. No merge or deployment was performed for this feature.
+- **Open before merge:** Independently review the current diff and run browser checks at 320/375/1280 CSS px with no console errors. Check input validation, copy summary, keyboard access, and that the existing hourly calculator remains unchanged. Keep PR #13 as draft until these checks and review are complete.
+- **Handoff:** Claude: independently review the implementation and formula/validation, especially buffer semantics, keyboard/screen-reader behavior, and the Pages allowlist. Report findings here before any merge.
+- **Owner action required:** No.
+
+### 2026-10-24 — Shared operations room
+- Owner established a shared, ongoing workflow for ChatGPT and Claude: no hierarchy, read-before-work, evidence-based quality rules, competitor benchmarking, and a durable handoff log.
+- Added `docs/OPERATIONS-ROOM.md` as the shared rules and work log; updated `CLAUDE.md` so every Claude session reads it first.
+- Work is on `docs/shared-operations-room`; no changes to `main`, no merge, and no deployment.
+- Verified current PR #11 is open as a draft and its `RateNest checks` run for head `bcccda37322c385b16d7f445777e0679f77bae65` completed successfully. This does not mean PR #11 was reviewed or merged.
+- No local tests were run for this documentation-only change. CI for this branch/PR must be checked after the PR is opened.
+- Handoff: Claude should read the operations room before starting new work and add a dated entry for each session. Owner's trigger “ابدأ الآن” means inspect the shared log and live repository state, then take the next useful in-scope action without routine questions.
+
 ### 2026-10-24 — independent review and Phase 3 discovery
 - Re-read `CLAUDE.md`, this status log, and the handoff. Confirmed no open PRs and reviewed the live page's fetched HTML plus calculator validation/formula code. Manual formula review agrees with `base × (1 + buffer%) ÷ (1 − fee%)`; 50% fee and 100% buffer are accepted boundaries in code. **No real phone/emulator interaction was performed in this session**, and browser edge cases were not claimed as passed.
 - Search-intent discovery for Phase 3 found distinct fixed-price project quote intent: estimated hours, direct costs, uncertainty/revision buffer, formula breakdown, effective rate and copyable summary. See `docs/phase-3-project-pricing-research.md` (research only; search volume/difficulty unknown; no Phase 3 UI implemented yet).
 - Opened branch `phase-3-project-pricing-research` for a docs-only PR. No changes to `main`, no deployment, no merge.
+
 ### 2026-10-24
 - Owner re-confirmed approval of Phase 2 (already merged in PR #8 from the owner's account on 2026-10-23). Claude reviewed it independently instead of rebuilding it:
   adjustment formula checked by hand-computed values, 29 unit tests + static checks + 42/6/13 browser checks pass on `main`, no built-in fee, deploy of `b9ee807` succeeded.
@@ -22,7 +84,7 @@ _Last updated: 2026-10-24. New sessions start from `CLAUDE.md` at the repo root,
 - Dependabot PRs #2–#6 merged one at a time. Phase 2 merged (PR #8). PR #9 docs.
 
 ## Next up (suggested, in order)
-Current work: review the docs-only Phase 3 search-intent research PR. If approved and CI passes, implementation can proceed in a separate small PR. Other candidates: Search Console sitemap submission (owner's Google account), axe-core in CI if the registry becomes reachable.
+PR #11 (Phase 3 search-intent research) remains an open draft; its scan now documents 22 pages read on 2026-10-25 (the six first-scan sources are marked unconfirmed) and awaits ChatGPT's review. PR #14 and PR #15 are integrated into the feature branch; the uncertainty buffer now defaults to 0%. PR #16 (check fix, 0% guard, a11y measurements for the project page) awaits ChatGPT's review and merge into the feature branch; after that, update PR #13's description with the final evidence, review the final diff and decide on merging PR #13 into `main`. Then rebase PR #11 on `main` (its `docs/STATUS.md` conflict) and gather the operations-room entries into `main`. Phase 3 is not deployed. Optional later work: Search Console sitemap submission (requires owner's Google account), axe-core in CI if the registry becomes reachable.
 
 ## Rules of engagement
 - Work only in this repository, on branches + pull requests. Never commit to `main` directly.
@@ -35,10 +97,11 @@ Current work: review the docs-only Phase 3 search-intent research PR. If approve
 |---|---|
 | Phase 1 calculator | Merged (PR #1). Default result $57.29/hr matches the formula (66,000 ÷ 1,152). |
 | Phase 2 (optional fee % and buffer %) | Merged (PR #8) and deployed. Both inputs default to 0%; base rate stays the headline; "rate to quote" is shown separately. |
-| Unit tests | 29 pass (`node --test`), also green on GitHub Actions. |
-| Static site checks | `node scripts/check-site.mjs` passes, also green on GitHub Actions. |
-| Browser behaviour | Previously verified locally only (headless Chromium, 320/375/1280 px). Not part of CI. Current independent review did not rerun these checks or test a real device. |
-| Deployment | **Live** at https://fadhel-docom.github.io/RateNest/ — see Deployment below. |
+| Unit tests | 36 pass on the Phase 3 feature branch; latest observed GitHub Actions run 40171322667 is green. |
+| Static site checks | Latest observed Phase 3 run 40171322667 is green. |
+| Browser behaviour | Verified locally only (headless Chromium, 320/375/1280 px). Not part of CI. |
+| Phase 3 project quote calculator | Implemented on `phase-3-project-quote-calculator`; PR #14 fixes integrated; PR #13 remains draft and not deployed. CI green; browser evidence recorded in PR #14 but not rerun by ChatGPT. |
+| Deployment | **Live** at https://fadhel-docom.github.io/RateNest/ — current production remains on main; Phase 3 page is not yet deployed. |
 | Dependabot | PRs #2–#6 merged one at a time on 2026-10-23; every push-triggered deploy succeeded. Actions now on checkout@v7, setup-node@v7, configure-pages@v6, upload-pages-artifact@v5, deploy-pages@v5. The Node 20 deprecation warnings are gone. No open PRs. |
 
 ## Deployment
@@ -69,5 +132,5 @@ Current work: review the docs-only Phase 3 search-intent research PR. If approve
 ## Backlog (none started; each needs the owner's go-ahead because it changes scope)
 1. Search Console: submit `sitemap.xml` (needs the owner's Google account) — optional, no code change.
 2. axe-core / Lighthouse in CI if the npm registry becomes reachable; otherwise keep the custom measurements.
-3. Phase 3 — project pricing calculator: do search-intent research first and only build it if it solves a distinct user need.
+3. Phase 3 — project pricing calculator: implementation and browser verification evidence exist in PR #13/#14; research PR #11 needs competitor-coverage clarification, then final independent diff/CI review before merge.
 4. Later phases (retainer / quote generator, guides) — after Phase 3.

@@ -2,8 +2,10 @@
 // These are regex-based sanity checks, not a full HTML validator or accessibility audit.
 import { readFileSync, existsSync } from "node:fs";
 import { calculateHourlyRate, billableScenarios, formatCurrency, formatNumber } from "../calculator.mjs";
+import { calculateProjectQuote } from "../project-pricing-calculator.mjs";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
+const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.url), "utf8");
 const failures = [];
 const check = (label, condition) => {
   console.log(`${condition ? "OK  " : "FAIL"}: ${label}`);
@@ -20,6 +22,23 @@ check("title is present and 10-70 chars", title.length >= 10 && title.length <= 
 check("meta description is 70-170 chars", description.length >= 70 && description.length <= 170);
 check("canonical is an absolute https URL", /^https:\/\/[^/]+\/.*/.test(canonical));
 check("exactly one h1", (html.match(/<h1[\s>]/gi) ?? []).length === 1);
+check("project quote page has a descriptive title", /<title>Freelance Project Quote Calculator — RateNest<\/title>/.test(projectHtml));
+check("project quote page has a unique canonical URL", /<link rel="canonical" href="https:\/\/fadhel-docom\.github\.io\/RateNest\/project-pricing\.html">/.test(projectHtml));
+check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) ?? []).length === 1);
+check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
+const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
+const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
+check("project quote page ARIA references exist", projectAriaRefs.every((id) => projectIds.includes(id)));
+const projectControlIds = [...projectHtml.matchAll(/<(?:input|select)[^>]*\sid="([^"]+)"/g)].map((m) => m[1]);
+check("project quote page inputs/selects have labels", projectControlIds.every((id) => new RegExp(`<label[^>]*for="${id}"`).test(projectHtml)));
+check("project quote page links to local assets that exist", [...projectHtml.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g)].map((m) => m[1]).every((ref) => existsSync(new URL(`../${ref.slice(2)}`, import.meta.url))));
+check("project quote page is linked from the homepage", html.includes('href="./project-pricing.html"'));
+const projectDefault = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0 });
+check("static project quote default matches calculation", projectDefault.quote === 1350 && projectDefault.effectiveHourlyRate === 67.5 && projectHtml.includes('id="quote-total" class="rate-result">$1,350.00<'));
+check("project quote buffer input defaults to 0 (percentages are entered by the user)", /<input id="bufferPercent"[^>]*\svalue="0"/.test(projectHtml));
+check("Pages workflow stages the new project quote page and modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml _site/"));
+
 check("calculator form exists", /<form[^>]*id="rate-form"/i.test(html));
 const h1Html = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html)?.[1] ?? "";
 check("h1 line breaks are preceded by a space (plain text reads correctly)", !/\S<br\s*\/?>/i.test(h1Html));

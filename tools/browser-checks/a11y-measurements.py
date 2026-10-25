@@ -38,27 +38,35 @@ JS = r"""
 try:
     with sync_playwright() as p:
         b=p.chromium.launch()
-        for state in ("default","error","adjusted"):
+        # (page, state, label) — the project quote page was added with Phase 3
+        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large")]
+        for page,state in CASES:
+            tag=("project " if page!="index.html" else "")+state
             for w in (320,1280):
-                pg=b.new_page(viewport={"width":w,"height":900}); pg.goto(f"http://127.0.0.1:{port}/index.html"); pg.wait_for_timeout(300)
-                if state=="error": pg.fill("#income",""); pg.wait_for_timeout(200)
-                if state=="adjusted": pg.click("#adjustments summary"); pg.fill("#fee","10"); pg.fill("#buffer","10"); pg.wait_for_timeout(250)
+                pg=b.new_page(viewport={"width":w,"height":900}); pg.goto(f"http://127.0.0.1:{port}/{page}"); pg.wait_for_timeout(300)
+                if page=="index.html":
+                    if state=="error": pg.fill("#income",""); pg.wait_for_timeout(200)
+                    if state=="adjusted": pg.click("#adjustments summary"); pg.fill("#fee","10"); pg.fill("#buffer","10"); pg.wait_for_timeout(250)
+                else:
+                    if state=="error": pg.fill("#estimatedHours",""); pg.click(".calculate-button"); pg.wait_for_timeout(250)
+                    if state=="large": pg.fill("#estimatedHours","500"); pg.fill("#hourlyRate","150"); pg.fill("#directExpenses","25000"); pg.fill("#bufferPercent","30"); pg.wait_for_timeout(250)
                 r=pg.evaluate(JS)
-                print(f"[{state} @{w}] contrast failures: {len(r['contrast'])}; unnamed controls: {len(r['names'])}; dup ids: {r['dupIds']}; notes: {r['small']}")
+                print(f"[{tag} @{w}] contrast failures: {len(r['contrast'])}; unnamed controls: {len(r['names'])}; dup ids: {r['dupIds']}; notes: {r['small']}")
                 for c in r["contrast"]: print("   LOW CONTRAST", c)
                 if state=="default" and w==1280: print("   headings:", r["headings"]); print("   landmarks:", r["landmarks"])
                 pg.close()
-        # Every focusable element must show a visible focus indicator
-        pg=b.new_page(viewport={"width":375,"height":900}); pg.goto(f"http://127.0.0.1:{port}/index.html"); pg.wait_for_timeout(300)
-        bad=[]
-        for _ in range(14):
-            pg.keyboard.press("Tab")
-            info=pg.evaluate("""()=>{const e=document.activeElement;const c=getComputedStyle(e);return {id:e.id||e.className||e.tagName, ow:parseFloat(c.outlineWidth), os:c.outlineStyle, bs:c.boxShadow}}""")
-            if info["os"]=="none" or info["ow"]<2:
-                if info["bs"]=="none": bad.append(info)
-        print("[focus] elements without a >=2px outline or box-shadow:", bad)
-        # Reflow at 400% zoom ~ 320 CSS px wide: already no overflow; check 200% text zoom via font-size on root
-        pg.add_style_tag(content="html{font-size:200%}"); pg.set_viewport_size({"width":320,"height":900}); pg.wait_for_timeout(200)
-        print("[zoom] horizontal overflow at 320px with 200% text:", pg.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"))
+        # Every focusable element must show a visible focus indicator; reflow at 200% text on 320 px
+        for page in ("index.html","project-pricing.html"):
+            pg=b.new_page(viewport={"width":375,"height":900}); pg.goto(f"http://127.0.0.1:{port}/{page}"); pg.wait_for_timeout(300)
+            bad=[]
+            for _ in range(14):
+                pg.keyboard.press("Tab")
+                info=pg.evaluate("""()=>{const e=document.activeElement;const c=getComputedStyle(e);return {id:e.id||e.className||e.tagName, ow:parseFloat(c.outlineWidth), os:c.outlineStyle, bs:c.boxShadow}}""")
+                if info["os"]=="none" or info["ow"]<2:
+                    if info["bs"]=="none": bad.append(info)
+            print(f"[focus {page}] elements without a >=2px outline or box-shadow:", bad)
+            pg.add_style_tag(content="html{font-size:200%}"); pg.set_viewport_size({"width":320,"height":900}); pg.wait_for_timeout(200)
+            print(f"[zoom {page}] horizontal overflow at 320px with 200% text:", pg.evaluate("document.documentElement.scrollWidth > document.documentElement.clientWidth"))
+            pg.close()
         b.close()
 finally: srv.terminate()
