@@ -77,8 +77,8 @@
         </div>
         <div class="field">
           <label for="bufferPercent">Uncertainty / revision buffer (%)</label>
-          <p class="field-help" id="bufferPercent-help">An allowance applied to labour only, for uncertain scope or revisions. This is a markup allowance, not a true profit-margin calculation; starts at 25% as an editable planning example.</p>
-          <input id="bufferPercent" name="bufferPercent" type="number" min="0" max="100" step="any" value="25" inputmode="decimal" aria-describedby="bufferPercent-help bufferPercent-error">
+          <p class="field-help" id="bufferPercent-help">An allowance applied to labour only, for uncertain scope or revisions. This is a markup allowance, not a true profit-margin calculation; starts at 0%; enter your own allowance if needed.</p>
+          <input id="bufferPercent" name="bufferPercent" type="number" min="0" max="100" step="any" value="0" inputmode="decimal" aria-describedby="bufferPercent-help bufferPercent-error">
           <p class="field-error" id="bufferPercent-error" hidden></p>
         </div>
         <button class="calculate-button" type="submit">Calculate project quote <span aria-hidden="true">→</span></button>
@@ -87,13 +87,13 @@
       <section class="result-card" aria-labelledby="result-heading">
         <h2 id="result-heading" class="sr-only">Your project quote</h2>
         <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">SUGGESTED FIXED-PRICE QUOTE</span></div>
-        <p id="quote-total" class="rate-result">$1,650.00</p>
-        <p id="quote-summary" class="result-summary">Based on 20 estimated hours, a 25% labour-only uncertainty allowance, and $150.00 in direct expenses.</p>
+        <p id="quote-total" class="rate-result">$1,350.00</p>
+        <p id="quote-summary" class="result-summary">Based on 20 estimated hours, a 0% labour-only uncertainty allowance, and $150.00 in direct expenses.</p>
         <div class="result-divider"></div>
         <div class="result-stat"><span>Labour subtotal</span><strong id="labour-total">$1,200.00</strong></div>
-        <div class="result-stat"><span>Uncertainty allowance</span><strong id="buffer-total">$300.00</strong></div>
+        <div class="result-stat"><span>Uncertainty allowance</span><strong id="buffer-total">$0.00</strong></div>
         <div class="result-stat"><span>Direct expenses</span><strong id="expenses-total">$150.00</strong></div>
-        <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$82.50/hr</strong></div>
+        <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$67.50/hr</strong></div>
         <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of profit. Taxes and platform/payment fees are excluded unless you include them in direct expenses. Confirm scope, deliverables, and revision limits with your client.</p></div>
         <button id="copy-quote" class="copy-button" type="button">Copy quote summary</button>
         <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
