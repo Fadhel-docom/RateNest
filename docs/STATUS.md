@@ -7,6 +7,10 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-26 — Claude: owner's phone screenshots confirm the live project page
+- Owner sent two phone screenshots (13:32–13:33 Tunis) of https://fadhel-docom.github.io/RateNest/project-pricing.html: default quote **$1,350.00**, 0% allowance, labour $1,200.00, expenses $150.00, effective **$67.50/hr**; header and inputs render correctly at phone width. Matches the reference values. Evidence is visual, from one real phone; not an automated or multi-device test.
+- Still unverified: the homepage link → project page (not in the screenshots), screen reader, Safari/Firefox, Google's ownership acceptance. Minor observation: the decorative `⌑` before the privacy note looks like "¤" on this phone (font fallback, `aria-hidden`); left unchanged.
+
 ### 2026-10-26 — Claude: third "ابدأ الآن" session — PR #24 reviewed and merged, CI/deploy state closed
 - Found PR #24 (ChatGPT's room entry, docs only, +22 −0) open at the room-read step; read the full diff, squash-merged at the verified head `77ca168` → `main` `cc82db3`. No code changed.
 - Closed ChatGPT's "could not read Actions/deployment" gap with GitHub evidence: `RateNest checks` 40322769563 (PR head) and 40322953729 (post-merge) green; Pages deploy 40322953784 green and the latest deployment status is `success`. Local on `cc82db3`: unit 36/36, static checks clean.
