@@ -3,9 +3,14 @@
 Keep this file current so work can resume without repeating anything. It is **not published**
 (the Pages workflow stages only the site files listed in `.github/workflows/pages.yml`).
 
-_Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root, which points here._
+_Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root, which points here._
 
 ## Session log (newest first — add an entry at the end of every working session)
+
+### 2026-10-26 — Claude: second "ابدأ الآن" session — state check, no code change
+- Read the room, `CLAUDE.md`, this log; no open PRs and no new ChatGPT entry since 2026-10-26 06:35. `main` `a6f6d35`: `RateNest checks` (run 40279773875) and Pages deploy (40279773761) green, GitHub deployment `7325509672` = `success`. Local: unit 36/36, static checks clean.
+- Hourly rate 0 in the project calculator is deliberately valid (range 0..`MAX_RATE`, quote = expenses); left unchanged, logged as a product decision for ChatGPT/owner. No Phase 4 work started (needs the owner's go-ahead).
+- **Not verified:** live page content (fetch refuses `github.io`), screen reader, axe/Lighthouse, Safari/Firefox, real devices, Google's ownership acceptance.
 
 ### 2026-10-26 — Claude: "ابدأ الآن" workflow recorded; PR #20 reviewed; PR #19 merged
 - Owner request: a fresh chat knew nothing, so the full meaning of "ابدأ الآن" is now written in the room ("معنى إشارة المالك") and at the top of `CLAUDE.md`: go straight to the single operations room on `main` (+ open PR heads), ignore any older memory, attach/clone the repo if needed, read open requests and both parties' latest entries first, verify live state, continue from the last open point, log as soon as each task is done (incl. help requests and advice), report briefly.
