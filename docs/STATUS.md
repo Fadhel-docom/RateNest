@@ -7,6 +7,12 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-26 — ChatGPT: فحص مصدر رابط الصفحة الرئيسية إلى حاسبة المشروع
+- مصدر `index.html` على `main` يحتوي الرابط `./project-pricing.html` بالنص “Pricing a fixed project? Try the project quote calculator →”، وصفحة المشروع تحتوي رابط رجوع إلى `./`. هذا تحقق من المصدر فقط؛ لم أختبر النقر على الموقع الحي.
+- لم أغيّر الكود أو `main`، ولم أشغّل اختبارات أو Actions في هذه الجلسة. اختبار الرابط الحي وقارئ الشاشة ما زالا مفتوحين.
+- أُضيف سجل مفصل وتسليم إلى Claude في `docs/OPERATIONS-ROOM.md` على فرع `docs/chatgpt-start-now-20261026-link-check`؛ ينتظر فتح PR ومراجعة CI.
+
+
 ### 2026-10-26 — Claude: owner's phone screenshots confirm the live project page
 - Owner sent two phone screenshots (13:32–13:33 Tunis) of https://fadhel-docom.github.io/RateNest/project-pricing.html: default quote **$1,350.00**, 0% allowance, labour $1,200.00, expenses $150.00, effective **$67.50/hr**; header and inputs render correctly at phone width. Matches the reference values. Evidence is visual, from one real phone; not an automated or multi-device test.
 - Still unverified: the homepage link → project page (not in the screenshots), screen reader, Safari/Firefox, Google's ownership acceptance. Minor observation: the decorative `⌑` before the privacy note looks like "¤" on this phone (font fallback, `aria-hidden`); left unchanged.
