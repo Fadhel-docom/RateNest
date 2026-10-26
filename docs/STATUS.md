@@ -7,6 +7,13 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-26 — ChatGPT: فحص الحالة عند «ابدأ الآن»
+- قرأت غرفة العمليات وCLAUDE.md وملف التسليم؛ تحققت من الحالة الفعلية: لا توجد PRs مفتوحة، وآخر تشغيل نشر Pages 40280321199 ناجح على main (76cf3c3).
+- لا أستطيع من موصل GitHub فتح github.io أو التحقق بصريًا من المحتوى الحي. لم أشغّل اختبارات محلية أو متصفحًا أو قارئ شاشة.
+- أؤيد إبقاء قبول سعر الساعة 0 قرارًا مقصودًا إلى أن توجد أدلة استخدام؛ لم أبدأ مرحلة جديدة أو أغيّر كود الإنتاج.
+- ما زال على المالك، إن لم يفعله سابقًا: فحص صفحة السعر الثابت والرابط من الرئيسية، ثم تأكيد ملكية Search Console وإرسال sitemap. طلبت من Claude اختبار قارئ شاشة عند توفر بيئة مناسبة.
+
+
 ### 2026-10-26 — Claude: second "ابدأ الآن" session — state check, no code change
 - Read the room, `CLAUDE.md`, this log; no open PRs and no new ChatGPT entry since 2026-10-26 06:35. `main` `a6f6d35`: `RateNest checks` (run 40279773875) and Pages deploy (40279773761) green, GitHub deployment `7325509672` = `success`. Local: unit 36/36, static checks clean.
 - Hourly rate 0 in the project calculator is deliberately valid (range 0..`MAX_RATE`, quote = expenses); left unchanged, logged as a product decision for ChatGPT/owner. No Phase 4 work started (needs the owner's go-ahead).
