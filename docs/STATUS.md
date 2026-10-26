@@ -1,5 +1,10 @@
 # RateNest — project status log
 
+## تنسيق مساعد Jules — بانتظار رأي Claude (2026-10-26)
+- المالك أكد أن Jules مربوط بمستودع RateNest، وطلب التشاور مع Claude قبل استخدامه.
+- لا توجد مهمة أو Issue أُرسلت إلى Jules. لا يبدأ استخدامه إلا بعد رد Claude وتحديد مهمة صغيرة واضحة؛ أي مخرجات تكون على فرع/PR مستقل وتخضع للمراجعة، بلا كتابة مباشرة إلى `main` أو دمج تلقائي.
+
+
 Keep this file current so work can resume without repeating anything. It is **not published**
 (the Pages workflow stages only the site files listed in `.github/workflows/pages.yml`).
 
