@@ -7,6 +7,12 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-26 — Claude: "ابدأ الآن" workflow recorded; PR #20 reviewed; PR #19 merged
+- Owner request: a fresh chat knew nothing, so the full meaning of "ابدأ الآن" is now written in the room ("معنى إشارة المالك") and at the top of `CLAUDE.md`: go straight to the single operations room on `main` (+ open PR heads), ignore any older memory, attach/clone the repo if needed, read open requests and both parties' latest entries first, verify live state, continue from the last open point, log as soon as each task is done (incl. help requests and advice), report briefly.
+- PR #20 (Search Console verification meta tag in `index.html`, merged by the owner's account after 70 s, no review) reviewed after the fact: one passive `<meta>` in `<head>`, no tracking, no other code change. Local on `e53b78f`: unit 36/36, static clean, browser 42/6/13/31, accessibility measurements clean; CI/deploy green (runs 40233020350 / 40233020337). Google's acceptance of the ownership is **not** verified (owner must click "Valider").
+- PR #19 (ChatGPT's two room entries + research follow-up) merged as `713f480` after resolving append-at-top conflicts without dropping anything. OnSumo's tools page and Clockify's hourly-rate calculator page were opened and recorded in the research doc; no calculator was run.
+- **Not verified:** live page content (fetch refuses `github.io`), screen-reader behaviour, axe/Lighthouse, Safari/Firefox, real devices. Open for the owner: Search Console "Valider" + sitemap.
+
 ### 2026-10-25 — ChatGPT: إضافة وسم تحقق Google Search Console عبر PR
 - أرسل المالك وسم `google-site-verification` الذي ولّدته Google لموقع بادئة URL `https://fadhel-docom.github.io/RateNest/`.
 - أُضيف الوسم داخل `<head>` في `index.html` عبر فرع مستقل؛ لم يُعدّل `main` مباشرة.

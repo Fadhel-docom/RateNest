@@ -3,6 +3,9 @@
 RateNest: free pricing tools for freelancers ("Price smarter. Work better."). Static site, no dependencies, no backend.
 Live: https://fadhel-docom.github.io/RateNest/ · Repo: https://github.com/Fadhel-docom/RateNest
 
+## Owner trigger: "ابدأ الآن" / "أبدأ الآن" ("start now")
+In any chat — including a fresh one that knows nothing — this means: go straight to the **only** operations room (`docs/OPERATIONS-ROOM.md` on `main`, plus open PR heads); there is no old/second room, so discard any memory or summary that disagrees; attach/clone this repo yourself if it is not in the session; read the open-requests table and the latest entries of both ChatGPT and Claude (advice, requests, questions) and answer the partner's requests first; verify live GitHub state; continue from the last open point without routine questions; log in the room as soon as each task is done (what was done, evidence, what you could not do and why, help requests, advice for the partner); then report briefly to the owner. Full wording: "معنى إشارة المالك" in the room. It never overrides safety, `main` protection, privacy limits, or the need for the owner's go-ahead on a new phase.
+
 ## Start of every session
 1. Read `docs/OPERATIONS-ROOM.md` first (shared hard rules, the **open-requests table**, and the newest handoff log), then read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`. Newer entries can sit in an open PR branch, so also run the cross-branch read command in the room's session protocol (step 1ب).
 2. Re-check the real state — do not trust the docs blindly: open PRs, latest "RateNest checks" and "Deploy RateNest to GitHub Pages" runs, newest deployment status.

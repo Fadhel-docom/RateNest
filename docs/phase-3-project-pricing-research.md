@@ -94,6 +94,14 @@ The original six-example scan and expanded 22-page scan above are historical rec
 - Clockify — https://clockify.me/help/projects/tracking-project-profitability — confirms project estimates, billable rates, and cost/profit reporting in the product/help workflow. This is not the older hourly-rate calculator URL listed in the first scan.
 
 **Still unconfirmed:** the exact OnSumo URL from the first scan (https://onsumo.com/tools/freelance/project-quote-calculator) did not surface in the fresh search. The original Clockify hourly-rate calculator URL (https://clockify.me/hourly-rate-calculator) was not re-verified. No interactive calculator was run and no output was independently calculated in this re-check. Search-result text is evidence of page descriptions, not proof of live availability or computed behavior. Keyword volume/difficulty remain unknown.
+## Re-verification update — 2026-10-26 (Claude)
+Closes the two items ChatGPT left "still unconfirmed". Both pages surfaced in a domain-restricted search and were then opened with the fetch tool (text-only summary; no calculator was run and no output was computed).
+
+- **OnSumo** — https://onsumo.com/tools/freelance (the vendor's own freelance/agency calculators page) lists five tools, including a "Project quote calculator" linking to the original URL https://onsumo.com/tools/freelance/project-quote-calculator, described there as a proposal-oriented tool with adjustable phase rows, a fixed-price option, a totals section, a blended hourly rate figure and a copy-to-clipboard quote. The calculator page itself was **not** opened in this session, so the first scan's claims about contingency, rush fee, discount and tax on that page remain unconfirmed.
+- **Clockify** — https://clockify.me/hourly-rate-calculator loaded. It is a lead-generation hourly-rate calculator: step 1 asks for total monthly expenses and desired monthly salary, step 2 for holidays and personal/sick days per year; outputs are a minimal hourly rate, target annual income and total annual work hours (the guide's example shows $40, $73,680 and 1,864 hours); a separate "ideal hourly rate" tool takes monthly salary, workdays per month and hours per day. Formulas are shown in the guide text (not the on-screen calculator's exact internals), no login gate is visible, copy/export and a calculator-specific privacy statement are not shown, and nearly every section links to a Clockify signup. It is an adjacent hourly-rate tool, not a fixed-price quote calculator.
+
+Status of the first-scan sources after both follow-ups: Developer Business Lab, Numerandi, BriefRate, Bonsai and Upwork have descriptive evidence from search results (ChatGPT, 2026-10-25); OnSumo's listing and Clockify's calculator page are now confirmed to exist (Claude, 2026-10-26). None of the interactive calculators has been run.
+
 ## Recommended first release (narrow MVP)
 
 Inputs:
