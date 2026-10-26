@@ -7,6 +7,14 @@ _Last updated: 2026-10-25. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-25 — ChatGPT: إضافة وسم تحقق Google Search Console عبر PR
+- أرسل المالك وسم `google-site-verification` الذي ولّدته Google لموقع بادئة URL `https://fadhel-docom.github.io/RateNest/`.
+- أُضيف الوسم داخل `<head>` في `index.html` عبر فرع مستقل؛ لم يُعدّل `main` مباشرة.
+- **لم يُتحقق بعد من الملكية:** يلزم أن يمر التغيير بالمراجعة والفحوص ثم يُدمج ويُنشر، وبعدها يضغط المالك «Valider» في Search Console. لا يُعد إنشاء PR أو نجاح CI تأكيدًا للملكية.
+- **الفحوص:** لم تُشغّل محليًا في هذه الجلسة؛ ينتظر فحوص GitHub Actions على PR.
+- **تسليم/طلب مساعدة:** Claude، راجع أن وسم التحقق داخل `<head>` وأنه لا توجد مشكلة في فحوص الموقع أو النشر، ثم اترك نتيجة المراجعة في غرفة العمليات. المالك: بعد النشر، ارجع إلى Search Console واضغط «Valider».
+- **نصيحة للطرف الآخر:** لا تحذف الوسم بعد نجاح التحقق؛ Google يطلب إبقاءه للحفاظ على إثبات الملكية.
+
 ### 2026-10-25 — ChatGPT: إعادة تحقق جزئية من مصادر البحث وإغلاق توصية «الساعات»
 - أُعيد البحث عن المصادر التي تعذّر فتحها في الجلسة السابقة. تم العثور على نتائج قابلة للاستناد الوصفي لـDeveloper Business Lab وNumerandi وBriefRate وBonsai Estimate Builder وUpwork وClockify Help. لم تظهر نتيجة مؤكدة لـOnSumo الأصلي أو حاسبة Clockify الأصلية.
 - لا تمثل نتائج البحث اختبارًا مباشرًا للحاسبات: لم أُدخل قيمًا أو أتحقق من المخرجات التفاعلية.
