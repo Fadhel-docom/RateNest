@@ -83,6 +83,17 @@ Ranked by visitor value, evidence quality, ease, risk and testability:
 - Search volume, keyword difficulty and traffic potential remain **unknown**; no keyword provider was available.
 - The count is of pages read, not of independent companies; several are small, niche or paid products, three are guides/forum threads, and three are paid kits rather than free calculators.
 
+## Re-verification follow-up — 2026-10-25 (ChatGPT)
+The original six-example scan and expanded 22-page scan above are historical records. A fresh search on 2026-10-25 found the following source pages/snippets again:
+
+- Developer Business Lab — https://www.developerbusinesslab.com/tools/freelance-project-pricing-calculator/ — page content describes an income/capacity floor, project phases, uncertainty hours, direct expenses, fees/margin, and an overrun scenario. This is a richer model than RateNest's intentionally small calculator.
+- Numerandi — https://numerandi.com/tools/freelance-project-pricing-calculator/ — describes estimated hours × hourly floor, direct expenses, labor uncertainty, target profit margin, formula explanation, and CSV/print options.
+- BriefRate — https://hollinlabs.com/briefrate — describes hours, hourly rate, labour-only buffer, expenses, and scope/quote guidance.
+- Bonsai Estimate Builder — https://help.hellobonsai.com/en/articles/10731093-the-estimate-builder — describes estimates with sections, flat/hour/day units, hours, markup/discount, cost rate, and totals for price/cost/profit/margin. This is a help page about a workflow, not a standalone public calculator.
+- Upwork — https://www.upwork.com/tools and https://www.upwork.com/tools/freelance-rate-calculator/ — confirms a public tools directory and a separate hourly-rate calculator; it is adjacent rather than a direct fixed-price quote calculator.
+- Clockify — https://clockify.me/help/projects/tracking-project-profitability — confirms project estimates, billable rates, and cost/profit reporting in the product/help workflow. This is not the older hourly-rate calculator URL listed in the first scan.
+
+**Still unconfirmed:** the exact OnSumo URL from the first scan (https://onsumo.com/tools/freelance/project-quote-calculator) did not surface in the fresh search. The original Clockify hourly-rate calculator URL (https://clockify.me/hourly-rate-calculator) was not re-verified. No interactive calculator was run and no output was independently calculated in this re-check. Search-result text is evidence of page descriptions, not proof of live availability or computed behavior. Keyword volume/difficulty remain unknown.
 ## Recommended first release (narrow MVP)
 
 Inputs:
