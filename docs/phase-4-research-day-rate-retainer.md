@@ -33,3 +33,14 @@ Search results only (not opened, so not counted as read): MentorCruise, Rize, Ev
 - Text-only fetch; interactive widgets were not run; "not shown" means the captured text did not show it.
 - 4 pages opened and read, 1 not read; this is not the 20-competitor target of rule 5 for this cycle. The 22-page Phase 3 scan remains the broader record.
 - No demand data. Do not treat presence of competitors as proof of search volume.
+
+## Addendum 2026-10-28 (Claude): second pass before building the retainer calculator
+The owner confirmed a standing go-ahead on 2026-10-28 (see `CLAUDE.md`). Two more searches (`freelance retainer calculator monthly retainer hours rate discount`, `how to price a monthly retainer freelancer formula hours per month rollover unused hours`) and three more pages **actually opened** (text-only fetch; no calculator run): 
+
+| Page | Observed | Used for the RateNest design |
+|---|---|---|
+| Agiled — How to Price a Retainer (https://agiled.app/hub/agencies/how-to-price-a-retainer) | Three models (fixed-scope, hours-bank, value-based); hours-bank fee = rate × hours (+ buffer); warns about rollover/overage disputes and scope creep; suggests a fixed review cadence. | Ship the **hours-bank** model only (simple, transparent); mention unused-hours and extra-work terms as guidance, not as modelled features. |
+| Everhour — monthly to hourly (https://everhour.com/calculators/convert-monthly-to-hourly) | Converts a monthly amount to an hourly rate; formula monthly × 12 ÷ annual hours; notes the figure is gross and excludes tax/overhead. | Confirms the reverse view people look for; RateNest shows the **effective hourly rate** and states what it excludes. |
+| Indy — monthly retainer contracts (https://weareindy.com/blog/monthly-retainer-contracts-why-and-how-to-use-them) | Retainer = hourly rate × expected hours; suggests a modest retainer discount (example 10%); lists contract items (scope, hours, payment terms, extra work, end/break clause). | Discount is **optional and user-entered** (default 0); short original "terms to settle early" list. |
+
+Decision: build **`retainer-pricing.html`** (reserved hours × rate − optional user-entered discount → monthly retainer, effective rate, contract value, copy summary). Not modelled: support-level multipliers, rollover/overage, value-based pricing, tax, benchmarks (would need primary sources). Still **no demand data**: competitor presence is not evidence of search volume. Together with the 4 pages from 2026-10-27 and the Phase 3 scan, this is 7 pages read for Phase 4, below rule 5's 20-competitor target; the shortfall is stated, not hidden.

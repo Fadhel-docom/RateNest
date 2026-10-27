@@ -33,6 +33,11 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — Claude: Phase 4 retainer calculator (`retainer-pricing.html`)
+- Built under the owner's standing authorization (see `CLAUDE.md`). Hours-bank model only: reserved hours × rate − **user-entered** discount (default 0%) → monthly retainer, effective rate, contract value, copy summary. Reference: 20 h × $60 = $1,200.00/month, $60.00/hr, $14,400.00 over 12 months; with 10% and 6 months: $1,080.00, $54.00/hr, $6,480.00. No built-in fee/discount, no tracking, calculations client-side.
+- Research addendum (3 more pages opened) in `docs/phase-4-research-day-rate-retainer.md`; no demand data. Linked from the homepage and project page, added to `sitemap.xml` and the GitHub Pages staging list; new static checks and `tools/browser-checks/retainer-pricing.py`; accessibility measurements now cover the page.
+- Local: unit 45/45, static clean, browser retainer 37/37 + behaviour 42 + regression 6 + phase2 13 + project 31, accessibility clean on all three pages. Found and fixed a 320px/200% overflow (long heading). Not verified: live host, screen reader, real phone, indexing.
+
 ### 2026-10-28 — Claude: owner's standing authorization recorded, sitemap diagnosis, "¤" glyph removed
 - Owner wrote (verbatim, recorded in `CLAUDE.md` and room rule 11): «لديك تفويض دائم طالما انت ملتزم بتطوير الموقع في اطار القواعد التي ذكرناها لا تعود الي طالما ما تقوم به يفيد المشروع». Phase 4 may proceed in small tested PRs with search-intent research first; privacy, tracking, external cost and owner-only permissions stay out of scope.
 - Search Console shows "Impossible de récupérer le sitemap" for `https://ratenest.pages.dev/sitemap.xml` (submitted 27 Oct). Local: `sitemap.xml` is well-formed, `robots.txt` does not block it. Cause **unknown** (live host unreachable from our sessions); owner asked to open the error details and run a live URL Inspection on the sitemap URL.

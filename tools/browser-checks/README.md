@@ -8,6 +8,7 @@ python3 -I tools/browser-checks/behaviour.py          . 8801   # 42 checks: widt
 python3 -I tools/browser-checks/review-regression.py  . 8802   # 6 checks from PR #1 review comments
 python3 -I tools/browser-checks/phase2-ui.py          . 8803   # 13 checks: fee/buffer inputs, errors, adjusted result, copy
 python3 -I tools/browser-checks/project-pricing.py     . 8805   # 29 checks: Phase 3 project quote page (needs PR #13 code)
+python3 -I tools/browser-checks/retainer-pricing.py   . 8806   # 37 checks: Phase 4 retainer page
 python3 -I tools/browser-checks/a11y-measurements.py  . 8804   # contrast, names, headings, focus rings, zoom reflow on the home page and the project quote page (NOT axe-core)
 ```
 
