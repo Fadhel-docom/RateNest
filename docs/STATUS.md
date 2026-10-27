@@ -1,3 +1,9 @@
+## 2026-10-27 — ChatGPT: تصحيح العنوان الأساسي وتجهيز الفهرسة
+- كشف فحص المصدر أن `index.html` و`project-pricing.html` و`og:url` وبيانات `WebApplication` و`sitemap.xml` كانت تشير إلى GitHub Pages رغم اختيار المالك `https://ratenest.pages.dev`.
+- على فرع PR #36 `docs/cloudflare-pages-url-20261027`: حُدّثت روابط canonical وOpen Graph وJSON-LD في الصفحتين، وحُدّث `sitemap.xml` ليحتوي رابطَي Cloudflare فقط. أُضيف `robots.txt` يسمح بالزحف ويشير إلى `https://ratenest.pages.dev/sitemap.xml`، وأُضيف إلى ملفات النشر في workflow الخاص بـGitHub Pages كنسخة احتياطية. عُدّلت فحوص المصدر للتحقق من العنوان الأساسي وSitemap.
+- لم تُشغّل الاختبارات محليًا أو عبر Actions بعد هذه التغييرات. تعذّر جلب كلا الموقعين من بيئة التصفح، لذا حالة Cloudflare الحية وتشغيل الحاسبتين غير متحققين مستقلًا. لم تُغيّر إعدادات Cloudflare ولا Search Console/Bing.
+- **الخطوة التالية:** راجع CI والفرق، وبعد الدمج تأكد من نشر Cloudflare ثم اختبر الرئيسية و`/project-pricing.html` و`/sitemap.xml` و`/robots.txt`. أضف/تحقق من خاصية `https://ratenest.pages.dev/` في Google Search Console وBing Webmaster Tools، ثم أرسل Sitemap. لا تعطّل GitHub Pages قبل التحقق النهائي.
+
 ## عنوان Cloudflare Pages الجديد (2026-10-27)
 ### 2026-10-27 — ChatGPT: تسجيل عنوان Cloudflare Pages الجديد
 - سجّلت `https://ratenest.pages.dev` في `CLAUDE.md` وغرفة العمليات وملف الحالة عبر PR #36 (`docs/cloudflare-pages-url-20261027`). أبقيت GitHub Pages موثقًا كعنوان احتياطي.
