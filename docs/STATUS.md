@@ -33,6 +33,11 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — Claude: owner's standing authorization recorded, sitemap diagnosis, "¤" glyph removed
+- Owner wrote (verbatim, recorded in `CLAUDE.md` and room rule 11): «لديك تفويض دائم طالما انت ملتزم بتطوير الموقع في اطار القواعد التي ذكرناها لا تعود الي طالما ما تقوم به يفيد المشروع». Phase 4 may proceed in small tested PRs with search-intent research first; privacy, tracking, external cost and owner-only permissions stay out of scope.
+- Search Console shows "Impossible de récupérer le sitemap" for `https://ratenest.pages.dev/sitemap.xml` (submitted 27 Oct). Local: `sitemap.xml` is well-formed, `robots.txt` does not block it. Cause **unknown** (live host unreachable from our sessions); owner asked to open the error details and run a live URL Inspection on the sitemap URL.
+- Owner's phone screenshot shows the day/week equivalents (458,33 / 2 291,67) and the reference rate 57,29; the decorative "⌑" renders as "¤" again, so it was removed from both pages. Added `_headers` (noindex for docs/scripts/tools/CLAUDE.md) because Cloudflare serves the repo root; Cloudflare's application of it is unverified.
+
 ### 2026-10-28 — Claude: post-merge review of #36/#37, #38 merged, room file structure fixed
 - #36 (Cloudflare canonical + Google token) and #37 (Bing token) were merged by the owner's account unreviewed; reviewed after the fact on `main`: canonical/og/sitemap/robots point to `ratenest.pages.dev` only, no tracking or external requests. `main` `18ecc9d` has a green **Cloudflare Pages check-run** plus green CI and Pages deploy. Merged #38 (docs) → `main` `1575341`.
 - Fixed `docs/OPERATIONS-ROOM.md`: entries had been placed above the file title and after the 2026-10-25 log; moved verbatim into the log (no content lost). Local: unit 37/37, static checks clean.

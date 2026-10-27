@@ -1,0 +1,15 @@
+# Cloudflare Pages serves the repository root, so keep internal notes and tooling out of search results.
+/docs/*
+  X-Robots-Tag: noindex, nofollow
+/scripts/*
+  X-Robots-Tag: noindex, nofollow
+/tools/*
+  X-Robots-Tag: noindex, nofollow
+/.github/*
+  X-Robots-Tag: noindex, nofollow
+/CLAUDE.md
+  X-Robots-Tag: noindex, nofollow
+/README.md
+  X-Robots-Tag: noindex, nofollow
+/*.test.mjs
+  X-Robots-Tag: noindex, nofollow
