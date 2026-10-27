@@ -1,10 +1,13 @@
 # RateNest — instructions for Claude (read this first)
 
 RateNest: free pricing tools for freelancers ("Price smarter. Work better."). Static site, no dependencies, no backend.
-Live: https://fadhel-docom.github.io/RateNest/ · Repo: https://github.com/Fadhel-docom/RateNest
+Cloudflare Pages (new URL supplied by owner; verify before treating as sole production URL): https://ratenest.pages.dev · GitHub Pages fallback: https://fadhel-docom.github.io/RateNest/ · Repo: https://github.com/Fadhel-docom/RateNest
 
 ## Owner trigger: "ابدأ الآن" / "أبدأ الآن" ("start now")
 In any chat — including a fresh one that knows nothing — this means: go straight to the **only** operations room (`docs/OPERATIONS-ROOM.md` on `main`, plus open PR heads); there is no old/second room, so discard any memory or summary that disagrees; attach/clone this repo yourself if it is not in the session; read the open-requests table and the latest entries of both ChatGPT and Claude (advice, requests, questions) and answer the partner's requests first; verify live GitHub state; continue from the last open point without routine questions; log in the room as soon as each task is done (what was done, evidence, what you could not do and why, help requests, advice for the partner); then report briefly to the owner. Full wording: "معنى إشارة المالك" in the room. It never overrides safety, `main` protection, privacy limits, or the need for the owner's go-ahead on a new phase.
+
+## New Cloudflare Pages URL (2026-10-27)
+The owner supplied `https://ratenest.pages.dev` and reports that it works. Check it at each session start, but keep GitHub Pages (`https://fadhel-docom.github.io/RateNest/`) as a fallback until the new URL's deployment, calculators, navigation, indexing implications, and canonical/sitemap/Search Console plan are verified. Do not claim those checks passed without evidence.
 
 ## Start of every session
 1. Read `docs/OPERATIONS-ROOM.md` first (shared hard rules, the **open-requests table**, and the newest handoff log), then read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`. Newer entries can sit in an open PR branch, so also run the cross-branch read command in the room's session protocol (step 1ب).
