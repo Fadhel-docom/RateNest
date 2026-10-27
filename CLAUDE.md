@@ -31,10 +31,11 @@ The owner supplied `https://ratenest.pages.dev` and reports that it works. This 
 - `node scripts/check-site.mjs` — static checks (metadata, ids/labels, JSON-LD, static default numbers equal the calculator's output, no built-in fee).
 - Browser checks: `tools/browser-checks/` (local only, needs Playwright; see its README).
 - Local preview must use HTTP (ES modules fail on `file://`): `python3 -m http.server 8000`.
-- Pages workflow publishes only: `index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml` (see `.github/workflows/pages.yml`; `scripts/check-site.mjs` guards this list). Add new public files to its staging step, or they will not be deployed.
+- Pages workflow publishes only: `index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs retainer-pricing.html retainer-pricing.mjs retainer-pricing-calculator.mjs sitemap.xml robots.txt` (see `.github/workflows/pages.yml`; `scripts/check-site.mjs` guards this list). Add new public files to its staging step, or they will not be deployed.
 
 ## Architecture
 `calculator.mjs` pure logic (no DOM) · `app.mjs` UI wiring · `index.html` includes static default numbers for no-JS/SEO that must match the logic · `styles.css` · tests beside the code.
+Phase 4 (retainer): `retainer-pricing-calculator.mjs` (pure logic) · `retainer-pricing.mjs` (UI wiring) · `retainer-pricing.html` (static defaults must match the logic; the discount input must default to 0, guarded by `check-site.mjs`).
 Phase 3: `project-pricing-calculator.mjs` (pure logic) · `project-pricing.mjs` (UI wiring) · `project-pricing.html` (static defaults must match the logic; the buffer input must default to 0, guarded by `check-site.mjs`).
 
 ## Environment quirks learned (Claude Code cloud sessions)

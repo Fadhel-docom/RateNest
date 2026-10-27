@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102c26">
+  <meta name="description" content="Price a monthly freelance retainer from reserved hours, your hourly rate, and an optional discount you choose. See the effective rate and contract value.">
+  <title>Freelance Retainer Calculator — RateNest</title>
+  <link rel="canonical" href="https://ratenest.pages.dev/retainer-pricing.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RateNest">
+  <meta property="og:title" content="Freelance Retainer Calculator — RateNest">
+  <meta property="og:description" content="Turn reserved monthly hours and your hourly rate into a clear monthly retainer, effective rate and contract value.">
+  <meta property="og:url" content="https://ratenest.pages.dev/retainer-pricing.html">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "RateNest Freelance Retainer Calculator",
+    "url": "https://ratenest.pages.dev/retainer-pricing.html",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "A free client-side calculator for estimating a monthly freelance retainer from reserved hours, hourly rate and an optional discount."
+  }
+  </script>
+  <script type="module" src="./retainer-pricing.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#retainer-form">Skip to the calculator</a>
+  <header class="site-header">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a>
+    <nav aria-label="Pricing tools"><a href="./">Hourly rate calculator</a><a href="./project-pricing.html">Project quote calculator</a><span class="header-note">Free tools for freelancers</span></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">RECURRING WORK, CLEAR PRICE</p>
+      <h1>Price a monthly retainer <br><span>without guessing.</span></h1>
+      <p class="hero-copy">Turn the hours you reserve for a client each month and your hourly rate into a monthly fee. Any discount is yours to choose; RateNest does not assume one.</p>
+    </section>
+    <noscript><p class="noscript-note">JavaScript is required to calculate a retainer. Your numbers are processed locally in your browser.</p></noscript>
+    <section class="calculator-layout" aria-label="Monthly retainer calculator">
+      <form id="retainer-form" class="calculator-card" novalidate aria-labelledby="form-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">RETAINER ASSUMPTIONS</p><h2 id="form-title">Build your retainer</h2></div>
+          <label class="currency-control" for="currency"><span>Currency</span>
+            <select id="currency" name="currency">
+              <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="TND">TND</option><option value="CAD">CAD</option><option value="AUD">AUD</option>
+            </select>
+          </label>
+        </div>
+        <div class="field">
+          <label for="retainerName">Client or retainer name <span class="field-help">(optional)</span></label>
+          <input id="retainerName" name="retainerName" type="text" maxlength="120" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="monthlyHours">Reserved hours per month <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="monthlyHours-help">Hours of your time the client can count on each month. Must be greater than zero and at most 744.</p>
+          <input id="monthlyHours" name="monthlyHours" type="number" min="0.01" max="744" step="any" value="20" required inputmode="decimal" aria-describedby="monthlyHours-help monthlyHours-error">
+          <p class="field-error" id="monthlyHours-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="hourlyRate">Hourly rate to use <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a>. This value is not imported automatically.</p>
+          <input id="hourlyRate" name="hourlyRate" type="number" min="0" max="1000000000" step="any" value="60" required inputmode="decimal" aria-describedby="hourlyRate-help hourlyRate-error">
+          <p class="field-error" id="hourlyRate-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="discountPercent">Retainer discount (%)</label>
+          <p class="field-help" id="discountPercent-help">Optional. Some freelancers trade a lower rate for predictable monthly income; others do not discount at all. Starts at 0%; enter your own figure if you choose to discount.</p>
+          <input id="discountPercent" name="discountPercent" type="number" min="0" max="100" step="any" value="0" inputmode="decimal" aria-describedby="discountPercent-help discountPercent-error">
+          <p class="field-error" id="discountPercent-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="months">Contract length (months)</label>
+          <p class="field-help" id="months-help">Whole months, 1 to 120. Used only for the total contract value. Blank means 12.</p>
+          <input id="months" name="months" type="number" min="1" max="120" step="1" value="12" inputmode="numeric" aria-describedby="months-help months-error">
+          <p class="field-error" id="months-error" hidden></p>
+        </div>
+        <button class="calculate-button" type="submit">Calculate retainer <span aria-hidden="true">→</span></button>
+        <p class="privacy-note">Your numbers stay in your browser.</p>
+      </form>
+      <section class="result-card" aria-labelledby="result-heading">
+        <h2 id="result-heading" class="sr-only">Your retainer estimate</h2>
+        <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">SUGGESTED MONTHLY RETAINER</span></div>
+        <p id="retainer-total" class="rate-result">$1,200.00</p>
+        <p id="retainer-summary" class="result-summary">Based on 20 reserved hours per month at $60.00/hr, a 0% retainer discount, over 12 months.</p>
+        <div class="result-divider"></div>
+        <div class="result-stat"><span>Value at full rate</span><strong id="full-value">$1,200.00</strong></div>
+        <div class="result-stat"><span>Retainer discount</span><strong id="discount-total">−$0.00</strong></div>
+        <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$60.00/hr</strong></div>
+        <div class="result-stat"><span>Contract value</span><strong id="contract-total">$14,400.00</strong></div>
+        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of income. The effective rate assumes every reserved hour is used and paid. Taxes and platform/payment fees are excluded. Agree scope, unused hours and extra-work terms with your client.</p></div>
+        <button id="copy-retainer" class="copy-button" type="button">Copy retainer summary</button>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+      </section>
+    </section>
+    <section class="explainer">
+      <p class="eyebrow">A TRANSPARENT FORMULA</p>
+      <h2>See how the retainer is built</h2>
+      <div class="formula"><span>Reserved hours × hourly rate</span><span class="formula-line" aria-hidden="true">−</span><span>Your chosen discount</span></div>
+      <ol class="steps">
+        <li><strong>Value at full rate</strong> = reserved hours per month × hourly rate.</li>
+        <li><strong>Retainer discount</strong> = value at full rate × discount percentage. It is zero unless you enter one.</li>
+        <li><strong>Monthly retainer</strong> = value at full rate − retainer discount.</li>
+        <li><strong>Effective hourly rate</strong> = monthly retainer ÷ reserved hours. It equals your rate reduced by the discount.</li>
+        <li><strong>Contract value</strong> = monthly retainer × contract length in months.</li>
+      </ol>
+      <p class="fine-print">This tool does not estimate taxes, market rates or demand, and it cannot tell whether a client will accept the price. It does not model overage or rollover; it prices the reserved hours only.</p>
+      <p><a href="./">Need to calculate your sustainable hourly rate first? Use the hourly rate calculator.</a></p>
+    </section>
+    <section class="explainer">
+      <p class="eyebrow">BEFORE YOU SEND IT</p>
+      <h2>Terms to settle early</h2>
+      <ul class="steps">
+        <li><strong>What the hours cover:</strong> describe the work, so reserved time does not quietly turn into unlimited scope.</li>
+        <li><strong>Unused hours:</strong> decide whether they expire at month end, roll over for a limited time, or are billed anyway.</li>
+        <li><strong>Extra work:</strong> state how requests beyond the reserved hours are priced and approved.</li>
+        <li><strong>Review and exit:</strong> agree when the price is reviewed and how much notice either side gives to end it.</li>
+      </ul>
+      <p class="fine-print">This is general planning guidance, not legal advice. Have important contracts reviewed where you work.</p>
+    </section>
+    <section class="explainer faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Common questions</h2>
+      <details><summary>Do I have to offer a discount on a retainer?</summary><p>No. A discount is optional. If you choose one, enter the percentage yourself; the calculator starts at 0% and shows the effective hourly rate so you can see what the discount costs you.</p></details>
+      <details><summary>What does the effective hourly rate mean?</summary><p>It is the monthly retainer divided by the reserved hours. It describes what you earn per reserved hour if every reserved hour is used and the client pays in full, so it is not a guarantee of income.</p></details>
+      <details><summary>Does the retainer include tax or platform fees?</summary><p>No automatic tax or fee is applied. Rules and platform fees vary, so confirm the treatment that applies to you.</p></details>
+      <details><summary>Are my inputs saved or sent anywhere?</summary><p>No. Calculations run in your browser. RateNest does not send or store the values you enter.</p></details>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a><span>Price smarter. Work better.</span><span>Free pricing tools for freelancers.</span></footer>
+</body>
+</html>

@@ -1,0 +1,70 @@
+import sys, subprocess, time
+from playwright.sync_api import sync_playwright
+repo, port = sys.argv[1], sys.argv[2]
+srv = subprocess.Popen(["python3", "-I", "-m", "http.server", port, "--bind", "127.0.0.1"], cwd=repo, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL); time.sleep(1)
+r = []
+def ok(n, c, d=""): r.append((n, bool(c), d))
+URL = f"http://127.0.0.1:{port}/retainer-pricing.html"
+FIELDS = ("monthlyHours", "hourlyRate", "discountPercent", "months")
+def setv(pg, h, rate, d, m):
+    for k, v in zip(FIELDS, (h, rate, d, m)): pg.fill(f"#{k}", str(v))
+    pg.wait_for_timeout(150)
+try:
+    with sync_playwright() as p:
+        b = p.chromium.launch()
+        for w in (320, 375, 1280):
+            ctx = b.new_context(viewport={"width": w, "height": 800}, permissions=["clipboard-read", "clipboard-write"]); pg = ctx.new_page(); errs = []
+            pg.on("pageerror", lambda e: errs.append(str(e))); pg.on("console", lambda m: errs.append(m.text) if m.type in ("error", "warning") else None)
+            pg.goto(URL); pg.wait_for_timeout(400)
+            ok(f"[{w}px] default retainer $1,200.00 after JS", pg.inner_text("#retainer-total") == "$1,200.00", pg.inner_text("#retainer-total"))
+            ok(f"[{w}px] defaults: full/discount/effective/contract", (pg.inner_text("#full-value"), pg.inner_text("#discount-total"), pg.inner_text("#effective-rate"), pg.inner_text("#contract-total")) == ("$1,200.00", "−$0.00", "$60.00/hr", "$14,400.00"), str((pg.inner_text("#full-value"), pg.inner_text("#discount-total"), pg.inner_text("#effective-rate"), pg.inner_text("#contract-total"))))
+            ok(f"[{w}px] default discount input is 0 and nothing is pre-discounted", pg.input_value("#discountPercent") == "0")
+            ok(f"[{w}px] no horizontal overflow", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"), pg.evaluate("document.documentElement.scrollWidth+'>'+document.documentElement.clientWidth"))
+            if w == 375:
+                setv(pg, 20, 60, 10, 6)
+                ok("recalc 20h x 60, 10% discount, 6 months", (pg.inner_text("#retainer-total"), pg.inner_text("#discount-total"), pg.inner_text("#effective-rate"), pg.inner_text("#contract-total")) == ("$1,080.00", "−$120.00", "$54.00/hr", "$6,480.00"), pg.inner_text("#retainer-total"))
+                pg.fill("#discountPercent", ""); pg.fill("#months", ""); pg.wait_for_timeout(150)
+                ok("blank optional fields treated as 0% and 12 months without error", pg.inner_text("#retainer-total") == "$1,200.00" and pg.inner_text("#contract-total") == "$14,400.00" and not pg.is_visible("#discountPercent-error") and not pg.is_visible("#months-error"), pg.inner_text("#contract-total"))
+                for fld, bad in (("monthlyHours", "0"), ("monthlyHours", ""), ("monthlyHours", "745"), ("hourlyRate", "-1"), ("discountPercent", "101"), ("months", "0"), ("months", "2.5"), ("months", "121")):
+                    setv(pg, 20, 60, 0, 12)
+                    pg.fill(f"#{fld}", bad); pg.wait_for_timeout(150)
+                    vis = pg.is_visible(f"#{fld}-error")
+                    ok(f"{fld}='{bad}' shows error, aria-invalid, clears result", vis and pg.get_attribute(f"#{fld}", "aria-invalid") == "true" and pg.inner_text("#retainer-total") == "—" and pg.is_disabled("#copy-retainer"), pg.inner_text(f"#{fld}-error") if vis else "no error")
+                setv(pg, 20, 60, 0, 12)
+                pg.fill("#monthlyHours", ""); pg.wait_for_timeout(100)
+                pg.click("#hourlyRate"); pg.keyboard.type("5"); pg.wait_for_timeout(150)
+                active = pg.evaluate("document.activeElement.id")
+                ok("typing in hourlyRate while hours is invalid keeps focus in hourlyRate", active == "hourlyRate", f"activeElement={active}")
+                setv(pg, 20, 60, 10, 6); pg.fill("#retainerName", "Acme support"); pg.wait_for_timeout(150)
+                pg.click("#copy-retainer"); pg.wait_for_timeout(200)
+                clip = pg.evaluate("navigator.clipboard.readText()")
+                ok("copy summary has name, retainer, effective rate, contract, assumptions", all(s in clip for s in ("Acme support", "$1,080.00", "$54.00/hr", "$6,480.00", "Assumptions")), clip.replace("\n", " | ")[:260])
+                ok("copy status announced", "copied" in pg.inner_text("#copy-status").lower(), pg.inner_text("#copy-status"))
+                pg.select_option("#currency", "EUR"); pg.wait_for_timeout(150)
+                ok("currency EUR re-renders retainer", "€" in pg.inner_text("#retainer-total"), pg.inner_text("#retainer-total"))
+                pg.select_option("#currency", "TND"); pg.wait_for_timeout(150)
+                ok("currency TND renders without throwing", "1,080" in pg.inner_text("#retainer-total"), pg.inner_text("#retainer-total"))
+                ok("skip link target exists", pg.evaluate("!!document.querySelector(document.querySelector('.skip-link').getAttribute('href'))"))
+                pg.goto(f"http://127.0.0.1:{port}/index.html"); pg.wait_for_timeout(200)
+                ok("homepage links to retainer page", pg.is_visible("a[href='./retainer-pricing.html']"))
+                pg.goto(f"http://127.0.0.1:{port}/project-pricing.html"); pg.wait_for_timeout(200)
+                ok("project page links to retainer page", pg.is_visible("a[href='./retainer-pricing.html']"))
+            ok(f"[{w}px] no console errors/warnings", not errs, str(errs))
+            ctx.close()
+        ctx = b.new_context(java_script_enabled=False); pg = ctx.new_page(); pg.goto(URL)
+        ok("no-JS: static default $1,200.00 visible", "$1,200.00" in pg.inner_text("#retainer-total"))
+        ctx.close()
+        ctx = b.new_context(viewport={"width": 320, "height": 800}); pg = ctx.new_page(); pg.goto(URL)
+        pg.add_style_tag(content="html{font-size:200%}"); pg.wait_for_timeout(200)
+        ok("320px with 200% text: no horizontal scroll", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"))
+        ctx.close()
+        for label, vals in (("six-figure", (160, 500, 5, 24)), ("eight-figure", (744, 100000, 0, 120))):
+            ctx = b.new_context(viewport={"width": 320, "height": 800}); pg = ctx.new_page(); pg.goto(URL); pg.wait_for_timeout(200)
+            setv(pg, *vals)
+            pg.add_style_tag(content="html{font-size:200%}"); pg.wait_for_timeout(200)
+            ok(f"320px with 200% text, {label} contract: no horizontal scroll", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"), pg.evaluate("document.documentElement.scrollWidth+'>'+document.documentElement.clientWidth") + " " + pg.inner_text("#contract-total"))
+            ctx.close()
+        b.close()
+finally: srv.terminate()
+for n, c, d in r: print(("PASS" if c else "FAIL"), n, (f"[{d}]" if d else ""))
+print(sum(1 for _, c, _ in r if c), "passed,", sum(1 for _, c, _ in r if not c), "failed")
