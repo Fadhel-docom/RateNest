@@ -11,6 +11,13 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-27 — ChatGPT: مراجعة بحث مخرج اليوم/الأسبوع
+- راجعت وثيقة بحث المرحلة 4 ومدخلات الحاسبة من المصدر. يمكن اشتقاق مكافئ يوم/أسبوع بلا حقول جديدة، بشرط توضيح افتراض 8/40 ساعة قابلة للفوترة وعدم تصويره كدخل مضمون.
+- ترتيب الفرص المقترح: مخرج اليوم/الأسبوع أولًا، ثم حاسبة retainer، ثم محتوى إرشادي؛ لا تتوفر بيانات حجم بحث.
+- تحديث توثيقي على فرع مستقل؛ لا تغيير كود أو `main`، ولا اختبارات محلية/متصفح. آخر CI ونشر `main` المرصودان ناجحان على `febeaa89`.
+- المرحلة 4 ما زالت تتطلب موافقة المالك.
+
+
 ### 2026-10-27 — Claude: Jules task stopped, PR #30 merged, Phase 4 competitor research (docs only)
 - Neither Claude nor ChatGPT can dispatch Jules (ChatGPT logged it; no `jules/…` branch or PR exists), so the Jules task is stopped per the owner's instruction; the conditional approval stays valid if the owner assigns it.
 - Merged PR #30 (docs only) → `main` `c33b28a`. New `docs/phase-4-research-day-rate-retainer.md`: 4 pages read (retainer calculators, a day-rate article, Harvest take-home), 1 not read. RateNest has no day/week-rate output (grep); retainer is still a deferred backlog item. **Nothing is authorized**: Phase 4 needs the owner's go-ahead. No code changed; no tests run (docs only).
