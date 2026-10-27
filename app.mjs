@@ -1,5 +1,6 @@
 import {
   calculateHourlyRate,
+  rateEquivalents,
   validateRateInputs,
   validateAdjustments,
   applyAdjustments,
@@ -20,6 +21,8 @@ const resultLabel = $("#result-label");
 const annualTotal = $("#annual-total");
 const billableHours = $("#billable-hours");
 const workingWeeks = $("#working-weeks");
+const dailyRate = $("#daily-rate");
+const weeklyRate = $("#weekly-rate");
 const summary = $("#result-summary");
 const copyButton = $("#copy-result");
 const copyStatus = $("#copy-status");
@@ -98,6 +101,8 @@ function renderEmpty() {
   annualTotal.textContent = "—";
   billableHours.textContent = "—";
   workingWeeks.textContent = "—";
+  dailyRate.textContent = "—";
+  weeklyRate.textContent = "—";
   summary.textContent = "Fix the highlighted fields to see your rate.";
   stepsList.replaceChildren();
   scenarioRows.replaceChildren();
@@ -143,6 +148,9 @@ function render(values, result, percents) {
   annualTotal.textContent = moneyCompact(result.annualRequired);
   billableHours.textContent = `${formatNumber(result.billableHours)} hrs`;
   workingWeeks.textContent = `${result.workingWeeks} weeks`;
+  const equivalents = rateEquivalents(result.hourlyRate);
+  dailyRate.textContent = `${money(equivalents.dailyRate)}/day`;
+  weeklyRate.textContent = `${money(equivalents.weeklyRate)}/week`;
   summary.textContent = `Based on ${values.billablePercent}% billable time and ${result.workingWeeks} working weeks per year.`;
   adjustedBlock.hidden = !adjustment.isAdjusted;
   if (adjustment.isAdjusted) {
@@ -203,7 +211,9 @@ copyButton.addEventListener("click", async () => {
   const fmtCompact = (value) => formatCurrency(value, lastValid.currency, undefined, { compact: true });
   const lines = [
     "RateNest hourly rate estimate",
-    `${adjustment.isAdjusted ? "Base rate" : "Suggested rate"}: ${fmt(result.hourlyRate)}/hr`
+    `${adjustment.isAdjusted ? "Base rate" : "Suggested rate"}: ${fmt(result.hourlyRate)}/hr`,
+    `8-billable-hour day equivalent (base rate): ${fmt(rateEquivalents(result.hourlyRate).dailyRate)}/day`,
+    `40-billable-hour week equivalent (base rate): ${fmt(rateEquivalents(result.hourlyRate).weeklyRate)}/week`
   ];
   if (adjustment.isAdjusted) {
     lines.push(`Rate to quote with your fee and buffer: ${fmt(adjustment.adjustedRate)}/hr`);
