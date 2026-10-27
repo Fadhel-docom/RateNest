@@ -33,6 +33,11 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — Claude: extensionless canonical/sitemap URLs for subpages
+- Cloudflare Pages redirects `/page.html` to `/page` (Cloudflare docs); our canonical, og:url, JSON-LD and sitemap used `.html` for the project and retainer pages. Switched them to `/project-pricing` and `/retainer-pricing`; `scripts/check-site.mjs` now fails on any `.html` URL on `ratenest.pages.dev`. Internal links stay `./page.html`.
+- Merged #42 (docs). Our sessions cannot reach `ratenest.pages.dev` (curl: proxy 403; WebFetch allowlist), so no live HTTP evidence; the redirect behaviour is from documentation, not observed. This may not be the cause of the sitemap fetch failure.
+- Local: unit 45/45, static clean, browser project 31 / retainer 37 / behaviour 42.
+
 ### 2026-10-28 — Claude: Phase 4 retainer calculator (`retainer-pricing.html`)
 - Built under the owner's standing authorization (see `CLAUDE.md`). Hours-bank model only: reserved hours × rate − **user-entered** discount (default 0%) → monthly retainer, effective rate, contract value, copy summary. Reference: 20 h × $60 = $1,200.00/month, $60.00/hr, $14,400.00 over 12 months; with 10% and 6 months: $1,080.00, $54.00/hr, $6,480.00. No built-in fee/discount, no tracking, calculations client-side.
 - Research addendum (3 more pages opened) in `docs/phase-4-research-day-rate-retainer.md`; no demand data. Linked from the homepage and project page, added to `sitemap.xml` and the GitHub Pages staging list; new static checks and `tools/browser-checks/retainer-pricing.py`; accessibility measurements now cover the page.
