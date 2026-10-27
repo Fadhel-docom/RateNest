@@ -278,3 +278,9 @@ Phase 3 (project quote calculator, PR #13) and its research (PR #11) are merged 
 2. axe-core / Lighthouse in CI if the npm registry becomes reachable; otherwise keep the custom measurements.
 3. ~~Phase 3 — project pricing calculator~~ — done 2026-10-25 (PR #13 and research PR #11 merged; post-merge review and live-page check still open).
 4. Later phases (retainer, guides, optional "hours before your effective rate drops" output) — each needs the owner's go-ahead.
+
+
+## 2026-10-27 — ChatGPT: إعداد تحقق Bing للموقع الأساسي
+- أُنشئ الفرع `seo/bing-verification-20261027` من `main` لإضافة وسم Bing الذي زوّد به المالك لخاصية `https://ratenest.pages.dev/`.
+- أُضيف وسم `msvalidate.01` إلى `index.html` بجانب وسم Google، دون تغيير العنوان الأساسي أو حذف إعدادات GitHub Pages الاحتياطية.
+- التغيير على فرع فقط، ولم يُدمج بعد. لم يُجرَ تحقق حي من الوسم ولم يُضغط Verify في Bing؛ لا يُعلن نجاح التحقق قبل دمج التغيير ونشره ثم التحقق من Bing.
