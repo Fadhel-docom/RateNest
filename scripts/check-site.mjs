@@ -20,7 +20,8 @@ check("html lang attribute", /<html[^>]*\slang="en"/i.test(html));
 check("viewport meta", /name="viewport"/i.test(html));
 check("title is present and 10-70 chars", title.length >= 10 && title.length <= 70);
 check("meta description is 70-170 chars", description.length >= 70 && description.length <= 170);
-check("canonical is an absolute https URL", /^https:\/\/[^/]+\/.*/.test(canonical));
+check("canonical is the selected Cloudflare Pages homepage", canonical === "https://ratenest.pages.dev/");
+check("homepage Open Graph URL matches canonical", html.includes(`<meta property="og:url" content="${canonical}">`));
 check("exactly one h1", (html.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a descriptive title", /<title>Freelance Project Quote Calculator — RateNest<\/title>/.test(projectHtml));
 check("project quote page has a unique canonical URL", /<link rel="canonical" href="https:\/\/fadhel-docom\.github\.io\/RateNest\/project-pricing\.html">/.test(projectHtml));
@@ -78,8 +79,9 @@ check(`static billable hours show ${formatNumber(result.billableHours, "en-US")}
 check("static scenario table matches calculator output", billableScenarios(defaults).every((row) =>
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
 
-check("sitemap.xml exists and lists the canonical URL", existsSync(new URL("../sitemap.xml", import.meta.url)) &&
-  readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8").includes(`<loc>${canonical}</loc>`));
+const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
+check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing.html</loc>"));
+check("sitemap no longer advertises GitHub Pages URLs", !sitemap.includes("fadhel-docom.github.io"));
 
 if (failures.length) {
   console.error(`\n${failures.length} check(s) failed.`);
