@@ -20,10 +20,12 @@ check("html lang attribute", /<html[^>]*\slang="en"/i.test(html));
 check("viewport meta", /name="viewport"/i.test(html));
 check("title is present and 10-70 chars", title.length >= 10 && title.length <= 70);
 check("meta description is 70-170 chars", description.length >= 70 && description.length <= 170);
-check("canonical is an absolute https URL", /^https:\/\/[^/]+\/.*/.test(canonical));
+check("canonical is the selected Cloudflare Pages homepage", canonical === "https://ratenest.pages.dev/");
+check("homepage Open Graph URL matches canonical", html.includes(`<meta property="og:url" content="${canonical}">`));
 check("exactly one h1", (html.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a descriptive title", /<title>Freelance Project Quote Calculator — RateNest<\/title>/.test(projectHtml));
-check("project quote page has a unique canonical URL", /<link rel="canonical" href="https:\/\/fadhel-docom\.github\.io\/RateNest\/project-pricing\.html">/.test(projectHtml));
+check("project quote page has the Cloudflare canonical URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/project-pricing\.html">/.test(projectHtml));
+check("project page Open Graph URL uses Cloudflare Pages", projectHtml.includes(`<meta property="og:url" content="https://ratenest.pages.dev/project-pricing.html">`));
 check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
@@ -37,7 +39,7 @@ check("project quote page is linked from the homepage", html.includes('href="./p
 const projectDefault = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0 });
 check("static project quote default matches calculation", projectDefault.quote === 1350 && projectDefault.effectiveHourlyRate === 67.5 && projectHtml.includes('id="quote-total" class="rate-result">$1,350.00<'));
 check("project quote buffer input defaults to 0 (percentages are entered by the user)", /<input id="bufferPercent"[^>]*\svalue="0"/.test(projectHtml));
-check("Pages workflow stages the new project quote page and modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml _site/"));
+check("Pages workflow stages the new project quote page and modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml robots.txt _site/"));
 
 check("calculator form exists", /<form[^>]*id="rate-form"/i.test(html));
 const h1Html = /<h1[^>]*>([\s\S]*?)<\/h1>/i.exec(html)?.[1] ?? "";
@@ -78,8 +80,9 @@ check(`static billable hours show ${formatNumber(result.billableHours, "en-US")}
 check("static scenario table matches calculator output", billableScenarios(defaults).every((row) =>
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
 
-check("sitemap.xml exists and lists the canonical URL", existsSync(new URL("../sitemap.xml", import.meta.url)) &&
-  readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8").includes(`<loc>${canonical}</loc>`));
+const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
+check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing.html</loc>"));
+check("sitemap no longer advertises GitHub Pages URLs", !sitemap.includes("fadhel-docom.github.io"));
 
 if (failures.length) {
   console.error(`\n${failures.length} check(s) failed.`);

@@ -1,4 +1,26 @@
+## 2026-10-27 — ChatGPT: تصحيح العنوان الأساسي وتجهيز الفهرسة
+- كشف فحص المصدر أن `index.html` و`project-pricing.html` و`og:url` وبيانات `WebApplication` و`sitemap.xml` كانت تشير إلى GitHub Pages رغم اختيار المالك `https://ratenest.pages.dev`.
+- على فرع PR #36 `docs/cloudflare-pages-url-20261027`: حُدّثت روابط canonical وOpen Graph وJSON-LD في الصفحتين، وحُدّث `sitemap.xml` ليحتوي رابطَي Cloudflare فقط. أُضيف `robots.txt` يسمح بالزحف ويشير إلى `https://ratenest.pages.dev/sitemap.xml`، وأُضيف إلى ملفات النشر في workflow الخاص بـGitHub Pages كنسخة احتياطية. عُدّلت فحوص المصدر للتحقق من العنوان الأساسي وSitemap.
+- لم تُشغّل الاختبارات محليًا. في GitHub Actions run [40518164113](https://github.com/Fadhel-docom/RateNest/actions/runs/40518164113) على commit `8c2e6073aaada5c38af8e5335b09dcd29783559e` نجحت خطوتا unit tests وstatic site checks؛ عند كتابة هذا السجل ظل run في حالة `in_progress` ولم تُسجّل نتيجة نهائية بعد. تعذّر جلب كلا الموقعين من بيئة التصفح، لذا حالة Cloudflare الحية وتشغيل الحاسبتين غير متحققين مستقلًا. لم تُغيّر إعدادات Cloudflare ولا Search Console/Bing.
+- **الخطوة التالية:** راجع CI والفرق، وبعد الدمج تأكد من نشر Cloudflare ثم اختبر الرئيسية و`/project-pricing.html` و`/sitemap.xml` و`/robots.txt`. أضف/تحقق من خاصية `https://ratenest.pages.dev/` في Google Search Console وBing Webmaster Tools، ثم أرسل Sitemap. لا تعطّل GitHub Pages قبل التحقق النهائي.
+
+## عنوان Cloudflare Pages الجديد (2026-10-27)
+### 2026-10-27 — ChatGPT: تسجيل عنوان Cloudflare Pages الجديد
+- سجّلت `https://ratenest.pages.dev` في `CLAUDE.md` وغرفة العمليات وملف الحالة عبر PR #36 (`docs/cloudflare-pages-url-20261027`). أبقيت GitHub Pages موثقًا كعنوان احتياطي.
+- لا تغيير في كود الموقع أو إعدادات الاستضافة/الفهرسة. تعذر جلب العنوانين بأداة التصفح؛ وظائف الموقع والنشر التلقائي والعنوان الأساسي ما زالت غير متحققة من هذه الجلسة.
+- PR #36 مفتوح؛ لم يُدمج ولم تُشغّل اختبارات محلية. يلزم فحص CI والفرق قبل الدمج.
+
+- العنوان الذي زوّدنا به المالك ويقول إنّه يعمل: https://ratenest.pages.dev
+- استخدم ChatGPT وClaude هذا العنوان في الفحص القادم، مع إبقاء https://fadhel-docom.github.io/RateNest/ متاحًا كعنوان احتياطي إلى أن يُستكمل التحقق من الروابط والحاسبات والفهرسة وقرار العنوان الأساسي (canonical/sitemap/Search Console).
+- لا نزعم في هذا السجل أننا اختبرنا كل الوظائف على العنوان الجديد؛ يلزم اختبار مستقل بعد ربط Cloudflare بالمستودع والتأكد من النشر التلقائي.
+
 # RateNest — project status log
+
+## 2026-10-27 — ChatGPT: إضافة رمز تحقق Google Search Console لعنوان Cloudflare
+- أُضيف وسم التحقق الذي زوّد به المالك إلى `<head>` في `index.html` على فرع PR #36، مع استبدال الرمز القديم لا تكرار وسوم التحقق.
+- الرمز المضاف: `BdO9K10cQ41kYtkdW-5CJP7UJ2oY-bouoIqOiPFje38`.
+- لم يُدمج التغيير ولم يُتحقق من نشره حيًا؛ يلزم اكتمال CI ودمج PR ثم التأكد من ظهور الوسم في `https://ratenest.pages.dev/` قبل ضغط «Vérifier» في Search Console.
+
 
 ## تنسيق مساعد Jules — موافقة Claude المشروطة (2026-10-26)
 - المالك أكد أن Jules مربوط بالمستودع؛ لم تُرسَل إليه أي مهمة بعد. رأي Claude: موافقة مشروطة على مهمة واحدة فقط (حالات اختبار وحدات إضافية في ملفات الاختبار فقط)، على فرع `jules/…` وPR منفصل بلا دمج تلقائي، بلا لمس للـworkflows أو `CLAUDE.md` أو الغرفة أو ملفات الموقع المنشورة، وبلا تبعيات أو ميزات. التفاصيل الكاملة والضوابط في مدخل Claude 2026-10-26 17:40 UTC في الغرفة.
