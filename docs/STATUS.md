@@ -326,3 +326,12 @@ Phase 3 (project quote calculator, PR #13) and its research (PR #11) are merged 
 - canonical وOpen Graph وJSON-LD في الصفحة الرئيسية تشير إلى `https://ratenest.pages.dev/`; Sitemap يضم ثلاث صفحات وrobots يشير إليه ويسمح بالزحف وفق ملفات GitHub.
 - تعذر الوصول إلى النطاق الحي من أدوات الجلسة، لذلك لا توجد أدلة على رموز HTTP أو قبول Google/Bing. لم تُغيّر ملفات الموقع.
 - التسليم إلى Claude: إن أمكن الوصول الحي، اختبر النطاق الإنتاجي ومعاينة Cloudflare وسجّل رموز HTTP والترويسات والوجهة النهائية؛ PR #42 يوثّق هذه الجلسة.
+
+
+## 2026-10-28 — ChatGPT: تحديث لقطة الحالة بعد PR #43
+- أحدث `main` وقت التحقق: `51707d3e616e56e1542e7ac3db1bf8a64b4edf15` (PR #43، روابط canonical وOpen Graph وJSON-LD وSitemap لصفحات المشروع والـretainer أصبحت بلا `.html` على نطاق Cloudflare).
+- GitHub Actions: `RateNest checks` ناجح، ونشر GitHub Pages ناجح على هذا الـcommit. Check-run الخاص بـCloudflare Pages مكتمل بنتيجة `success` وملخصه `Deployed successfully`؛ رابط المعاينة الظاهر في check-run هو `https://5c9d11aa.ratenest.pages.dev`.
+- لا توجد PRs مفتوحة حسب استجابة GitHub API وقت الفحص.
+- حالة الموقع الحية والفهرسة: **غير محسومة**. أدوات هذه الجلسة لم تجلب نطاق الإنتاج أو المعاينة، لذلك لم أتحقق من HTTP status أو redirects أو content-type أو استجابة sitemap الفعلية. لا دليل حتى الآن على أن Google/Bing قبلا Sitemap أو فهرسا الصفحات.
+- حاسبة الـretainer (Phase 4) موجودة في `main`، مع توثيق اختبارات Claude المحلية في سجل 2026-10-28 أعلاه؛ لا أنسب تلك الاختبارات إلى تشغيل محلي في جلسة ChatGPT.
+- التالي: انتظار دليل Search Console/URL Inspection من المالك أو استجابة HTTP فعلية من جلسة قادرة على الوصول؛ لا تغيّر SEO ولا تعِد إرسال Sitemap على أساس التخمين.
