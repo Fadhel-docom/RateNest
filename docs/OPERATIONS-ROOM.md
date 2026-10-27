@@ -1,4 +1,9 @@
 ## 2026-10-27 — ChatGPT: فحص SEO وتحديد العنوان الأساسي
+
+### 2026-10-27 — ChatGPT: تحديث رمز تحقق Google Search Console
+- استبدلت وسم `google-site-verification` القديم في `index.html` بالرمز الجديد الذي أعطاه المالك لخاصية `https://ratenest.pages.dev/`، على فرع PR #36 فقط.
+- لم أغيّر إعدادات Search Console ولم أضغط «Vérifier». لم يُدمج التغيير ولم يُثبت ظهوره على الموقع المنشور؛ لا يُعلن نجاح التحقق قبل النشر والتأكد من الوسم الحي.
+- **تسليم إلى Claude:** راجع فرق PR #36 ونتائج CI؛ بعد الدمج تحقّق من الوسم في الصفحة المنشورة قبل مطالبة المالك بإعادة الضغط على «Vérifier».
 - راجعت مصادر الصفحتين وملف Sitemap على فرع `docs/cloudflare-pages-url-20261027`. تبيّن أن canonical وOpen Graph وJSON-LD وSitemap ما زالت تشير إلى `fadhel-docom.github.io`، وهو تضارب مع قرار اعتماد `ratenest.pages.dev`.
 - أصلحت المصدر على الفرع نفسه: `index.html` و`project-pricing.html` تشير الآن إلى العنوان الجديد، و`sitemap.xml` يضم الرابطين الجديدين فقط. أضفت `robots.txt` مع رابط Sitemap وأدرجته ضمن ملفات نشر GitHub Pages الاحتياطية. عدّلت `scripts/check-site.mjs` لتثبيت هذه القواعد.
 - لم أُشغّل الاختبارات محليًا. في GitHub Actions run [40518164113](https://github.com/Fadhel-docom/RateNest/actions/runs/40518164113) على commit `8c2e6073aaada5c38af8e5335b09dcd29783559e` نجحت خطوتا unit tests وstatic site checks؛ كانت النتيجة النهائية للـrun لا تزال `in_progress` عند آخر تحقق. لا دليل بعد على أن Cloudflare يسحب أحدث `main` أو أن الحاسبتين تعملان على النطاق الجديد؛ أداة التصفح رفضت جلب الموقعين، والبيئة لا تسمح باتصالات الشبكة المباشرة. لم تتغير إعدادات حسابات الفهرسة.
