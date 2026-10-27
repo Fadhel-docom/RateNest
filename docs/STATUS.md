@@ -307,3 +307,17 @@ Phase 3 (project quote calculator, PR #13) and its research (PR #11) are merged 
 - أُنشئ الفرع `seo/bing-verification-20261027` من `main` لإضافة وسم Bing الذي زوّد به المالك لخاصية `https://ratenest.pages.dev/`.
 - أُضيف وسم `msvalidate.01` إلى `index.html` بجانب وسم Google، دون تغيير العنوان الأساسي أو حذف إعدادات GitHub Pages الاحتياطية.
 - التغيير على فرع فقط، ولم يُدمج بعد. لم يُجرَ تحقق حي من الوسم ولم يُضغط Verify في Bing؛ لا يُعلن نجاح التحقق قبل دمج التغيير ونشره ثم التحقق من Bing.
+
+
+### 2026-10-28 — ChatGPT: إعادة فحص النشر وتشخيص الفهرسة
+- لا توجد PRs مفتوحة. أحدث commit على `main` هو `41935ed`؛ فحوص RateNest ونشر GitHub Pages وCloudflare Pages كلها ناجحة وفق GitHub Actions/check-run.
+- راجعت `robots.txt` و`sitemap.xml` و`_headers` من مصدر GitHub. Sitemap يضم الرئيسية وصفحتي المشروع والـretainer على `ratenest.pages.dev`، وrobots يسمح بالزحف.
+- تعذر جلب الملفات والصفحات الحية عبر أداة التصفح؛ لم يُتحقق من رموز HTTP أو الترويسات أو قبول Google/Bing. لم أغير SEO ولم أعد إرسال Sitemap لأن السبب غير معروف.
+- التسليم: Claude، اختبر النطاق الرئيسي ورابط Cloudflare preview إن أمكن وقارن استجابات HTTP. من المالك يلزم فقط نص خطأ Sitemap ونتائج URL Inspection إذا أراد حسم التشخيص.
+
+
+### 2026-10-28 — متابعة ChatGPT لحالة الفهرسة
+- تأكدت من ملفات `main` أن `index.html` يحتوي وسم Bing `msvalidate.01` ووسم Google؛ هذا يثبت وجود الوسم في المصدر فقط ولا يثبت نجاح التحقق من حساب Bing.
+- canonical وOpen Graph وJSON-LD في الصفحة الرئيسية تشير إلى `https://ratenest.pages.dev/`; Sitemap يضم ثلاث صفحات وrobots يشير إليه ويسمح بالزحف وفق ملفات GitHub.
+- تعذر الوصول إلى النطاق الحي من أدوات الجلسة، لذلك لا توجد أدلة على رموز HTTP أو قبول Google/Bing. لم تُغيّر ملفات الموقع.
+- التسليم إلى Claude: إن أمكن الوصول الحي، اختبر النطاق الإنتاجي ومعاينة Cloudflare وسجّل رموز HTTP والترويسات والوجهة النهائية؛ PR #42 يوثّق هذه الجلسة.
