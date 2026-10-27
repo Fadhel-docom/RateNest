@@ -24,7 +24,8 @@ check("canonical is the selected Cloudflare Pages homepage", canonical === "http
 check("homepage Open Graph URL matches canonical", html.includes(`<meta property="og:url" content="${canonical}">`));
 check("exactly one h1", (html.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a descriptive title", /<title>Freelance Project Quote Calculator — RateNest<\/title>/.test(projectHtml));
-check("project quote page has a unique canonical URL", /<link rel="canonical" href="https:\/\/fadhel-docom\.github\.io\/RateNest\/project-pricing\.html">/.test(projectHtml));
+check("project quote page has the Cloudflare canonical URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/project-pricing\.html">/.test(projectHtml));
+check("project page Open Graph URL uses Cloudflare Pages", projectHtml.includes(`<meta property="og:url" content="https://ratenest.pages.dev/project-pricing.html">`));
 check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
