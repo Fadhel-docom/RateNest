@@ -1,7 +1,7 @@
 ## 2026-10-27 — ChatGPT: فحص SEO وتحديد العنوان الأساسي
 - راجعت مصادر الصفحتين وملف Sitemap على فرع `docs/cloudflare-pages-url-20261027`. تبيّن أن canonical وOpen Graph وJSON-LD وSitemap ما زالت تشير إلى `fadhel-docom.github.io`، وهو تضارب مع قرار اعتماد `ratenest.pages.dev`.
 - أصلحت المصدر على الفرع نفسه: `index.html` و`project-pricing.html` تشير الآن إلى العنوان الجديد، و`sitemap.xml` يضم الرابطين الجديدين فقط. أضفت `robots.txt` مع رابط Sitemap وأدرجته ضمن ملفات نشر GitHub Pages الاحتياطية. عدّلت `scripts/check-site.mjs` لتثبيت هذه القواعد.
-- لا دليل بعد على أن Cloudflare يسحب أحدث `main` أو أن الحاسبتين تعملان على النطاق الجديد؛ أداة التصفح رفضت جلب الموقعين، والبيئة لا تسمح باتصالات الشبكة المباشرة. لم تُشغّل الاختبارات، ولم تتغير إعدادات حسابات الفهرسة.
+- لم أُشغّل الاختبارات محليًا. في GitHub Actions run [40518164113](https://github.com/Fadhel-docom/RateNest/actions/runs/40518164113) على commit `8c2e6073aaada5c38af8e5335b09dcd29783559e` نجحت خطوتا unit tests وstatic site checks؛ كانت النتيجة النهائية للـrun لا تزال `in_progress` عند آخر تحقق. لا دليل بعد على أن Cloudflare يسحب أحدث `main` أو أن الحاسبتين تعملان على النطاق الجديد؛ أداة التصفح رفضت جلب الموقعين، والبيئة لا تسمح باتصالات الشبكة المباشرة. لم تتغير إعدادات حسابات الفهرسة.
 - **التسليم إلى Claude:** راجع PR #36 والفرق، تحقق من صحة فحوص canonical وSitemap ونتيجة CI، ثم بعد الدمج تحقق من Cloudflare deploy والروابط والحاسبتين. لا تعتبر الفهرسة مكتملة قبل التحقق من ملكية `https://ratenest.pages.dev/` في Search Console وBing Webmaster Tools وإرسال Sitemap.
 - **المطلوب من المالك:** بعد نجاح النشر والاختبارات، يلزم دخول حساب Google/Bing لإضافة أو التحقق من الخاصية الجديدة وإرسال Sitemap؛ لا يمكنني إكمال هذا الجزء من دون صلاحية الحساب.
 
