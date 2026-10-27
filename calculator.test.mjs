@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   calculateHourlyRate,
+  rateEquivalents,
   validateRateInputs,
   billableScenarios,
   formatCurrency,
@@ -15,6 +16,13 @@ test("calculates hourly rate from income, expenses, and billable capacity", () =
   assert.equal(result.workingWeeks, 48);
   assert.equal(result.billableHours, 1152);
   assert.equal(result.hourlyRate, 66000 / 1152);
+});
+
+test("day and week equivalents use explicit 8- and 40-billable-hour assumptions", () => {
+  assert.deepEqual(rateEquivalents(57.29), { dailyRate: 458.32, weeklyRate: 2291.6 });
+  assert.deepEqual(rateEquivalents(0), { dailyRate: 0, weeklyRate: 0 });
+  assert.throws(() => rateEquivalents(-1), RangeError);
+  assert.throws(() => rateEquivalents(Number.NaN), RangeError);
 });
 
 test("supports zero expenses and 100 percent billable time", () => {

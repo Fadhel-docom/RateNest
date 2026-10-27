@@ -57,3 +57,5 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 /* Project quote page header navigation */
 .site-header nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:4px 16px}
 .site-header nav a{color:var(--green);font-size:.85rem;font-weight:700;text-decoration-thickness:1px;text-underline-offset:3px}
+
+.result-equivalent-note{color:#d2e1d9;font-size:.72rem;margin:10px 0 0}
