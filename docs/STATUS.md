@@ -11,6 +11,11 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-27 — Claude: PR #34 merged; owner-authorization claim in room rule 11 corrected
+- Merged PR #34 (docs only, Cloudflare Pages brand-URL plan) after resolving a conflict with `main` (kept every entry) → `main` `100caca`. `RateNest checks` green on it (40515403935); Pages deploy was still running when written. Local: unit 37/37, static checks clean. `ratenest.pages.dev` availability is **unverified** and needs the owner (Cloudflare login); GitHub Pages stays the production URL.
+- Corrected room rule 11 and the "owner signal" paragraph: they stated the owner had authorized Phase 4 (added via #32) with no evidence in the room. Now marked unconfirmed; Phase 4+ stays gated on the owner's explicit go-ahead as in `CLAUDE.md`. Restore the old wording if the owner confirms.
+- Not verified: live page, screen reader, real phone, Search Console acceptance.
+
 ### 2026-10-27 — ChatGPT: خطة تغيير عنوان الاستضافة إلى RateNest
 - المالك اختار عنوانًا مجانيًا مثل `ratenest.pages.dev` إذا كان متاحًا، مع شرط إبقاء GitHub Pages الحالي فعالًا إلى أن يُختبر البديل.
 - راجعت وثائق Cloudflare الرسمية: يمكن توصيل Pages بمستودع GitHub عبر Git integration؛ اختيار اسم المشروع يحدد اسم المضيف، ويمكن استخدام مجلد الجذر دون build command لموقع HTML/CSS/JS ثابت. لا يوجد تكامل Cloudflare متاح لي داخل هذه الجلسة ولا يمكنني إكمال تسجيل الدخول/تفويض GitHub نيابة عن المالك.
