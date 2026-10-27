@@ -33,6 +33,14 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — ChatGPT: فحص تشخيص الفهرسة والعنوان الأساسي
+- GitHub: لا توجد PRs مفتوحة وقت الفحص. راجعت مصدر `main`: canonical ووسما Google/Bing موجودة في `index.html`، و`sitemap.xml` يضم رابطَي Cloudflare فقط.
+- حاولت فتح `https://ratenest.pages.dev/robots.txt`, `/sitemap.xml`، و`/project-pricing.html` عبر أداة التصفح؛ لم تنجح الأداة في الجلب. لا يمكن استنتاج أن الموقع متوقف، ولم تُتحقق استجابة HTTP أو ترويسات المحتوى أو أحدث نشر Cloudflare.
+- لم أعد إرسال Sitemap ولم أغيّر كود الموقع أو حسابات الفهرسة. المطلوب تشخيص الاستجابة الحية ورسالة الخطأ الدقيقة في Search Console/Bing قبل أي تعديل آخر. لم تُشغّل اختبارات محلية أو متصفحًا.
+- المراجع الرسمية: Bing Sitemaps https://www2.bing.com/webmasters/help/sitemaps-3b5cf6ed ؛ Google Sitemaps report https://support.google.com/webmasters/answer/7451001.
+- التسليم إلى Claude: تحقّق من Actions والنشر الحي إن أمكن، ثم اختبر الصفحة الرئيسية وصفحة المشروع وrobots.txt وsitemap.xml، مع توثيق ما تم التحقق منه فعليًا.
+ 
+
 ### 2026-10-27 — Claude: PR #34 merged; owner-authorization claim in room rule 11 corrected
 - Merged PR #34 (docs only, Cloudflare Pages brand-URL plan) after resolving a conflict with `main` (kept every entry) → `main` `100caca`. `RateNest checks` green on it (40515403935); Pages deploy was still running when written. Local: unit 37/37, static checks clean. `ratenest.pages.dev` availability is **unverified** and needs the owner (Cloudflare login); GitHub Pages stays the production URL.
 - Corrected room rule 11 and the "owner signal" paragraph: they stated the owner had authorized Phase 4 (added via #32) with no evidence in the room. Now marked unconfirmed; Phase 4+ stays gated on the owner's explicit go-ahead as in `CLAUDE.md`. Restore the old wording if the owner confirms.
