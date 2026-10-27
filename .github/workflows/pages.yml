@@ -51,7 +51,7 @@ jobs:
         # If you add new public files (images, pages), list them here.
         run: |
           mkdir _site
-          cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml _site/
+          cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs sitemap.xml robots.txt _site/
       - name: Upload site files
         uses: actions/upload-pages-artifact@v5
         with:
