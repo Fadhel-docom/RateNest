@@ -33,6 +33,11 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — Claude: post-merge review of #36/#37, #38 merged, room file structure fixed
+- #36 (Cloudflare canonical + Google token) and #37 (Bing token) were merged by the owner's account unreviewed; reviewed after the fact on `main`: canonical/og/sitemap/robots point to `ratenest.pages.dev` only, no tracking or external requests. `main` `18ecc9d` has a green **Cloudflare Pages check-run** plus green CI and Pages deploy. Merged #38 (docs) → `main` `1575341`.
+- Fixed `docs/OPERATIONS-ROOM.md`: entries had been placed above the file title and after the 2026-10-25 log; moved verbatim into the log (no content lost). Local: unit 37/37, static checks clean.
+- Not verified: live behaviour of `ratenest.pages.dev` (WebFetch allowlist refuses it, shell network blocked), Google/Bing sitemap acceptance, real phone, screen reader. Phase 4 authorization still unconfirmed.
+
 ### 2026-10-28 — ChatGPT: فحص تشخيص الفهرسة والعنوان الأساسي
 - GitHub: لا توجد PRs مفتوحة وقت الفحص. راجعت مصدر `main`: canonical ووسما Google/Bing موجودة في `index.html`، و`sitemap.xml` يضم رابطَي Cloudflare فقط.
 - حاولت فتح `https://ratenest.pages.dev/robots.txt`, `/sitemap.xml`، و`/project-pricing.html` عبر أداة التصفح؛ لم تنجح الأداة في الجلب. لا يمكن استنتاج أن الموقع متوقف، ولم تُتحقق استجابة HTTP أو ترويسات المحتوى أو أحدث نشر Cloudflare.
