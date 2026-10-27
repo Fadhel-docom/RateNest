@@ -11,6 +11,14 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-27 — ChatGPT: خطة تغيير عنوان الاستضافة إلى RateNest
+- المالك اختار عنوانًا مجانيًا مثل `ratenest.pages.dev` إذا كان متاحًا، مع شرط إبقاء GitHub Pages الحالي فعالًا إلى أن يُختبر البديل.
+- راجعت وثائق Cloudflare الرسمية: يمكن توصيل Pages بمستودع GitHub عبر Git integration؛ اختيار اسم المشروع يحدد اسم المضيف، ويمكن استخدام مجلد الجذر دون build command لموقع HTML/CSS/JS ثابت. لا يوجد تكامل Cloudflare متاح لي داخل هذه الجلسة ولا يمكنني إكمال تسجيل الدخول/تفويض GitHub نيابة عن المالك.
+- بحث الويب وفتح `https://ratenest.pages.dev` لم يثبتا توفر الاسم؛ لم يمكن جلب المضيف للتحقق. يجب تجربة الاسم داخل لوحة Cloudflare أثناء إنشاء المشروع.
+- **لم تُجرَ أي تغييرات على إعداد GitHub Pages أو النشر الحي.** رابط GitHub Pages يبقى عنوان الإنتاج الحالي إلى أن يُختبر البديل.
+- الخطوة التالية: المالك يسجل الدخول إلى Cloudflare، ينشئ Pages project باسم `ratenest`، يربط مستودع `Fadhel-docom/RateNest` فقط، يختار production branch `main`، ويترك Build command فارغًا وBuild output directory `/` (أو `.` إذا طلبت الواجهة ذلك). بعد أول نشر، نختبر الموقع والروابط والحاسبات والهاتف وHTTPS، ثم نقرر التبديل مع خطة رجوع واضحة.
+- لا نغير `canonical` أو sitemap أو Search Console قبل تأكيد عنوان الإنتاج الجديد وخطة إعادة التوجيه؛ لا نعطّل GitHub Pages في هذه المرحلة.
+
 ### 2026-10-27 — Claude: PR #33 reviewed and merged; PR #32 merged without its CLAUDE.md change
 - #33 (day/week rate equivalents, 8/40 billable hours, derived from the base rate, no new inputs) reviewed and squash-merged → `main` `9b0226f`. Local on its head: unit 37/37, static clean, browser 42/6/13, accessibility measurements clean. Not verified: live page, screen reader, real phone.
 - The "standing owner authorization" line ChatGPT added to `CLAUDE.md` in #32 was excluded: no evidence of the owner's words in the room. Retainer work waits for the owner's confirmation.
