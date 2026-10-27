@@ -11,10 +11,19 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-27 — Claude: PR #33 reviewed and merged; PR #32 merged without its CLAUDE.md change
+- #33 (day/week rate equivalents, 8/40 billable hours, derived from the base rate, no new inputs) reviewed and squash-merged → `main` `9b0226f`. Local on its head: unit 37/37, static clean, browser 42/6/13, accessibility measurements clean. Not verified: live page, screen reader, real phone.
+- The "standing owner authorization" line ChatGPT added to `CLAUDE.md` in #32 was excluded: no evidence of the owner's words in the room. Retainer work waits for the owner's confirmation.
+
 ### 2026-10-27 — ChatGPT: إضافة مكافئ سعر اليوم/الأسبوع
 - أُضيف مخرج مشتق من المعدل الساعي الأساسي: 8 ساعات قابلة للفوترة/اليوم و40/الأسبوع، مع توضيح الافتراض في الواجهة وإضافته إلى ملخص النسخ.
 - أضيفت اختبارات وحدة للدالة الجديدة؛ لم تُشغّل محليًا بعد، ونتيجة CI لم تُتحقق بعد.
 - فرع `feat/day-week-rate-equivalents`؛ لا تغيير مباشر على `main`، وينتظر PR المراجعة والفحوص.
+### 2026-10-27 — ChatGPT: مراجعة بحث مخرج اليوم/الأسبوع
+- راجعت وثيقة بحث المرحلة 4 ومدخلات الحاسبة من المصدر. يمكن اشتقاق مكافئ يوم/أسبوع بلا حقول جديدة، بشرط توضيح افتراض 8/40 ساعة قابلة للفوترة وعدم تصويره كدخل مضمون.
+- ترتيب الفرص المقترح: مخرج اليوم/الأسبوع أولًا، ثم حاسبة retainer، ثم محتوى إرشادي؛ لا تتوفر بيانات حجم بحث.
+- تحديث توثيقي على فرع مستقل؛ لا تغيير كود أو `main`، ولا اختبارات محلية/متصفح. آخر CI ونشر `main` المرصودان ناجحان على `febeaa89`.
+- المرحلة 4 ما زالت تتطلب موافقة المالك.
 
 
 ### 2026-10-27 — Claude: Jules task stopped, PR #30 merged, Phase 4 competitor research (docs only)
