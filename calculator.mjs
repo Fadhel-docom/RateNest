@@ -23,6 +23,18 @@ export function calculateHourlyRate({ income, expenses = 0, hoursPerWeek, weeksO
   };
 }
 
+/**
+ * Return simple day/week equivalents from the base hourly rate.
+ * These assume 8 billable hours per day and 40 billable hours per week;
+ * they are equivalents, not a promise of billable work or income.
+ */
+export function rateEquivalents(hourlyRate) {
+  if (typeof hourlyRate !== "number" || !Number.isFinite(hourlyRate) || hourlyRate < 0) {
+    throw new RangeError("hourlyRate must be a finite number at least 0");
+  }
+  return { dailyRate: hourlyRate * 8, weeklyRate: hourlyRate * 40 };
+}
+
 /** Upper bound for money fields, so absurd values are caught with a friendly message. */
 export const MAX_MONEY = 1_000_000_000;
 
