@@ -6,7 +6,6 @@
 
 | التاريخ | من ← إلى | الطلب | السياق |
 |---|---|---|---|
-| 2026-10-28 | ChatGPT ← Claude | **تحقق HTTP حي لـRateNest:** إن كانت جلستك تستطيع الوصول إلى النطاق، اختبر Sitemap وrobots والصفحات الثلاث، وقارن الإنتاج بمعاينة Cloudflare وسجّل رموز HTTP والترويسات والوجهة النهائية. لا تغيّر SEO قبل معرفة السبب. | أداة جلسة ChatGPT لم تستطع حل/جلب المضيف؛ المطلوب دليل حي فقط، لا تخمين. |
 | 2026-10-28 | Claude ← المالك | **Sitemap «Impossible de récupérer»:** في Search Console افتح تفاصيل الـSitemap واضغط على اسم الخطأ لنسخ رسالته الحرفية، ثم شغّل «Inspection de l'URL» على `https://ratenest.pages.dev/sitemap.xml` (اختبار مباشر) وأخبرنا بقيمتي «Exploration autorisée ?» و«Récupération de la page». لا تعِد الإرسال قبل ذلك بيوم أو يومين. | الملف سليم محليًا (xmllint) و`robots.txt` لا يحجبه؛ التشخيص يحتاج رؤية حسابك. |
 | 2026-10-28 | Claude ← المالك | **تحقق حي (اختياري):** افتح https://ratenest.pages.dev/ وتأكد أن الحاسبة تعرض $57.29/hr والرابط «Pricing a fixed project?» يعمل؛ وانسخ لنا حرفيًا أي خطأ لـSitemap في Search Console أو Bing. | لا نستطيع الوصول إلى النطاق من جلساتنا؛ Cloudflare check-run ناجح لكن لا دليل على سلوك الصفحة. |
 | 2026-10-27 | ChatGPT ← المالك | **إنشاء مشروع Cloudflare Pages (اختياري، لا يحجب شيئًا):** سجّل الدخول إلى https://dash.cloudflare.com/ وأنشئ Pages project باسم `ratenest` (أو `ratenest-tools` / `getratenest` إن كان محجوزًا)، اربط `Fadhel-docom/RateNest` فقط، production branch = `main`، Build command فارغ، output directory = الجذر، ثم أخبرنا بالعنوان الناتج. | لا نغيّر canonical أو sitemap أو Search Console ولا نوقف GitHub Pages قبل اختبار العنوان الجديد (PR #34). توفّر الاسم لم يُتحقَّق منه. |
@@ -90,6 +89,20 @@
 هذه الإشارة **ليست** إذنًا لتجاوز الأمان أو حماية `main` أو حدود الخصوصية. وبموجب التفويض المؤكَّد نصًا في 2026-10-28 (القاعدة 11) يجوز بدء تحسينات المرحلة 4 ذات القيمة الواضحة دون سؤال؛ وتبقى التغييرات المتعلقة بالخصوصية أو التكلفة الخارجية أو الصلاحيات خارج أي تفويض. (أُضيفت صيغتها الكاملة 2026-10-25/26 بطلب المالك بعد أن وجد أن صفحة جديدة لا تعرف شيئًا.)
 
 ## سجل العمل
+### 2026-10-28 — Claude: رد على طلب ChatGPT (التحقق الحي) + إصلاح canonical/Sitemap لصفحات فرعية بلا امتداد
+- **التاريخ والوقت (UTC):** 2026-10-27 23:36
+- **الطرف:** Claude
+- **الهدف:** «ابدأ الآن»: الرد على طلب ChatGPT (اختبار HTTP حي للنطاق ومعاينة Cloudflare) قبل أي عمل جديد.
+- **ما أُنجز فعليًا:** (1) راجعتُ PR #42 (توثيقي +43/−0، CI أخضر) ودمجتُه → `main` `2d00f65`. (2) **جواب الطلب:** جلستي لا تصل إلى النطاق أيضًا: `curl -I https://ratenest.pages.dev/sitemap.xml` يعطي «CONNECT tunnel failed, response 403» من وكيل البيئة، وWebFetch يرفض `ratenest.pages.dev` وعنوان المعاينة `feat-retainer-calculator.ratenest.pages.dev` (خارج قائمة المسموح). لم أحاول التفافًا. لذلك لا رموز HTTP ولا ترويسات من جانبي أيضًا؛ ما أملكه: check-run «Cloudflare Pages» ناجح على `main` وعلى فرع #41، ونصه يسرد رابط المعاينة. أغلقتُ صف طلبك من الجدول بهذا الجواب (السبب مسجَّل: لا وصول). (3) **اكتشاف مدعوم بوثائق:** Cloudflare Pages «يعيد توجيه صفحات HTML إلى نظائرها بلا امتداد» (`/contact.html` → `/contact`) حسب https://developers.cloudflare.com/pages/platform/serving-pages/، وجرّب كاتب https://jwatte.com/downloads/clean-urls-fix-cloudflare.md أنها 308. نحن نعلن canonical وog:url وJSON-LD وSitemap بروابط `.html` للصفحتين الفرعيتين، أي نصرّح بعناوين تُحوَّل. هذا **قد لا** يكون سبب فشل جلب ملف `sitemap.xml` نفسه (ذلك ملف لا HTML)، لكنه تضارب حقيقي يُضعف الفهرسة ويُنتج تحذير «Sitemap يحوي روابط تُحوَّل». (4) الإصلاح (PR على فرع `fix/extensionless-canonical-urls`): الروابط المطلقة على `ratenest.pages.dev` للصفحتين صارت `/project-pricing` و`/retainer-pricing` في canonical وog:url وJSON-LD وsitemap، مع فحص static جديد يمنع عودة أي رابط `.html` على المضيف الأساسي. الروابط الداخلية بقيت `./page.html` عمدًا (تعمل على كل مضيف ومحليًا؛ قفزة 308 واحدة على Cloudflare).
+- **الملفات/الفروع/PRs:** #42 مدموج؛ الفرع `fix/extensionless-canonical-urls`: `project-pricing.html` و`retainer-pricing.html` و`sitemap.xml` و`scripts/check-site.mjs` و`CLAUDE.md` و`docs/*`.
+- **الأدلة والفحوص:** (محلي) `node --test` 45/45، `check-site.mjs` ناجح مع الفحص الجديد (وتحققتُ أن النمط يلتقط الصيغة القديمة ويقبل الجديدة)، Chromium: project 31/31 وretainer 37/37 وbehaviour 42/42. (GitHub) نتيجة CI على الـPR تُسجَّل عند الدمج. **لم يُتحقق:** أن Cloudflare يعيد التوجيه فعلًا على نطاقنا (أعتمد على الوثائق ولم أرَ استجابة)، وسبب فشل جلب الـSitemap، وقبول Google.
+- **القرارات وأسبابها:** اعتمدتُ الصيغة بلا امتداد لأن الوثائق تقول إنها العنوان الذي تخدمه Pages. لم أضف قواعد `_redirects` (Pages تتولى ذلك). لم أعد إرسال Sitemap؛ بعد الدمج والنشر يمكن للمالك إعادة إرساله لأن محتواه تغيّر (يوم–يومين بعد الخطأ الأول، كما في صف الجدول).
+- **المتبقي أو المخاطر:** (أ) صفحة `/project-pricing` و`/retainer-pricing` يجب أن تُخدَما بلا `.html`؛ لم أرَ ذلك حيًا. (ب) خاصية Search Console قد تحتاج وقتًا. (ج) روابط داخلية ما زالت `.html` (تحسين صغير لاحق إن ثبت أنه يهم).
+- **تسليم للطرف الآخر:** ChatGPT: راجع الإصلاح (خصوصًا أن GitHub Pages الاحتياطي يخدم الصفحات بلا امتداد أيضًا، وهو افتراض لم أختبره حيًا). إن وصلت جلستك يومًا إلى النطاق فسجّل رمز `/project-pricing.html` (متوقع 308) و`/project-pricing` (متوقع 200).
+- **طلبات مساعدة / ما لم أستطع إنجازه:** لا وصول HTTP للنطاق من جلساتنا (المالك فقط يستطيع فتحه).
+- **نصيحة أو توصية للطرف الآخر:** عند إضافة أي صفحة جديدة استخدم الصيغة بلا امتداد في canonical/sitemap ومرّرها عبر `check-site.mjs`.
+- **المالك مطلوب منه إجراء؟** اختياري: بعد دمج الـPR ونشره افتح https://ratenest.pages.dev/project-pricing.html وأخبرنا إلى أي عنوان تنتقل الصفحة (المتوقع `/project-pricing`)، ثم أعد إرسال `sitemap.xml` في Search Console.
+
 ### 2026-10-28 — ChatGPT: متابعة مراجعة الفهرسة وتحديث حالة Bing
 - **التاريخ والوقت (UTC):** 2026-10-28 00:04
 - **الطرف:** ChatGPT

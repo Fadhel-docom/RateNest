@@ -26,8 +26,8 @@ check("canonical is the selected Cloudflare Pages homepage", canonical === "http
 check("homepage Open Graph URL matches canonical", html.includes(`<meta property="og:url" content="${canonical}">`));
 check("exactly one h1", (html.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a descriptive title", /<title>Freelance Project Quote Calculator — RateNest<\/title>/.test(projectHtml));
-check("project quote page has the Cloudflare canonical URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/project-pricing\.html">/.test(projectHtml));
-check("project page Open Graph URL uses Cloudflare Pages", projectHtml.includes(`<meta property="og:url" content="https://ratenest.pages.dev/project-pricing.html">`));
+check("project quote page has the Cloudflare canonical URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/project-pricing">/.test(projectHtml));
+check("project page Open Graph URL uses Cloudflare Pages", projectHtml.includes(`<meta property="og:url" content="https://ratenest.pages.dev/project-pricing">`));
 check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
@@ -44,7 +44,7 @@ check("project quote buffer input defaults to 0 (percentages are entered by the 
 check("Pages workflow stages the new project quote page and modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs retainer-pricing.html retainer-pricing.mjs retainer-pricing-calculator.mjs sitemap.xml robots.txt _site/"));
 
 check("retainer page has a descriptive title", /<title>Freelance Retainer Calculator — RateNest<\/title>/.test(retainerHtml));
-check("retainer page has the Cloudflare canonical and Open Graph URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/retainer-pricing\.html">/.test(retainerHtml) && retainerHtml.includes('<meta property="og:url" content="https://ratenest.pages.dev/retainer-pricing.html">'));
+check("retainer page has the Cloudflare canonical and Open Graph URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/retainer-pricing">/.test(retainerHtml) && retainerHtml.includes('<meta property="og:url" content="https://ratenest.pages.dev/retainer-pricing">'));
 check("retainer page has exactly one h1 and a calculator form", (retainerHtml.match(/<h1[\s>]/gi) ?? []).length === 1 && /<form[^>]*id="retainer-form"/i.test(retainerHtml));
 const retainerIds = [...retainerHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("retainer page element ids are unique", new Set(retainerIds).size === retainerIds.length);
@@ -97,8 +97,9 @@ check("static scenario table matches calculator output", billableScenarios(defau
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
 
 const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
-check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing.html</loc>"));
-check("sitemap lists the retainer page", sitemap.includes("<loc>https://ratenest.pages.dev/retainer-pricing.html</loc>"));
+check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing</loc>"));
+check("canonical, Open Graph, JSON-LD and sitemap URLs on the primary host are extensionless (Cloudflare Pages redirects .html to extensionless)", ![html, projectHtml, retainerHtml, sitemap].some((text) => /https:\/\/ratenest\.pages\.dev\/[^"<\s]*\.html/.test(text)));
+check("sitemap lists the retainer page", sitemap.includes("<loc>https://ratenest.pages.dev/retainer-pricing</loc>"));
 check("sitemap no longer advertises GitHub Pages URLs", !sitemap.includes("fadhel-docom.github.io"));
 
 if (failures.length) {
