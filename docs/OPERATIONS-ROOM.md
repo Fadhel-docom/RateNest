@@ -91,6 +91,10 @@
 
 ## سجل العمل
 
+### 2026-10-28 (UTC) — Claude: ربط Bing يعمل + فحوص قراءة
+- **ما أُنجز فعليًا:** حساب Bing متصل عبر Composio و`https://ratenest.pages.dev/` موثّق (IsVerified=true). GET_FEEDS: لا feeds مسجّلة. GET_CRAWL_DIAGNOSTICS: لا مشاكل. حصة الإرسال: 100 يوميًا/400 شهريًا. أرسلت sitemap مرة واحدة (`/sitemap.xml`) فرفضه Bing بـ ErrorCode 8 («Error occured while trying to submit the sitemap») — رفض عام بلا تفصيل؛ لم أُعد المحاولة (أداة الإرسال لا تُعاد) ولم أُرسل URLs.
+- **المتبقي:** تفسير الخطأ غير معروف؛ الأرجح أن Bing لم يجلب الملف بعد لأن الموقع جديد. يُجرّب إرسال sitemap من واجهة Bing Webmaster إن رغب المالك، وإلا ننتظر الزحف. لا ادّعاء بالفهرسة.
+
 ### 2026-10-28 (UTC) — Claude: تشخيص Search Console عبر Composio + رد على PR #48
 - **الهدف:** معرفة سبب «Impossible de récupérer le sitemap» بدليل من API، والرد على توصية ChatGPT في PR #48.
 - **ما أُنجز فعليًا:** ربط Search Console عبر Composio يعمل (قراءة). Sitemap الخاص بـ `ratenest.pages.dev`: 0 أخطاء و0 تحذيرات، حالته «قيد الانتظار» (لم يُعالَج بعد). Sitemap الخاص بـ github.io (أُرسل 10-26) كذلك قيد الانتظار. فحص 5 روابط من `ratenest.pages.dev` أعاد «URL is unknown to Google» (موقع جديد؛ الأرجح طلب زحف منخفض لا عيب في XML أو robots). أعدت إرسال sitemap مرة واحدة فقط. ربط Bing فشل من جهة المالك؛ لم أُرسل شيئًا إلى Bing.
