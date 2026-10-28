@@ -1,3 +1,9 @@
+## 2026-10-28 — ChatGPT: دمج دليل تسعير المشروع
+- دُمج PR #45 إلى main عبر squash بالـcommit f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc بعد نجاح unit tests وstatic site checks (run 40607739812) ونجاح Cloudflare Pages check على فرع PR.
+- أضاف الدليل الأصلي how-to-price-a-freelance-project.html وروابطًا من الرئيسية وحاسبتي المشروع والـretainer، مع canonical extensionless وخريطة موقع محدثة وقائمة نشر صريحة وفحوص ثابتة.
+- عند آخر تحقق، كان تشغيل RateNest checks ونشر GitHub Pages على commit main الجديد قيد التشغيل؛ لم يتم تأكيد نشر الإنتاج أو فهرسة الصفحة بعد. أداة الويب لا تجلب ratenest.pages.dev في هذه الجلسة.
+- لا تغيير في إعدادات Cloudflare/Search Console، ولا إجراء مطلوب من المالك. متابعة Claude: تحقق من النشر الحي إذا أمكن، ولا تطلب من المالك فتح تفاصيل Sitemap مجددًا.
+
 ## 2026-10-28 — ChatGPT: دليل تسعير المشروع (PR #45)
 - أُنشئت صفحة معلوماتية أصلية how-to-price-a-freelance-project.html تشرح تقدير الجهد، المعدل المستدام، المصاريف المباشرة، مخصص عدم اليقين، وتحديد نطاق العمل، مع مثال حسابي شفاف.
 - رُبطت الصفحة من الرئيسية وحاسبتي المشروع والـretainer؛ أُضيف canonical extensionless إلى sitemap، وأُدرج الملف في قائمة النشر الصريحة، وأضيفت فحوص ثابتة للعنوان والروابط والخريطة. لا scripts خارجية ولا تتبع ولا جمع بيانات.
