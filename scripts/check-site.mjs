@@ -8,6 +8,7 @@ import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.url), "utf8");
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
+const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
 const failures = [];
 const check = (label, condition) => {
   console.log(`${condition ? "OK  " : "FAIL"}: ${label}`);
@@ -52,6 +53,10 @@ check("retainer page ARIA references exist", [...retainerHtml.matchAll(/aria-(?:
 check("retainer page inputs/selects have labels", [...retainerHtml.matchAll(/<(?:input|select)[^>]*\sid="([^"]+)"/g)].map((m) => m[1]).every((id) => new RegExp(`<label[^>]*for="${id}"`).test(retainerHtml)));
 check("retainer page local assets exist", [...retainerHtml.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g)].map((m) => m[1]).every((ref) => existsSync(new URL(`../${ref.slice(2)}`, import.meta.url))));
 check("retainer page is linked from the homepage and the project page", html.includes('href="./retainer-pricing.html"') && projectHtml.includes('href="./retainer-pricing.html"'));
+check("pricing guide has a descriptive title and extensionless canonical", /<title>How to Price a Freelance Project — RateNest<\\/title>/.test(guideHtml) && /<link rel="canonical" href="https:\\/\\/ratenest\\.pages\\.dev\\/how-to-price-a-freelance-project">/.test(guideHtml));
+check("pricing guide has exactly one h1", (guideHtml.match(/<h1[\\s>]/gi) ?? []).length === 1);
+check("pricing guide local assets and internal links exist", [...guideHtml.matchAll(/(?:src|href)="(\\.\\/[^"#]+)"/g)].map((m) => m[1]).every((ref) => existsSync(new URL(`../${ref.slice(2)}`, import.meta.url))));
+check("pricing guide is linked from the homepage and both calculators", html.includes('href="./how-to-price-a-freelance-project.html"') && projectHtml.includes('href="./how-to-price-a-freelance-project.html"') && retainerHtml.includes('href="./how-to-price-a-freelance-project.html"'));
 const retainerDefault = calculateRetainer({ monthlyHours: 20, hourlyRate: 60, discountPercent: 0, months: 12 });
 check("static retainer default matches calculation", retainerDefault.monthlyRetainer === 1200 && retainerDefault.effectiveHourlyRate === 60 && retainerDefault.contractValue === 14400 && retainerHtml.includes('id="retainer-total" class="rate-result">$1,200.00<') && retainerHtml.includes('id="contract-total">$14,400.00<') && retainerHtml.includes('id="effective-rate">$60.00/hr<'));
 check("retainer discount input defaults to 0 (percentages are entered by the user)", /<input id="discountPercent"[^>]*\svalue="0"/.test(retainerHtml));
@@ -98,8 +103,9 @@ check("static scenario table matches calculator output", billableScenarios(defau
 
 const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
 check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing</loc>"));
-check("canonical, Open Graph, JSON-LD and sitemap URLs on the primary host are extensionless (Cloudflare Pages redirects .html to extensionless)", ![html, projectHtml, retainerHtml, sitemap].some((text) => /https:\/\/ratenest\.pages\.dev\/[^"<\s]*\.html/.test(text)));
+check("canonical, Open Graph, JSON-LD and sitemap URLs on the primary host are extensionless (Cloudflare Pages redirects .html to extensionless)", ![html, projectHtml, retainerHtml, guideHtml, sitemap].some((text) => /https:\/\/ratenest\.pages\.dev\/[^"<\s]*\.html/.test(text)));
 check("sitemap lists the retainer page", sitemap.includes("<loc>https://ratenest.pages.dev/retainer-pricing</loc>"));
+check("sitemap lists the freelance project pricing guide", sitemap.includes("<loc>https://ratenest.pages.dev/how-to-price-a-freelance-project</loc>"));
 check("sitemap no longer advertises GitHub Pages URLs", !sitemap.includes("fadhel-docom.github.io"));
 
 if (failures.length) {
