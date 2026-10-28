@@ -70,6 +70,8 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+- **2026-10-28 (Claude):** Search Console connected via Composio (read-only diagnosis). `ratenest.pages.dev` sitemap: 0 errors/0 warnings, status pending; 5 inspected URLs "unknown to Google" (new site). Sitemap resubmitted once. Bing connection failed owner-side; nothing submitted to Bing. PR #48 (retainer expected-hours research) is still a draft; recommendation accepted, implementation waits for its merge. No code changes.
+
 ### 2026-10-28 — Claude: IFTTT connection checked (read-only)
 - IFTTT account is on the free plan; connected services are Email, Email Digest, Date & Time, Weather, Space, IFTTT, RSS only. The IFTTT catalog has **no** Google Search Console or Bing service, and its only outbound-HTTP action (Webhooks "Make a web request") is Pro-only, i.e. a paid plan (external cost, outside the standing authorization). IndexNow would reach Bing/Yandex, not Google. No Applets were created. Indexing/sitemap actions stay with the owner's own Google/Bing accounts.
 
