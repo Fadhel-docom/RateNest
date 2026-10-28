@@ -1,3 +1,9 @@
+## 2026-10-28 — Search Console Sitemaps report (owner-provided)
+- Main table shows `/sitemap.xml`, type `Inconnu`, date `27 oct. 2026`, status `Impossible de récupérer le sitemap`, discovered pages `0`.
+- This confirms the displayed sitemap-fetch status is unsuccessful, but the main table does not reveal the cause. The owner separately opened the sitemap in a browser and saw valid XML with three URLs; Live URL Inspection separately reported that Google can access the URL. Neither fact proves the sitemap report successfully fetched/processed it.
+- Next diagnostic: owner should open the `/sitemap.xml` row, then click/open the error details and share the exact error/detail screen. No resubmission or Cloudflare changes yet.
+- Root cause and HTTP status observed by Google remain unknown.
+
 ## 2026-10-28 — ChatGPT: نتيجة Google Search Console بعد فحص المالك
 - **النتيجة التاريخية لفهرسة الصفحة الرئيسية** `https://ratenest.pages.dev/` (فحص 01:03): «Cette URL n'a pas été indexée par Google» / «Google ne reconnaît pas cette URL». يعرض التقرير «Aucun sitemap référent détecté» و«Aucune page d'origine détectée»، و«Dernière exploration: Sans objet»، وحقول الزحف/الجلب/canonical بلا بيانات. الدلالة: لا يوجد اكتشاف/زحف مسجّل لهذه الصفحة في بيانات الفهرسة المعروضة؛ السبب المحدد لم يُحسم.
 - **الاختبار المباشر منفصل:** فحص المالك المباشر للصفحة الرئيسية ولـ`/sitemap.xml` قال «Google a accès à cette URL» و«La page peut être indexée». لا يثبت ذلك أن الصفحة مفهرسة أو أن Google عالج Sitemap.
