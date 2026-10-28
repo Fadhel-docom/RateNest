@@ -1,3 +1,10 @@
+## 2026-10-28 — ChatGPT: نتيجة Google Search Console بعد فحص المالك
+- **النتيجة التاريخية لفهرسة الصفحة الرئيسية** `https://ratenest.pages.dev/` (فحص 01:03): «Cette URL n'a pas été indexée par Google» / «Google ne reconnaît pas cette URL». يعرض التقرير «Aucun sitemap référent détecté» و«Aucune page d'origine détectée»، و«Dernière exploration: Sans objet»، وحقول الزحف/الجلب/canonical بلا بيانات. الدلالة: لا يوجد اكتشاف/زحف مسجّل لهذه الصفحة في بيانات الفهرسة المعروضة؛ السبب المحدد لم يُحسم.
+- **الاختبار المباشر منفصل:** فحص المالك المباشر للصفحة الرئيسية ولـ`/sitemap.xml` قال «Google a accès à cette URL» و«La page peut être indexée». لا يثبت ذلك أن الصفحة مفهرسة أو أن Google عالج Sitemap.
+- **فحص يدوي من المالك:** `/sitemap.xml` يعرض ثلاث صفحات: الرئيسية و`/project-pricing` و`/retainer-pricing`; `/robots.txt` يسمح بالزحف ويشير إلى Sitemap. هذا يؤكد المحتوى عند فتحه بالمتصفح فقط، لا نجاح جلب Googlebot.
+- **الخطوة التالية:** من تقرير «Sitemaps» في Search Console افتح صف `https://ratenest.pages.dev/sitemap.xml` ورسالة «Impossible de récupérer» وأرسل تفاصيل الحالة/آخر قراءة/الأخطاء. لا تعِد الإرسال الآن ولا تغيّر Cloudflare/SEO حتى نعرف الرسالة الدقيقة.
+- **حدود التحقق:** لم أفتح حساب Search Console بنفسي ولم أتحقق من HTTP status أو headers من جلسة المساعد. السبب الجذري ما زال غير محسوم.
+
 ## 2026-10-27 — ChatGPT: تصحيح العنوان الأساسي وتجهيز الفهرسة
 - كشف فحص المصدر أن `index.html` و`project-pricing.html` و`og:url` وبيانات `WebApplication` و`sitemap.xml` كانت تشير إلى GitHub Pages رغم اختيار المالك `https://ratenest.pages.dev`.
 - على فرع PR #36 `docs/cloudflare-pages-url-20261027`: حُدّثت روابط canonical وOpen Graph وJSON-LD في الصفحتين، وحُدّث `sitemap.xml` ليحتوي رابطَي Cloudflare فقط. أُضيف `robots.txt` يسمح بالزحف ويشير إلى `https://ratenest.pages.dev/sitemap.xml`، وأُضيف إلى ملفات النشر في workflow الخاص بـGitHub Pages كنسخة احتياطية. عُدّلت فحوص المصدر للتحقق من العنوان الأساسي وSitemap.
