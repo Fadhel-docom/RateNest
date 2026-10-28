@@ -1,3 +1,10 @@
+## 2026-10-28 — ChatGPT: تشخيص Sitemap دون تغيير الإنتاج
+- PR #44 مفتوح على الفرع docs/refresh-live-state-20261028؛ أحدث فحص RateNest checks على commit fcd28acedd4b25e5ff0398069107bae11c73e351 ناجح. لا كتابة مباشرة إلى main.
+- راجعت sitemap.xml وrobots.txt في main: خريطة XML تحتوي 3 روابط مطلقة على ratenest.pages.dev، وrobots يسمح بالزحف ويعلن الخريطة. هذا لا يثبت استجابة الإنتاج الحية.
+- حاولت فتح ملفات الإنتاج عبر الويب؛ الأداة رفضت الجلب، لذلك لا يوجد HTTP status أو Content-Type مؤكد من جهتي. بحث site:ratenest.pages.dev لم يُظهر نتائج، لكنه ليس حاسمًا.
+- المالك أبلغ أن تفاصيل خطأ Search Console لا تفتح. لن نكرر الطلب ولن نعيد إرسال Sitemap أو نغيّر Cloudflare الآن. Google يذكر أن بعض أخطاء الجلب مؤقتة وأنه يعيد المحاولة لبضعة أيام؛ Live Test الذي أرسله المالك قال إن Google يستطيع الوصول للعنوان.
+- **الحالة:** سبب الفشل غير معروف؛ احتمال المؤقت قائم، وليس هناك دليل حالي يبرر تعديلًا جديدًا للموقع. لا إجراء مطلوب من المالك الآن.
+- **التسليم:** Claude، لا تطلب من المالك فتح التفاصيل مجددًا. إذا أمكن، تحقق من HTTP GET/HEAD للملف الحي وترويساته، وإلا استمر في تطوير الموقع ضمن التفويض.
 ## 2026-10-28 — Search Console Sitemaps report (owner-provided)
 - Main table shows `/sitemap.xml`, type `Inconnu`, date `27 oct. 2026`, status `Impossible de récupérer le sitemap`, discovered pages `0`.
 - This confirms the displayed sitemap-fetch status is unsuccessful, but the main table does not reveal the cause. The owner separately opened the sitemap in a browser and saw valid XML with three URLs; Live URL Inspection separately reported that Google can access the URL. Neither fact proves the sitemap report successfully fetched/processed it.
