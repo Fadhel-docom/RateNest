@@ -10,6 +10,8 @@ In any chat — including a fresh one that knows nothing — this means: go stra
 The owner supplied `https://ratenest.pages.dev` and reports that it works. This is the selected primary URL and canonical target. `https://fadhel-docom.github.io/RateNest/` is a backup only: do not list it in the sitemap, canonical tags, Open Graph URLs, or structured-data URLs. Keep the old hosting available until Cloudflare deployment and both calculators are verified end-to-end. Cloudflare Pages redirects `/page.html` to `/page` (documented: https://developers.cloudflare.com/pages/platform/serving-pages/), so canonical, Open Graph, JSON-LD and sitemap URLs for subpages are **extensionless** (`/project-pricing`, `/retainer-pricing`); `check-site.mjs` guards this. Internal links stay `./page.html` (works on every host and locally). Search Console/Bing ownership and sitemap submission must be checked for the new URL; do not claim indexing is complete without account evidence.
 
 ## Start of every session
+0. Read and apply `docs/VALUE-BEFORE-PUBLISHING.md` as a mandatory gate for every visitor-facing feature, page, article, and SEO change; each PR must document visitor need, added value, competitor differentiation, verification, and follow-up measurement.
+## Start of every session
 1. Read `docs/OPERATIONS-ROOM.md` first (shared hard rules, the **open-requests table**, and the newest handoff log), then read `docs/STATUS.md` (current state, verification log, backlog) and `docs/RateNest-handoff-2026-10-23.md`. Newer entries can sit in an open PR branch, so also run the cross-branch read command in the room's session protocol (step 1ب).
 2. Re-check the real state — do not trust the docs blindly: open PRs, latest "RateNest checks" and "Deploy RateNest to GitHub Pages" runs, newest deployment status.
 3. Do the next useful in-scope work, test it, and update `docs/STATUS.md` (Session log) in the same PR.
@@ -44,6 +46,7 @@ Phase 3: `project-pricing-calculator.mjs` (pure logic) · `project-pricing.mjs` 
 - Pushing needs the Claude GitHub App installed on the repo; the Pages settings API is blocked (the owner must change Pages settings).
 - Shell cannot reach github.io or the npm registry (policy 403); do not try to bypass. Check the live site with the web-fetch tool (text only) and GitHub's deployments API. axe-core/Lighthouse could therefore not be run.
 - Clone with `git clone --depth 1`. The "unpushed commits / no remote branch" stop-hook warning is a **false alarm** after a push on a shallow clone: confirm with `git ls-remote --heads origin <branch>` and `git rev-list --count origin/<branch>..HEAD` instead of pushing again.
+- IFTTT is connected (free plan, checked 2026-10-28) but has **no** Google Search Console or Bing service and its web-request action is Pro-only; do not spend time trying to automate indexing through it.
 - Playwright + Chromium are preinstalled (`/opt/pw-browsers`); use `fill()` only on text-compatible inputs (number inputs reject non-numeric text).
 
 ## Verified ground truth

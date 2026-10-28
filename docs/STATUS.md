@@ -76,6 +76,11 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+- **2026-10-28 (Claude):** Search Console connected via Composio (read-only diagnosis). `ratenest.pages.dev` sitemap: 0 errors/0 warnings, status pending; 5 inspected URLs "unknown to Google" (new site). Sitemap resubmitted once. Bing connection failed owner-side; nothing submitted to Bing. PR #48 (retainer expected-hours research) is still a draft; recommendation accepted, implementation waits for its merge. No code changes.
+
+### 2026-10-28 — Claude: IFTTT connection checked (read-only)
+- IFTTT account is on the free plan; connected services are Email, Email Digest, Date & Time, Weather, Space, IFTTT, RSS only. The IFTTT catalog has **no** Google Search Console or Bing service, and its only outbound-HTTP action (Webhooks "Make a web request") is Pro-only, i.e. a paid plan (external cost, outside the standing authorization). IndexNow would reach Bing/Yandex, not Google. No Applets were created. Indexing/sitemap actions stay with the owner's own Google/Bing accounts.
+
 ### 2026-10-28 — Claude: post-merge review of the pricing guide (#45), reflow fix
 - Reviewed `how-to-price-a-freelance-project.html`: original content, no invented market numbers, example math correct ($1,530), canonical/OG/JSON-LD/sitemap extensionless. Found horizontal overflow at 320px with 200% text (405 > 320) from long words; fixed with `.explainer{overflow-wrap:break-word}`; `a11y-measurements.py` now covers the guide. After the fix no page overflows.
 - Local: unit 45/45, static clean, browser 42/6/13/31/37, accessibility clean on 4 pages. Not verified: live host, screen reader, real phone. Owner's pasted live text confirms a deployment containing the guide link is live (host not shown).
@@ -382,3 +387,14 @@ Phase 3 (project quote calculator, PR #13) and its research (PR #11) are merged 
 - حالة الموقع الحية والفهرسة: **غير محسومة**. أدوات هذه الجلسة لم تجلب نطاق الإنتاج أو المعاينة، لذلك لم أتحقق من HTTP status أو redirects أو content-type أو استجابة sitemap الفعلية. لا دليل حتى الآن على أن Google/Bing قبلا Sitemap أو فهرسا الصفحات.
 - حاسبة الـretainer (Phase 4) موجودة في `main`، مع توثيق اختبارات Claude المحلية في سجل 2026-10-28 أعلاه؛ لا أنسب تلك الاختبارات إلى تشغيل محلي في جلسة ChatGPT.
 - التالي: انتظار دليل Search Console/URL Inspection من المالك أو استجابة HTTP فعلية من جلسة قادرة على الوصول؛ لا تغيّر SEO ولا تعِد إرسال Sitemap على أساس التخمين.
+
+
+## 2026-10-28 — ChatGPT: اعتماد قانون القيمة قبل النشر
+- أُضيف مرجع إلزامي `docs/VALUE-BEFORE-PUBLISHING.md` إلى فرع التوثيق، مع ربطه بتعليمات الجلسة وغرفة العمليات.
+- القاعدة الجديدة تشترط توثيق حاجة الزائر والدليل والقيمة المضافة والفرق عن البدائل والتحقق وخطة القياس لكل PR يغيّر ما يراه الزائر أو SEO.
+- لم تُشغّل اختبارات التطبيق؛ التغيير توثيقي فقط. لم يحدث دمج أو نشر.
+- الخطوة التالية: مراجعة PR ودمجه وفق القواعد المعتادة؛ بعد الدمج يصبح القانون مرجعًا مشتركًا على `main`.
+- طلب إلى Claude: راجع صياغة القانون ومدى توافقه مع بوابة الجودة الحالية، وأشر إلى أي تعارض قبل الدمج.
+- توصية للشريك: طبّق البوابة قبل التطوير، لا عند المراجعة النهائية فقط.
+- إجراء المالك: لا شيء.
+
