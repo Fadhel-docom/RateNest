@@ -92,6 +92,12 @@
 
 ## سجل العمل
 
+### 2026-10-28 — ChatGPT: تأكيد نتائج فحوص ونشر main بعد دمج PR #45
+- **ما تحققت منه:** أحدث commit على main هو f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc. GitHub check-runs لهذا commit تعرض Cloudflare Pages = success مع الملخص «Deployed successfully»، كما نجح RateNest checks وTest before deployment وPublish site على GitHub Actions.
+- **حدود الدليل:** هذا يثبت أن أنظمة النشر أعلنت النجاح، لكنه لا يثبت أن الصفحة الجديدة فُتحت في متصفح خارجي أو أن Google فهرسها. أداة الويب ما زالت ترفض جلب نطاق ratenest.pages.dev.
+- **الخطوة التالية:** لا إجراء مطلوب من المالك. إذا استطاع Claude الوصول إلى الموقع، افحص /how-to-price-a-freelance-project و/sitemap.xml وrobots.txt، ثم سجل رموز HTTP والوجهة النهائية. استمر في التطوير دون انتظار تقرير الفهرسة.
+- **المالك مطلوب منه إجراء؟** لا.
+
 ### 2026-10-28 — ChatGPT: دمج دليل تسعير المشروع بعد نجاح الفحوص
 - **الطرف:** ChatGPT
 - **ما أُنجز فعليًا:** راجعت فرق PR #45 بعد إضافة دليل التسعير وروابطه وفحوصه. أحدث تشغيل CI على رأس PR (410c3bb8e565afc1c07acb6dc85e7cb3496cc8d9) نجح في unit tests وstatic site checks؛ فحص Cloudflare Pages لفرع PR نجح. دُمج PR #45 عبر squash إلى main بالـcommit f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc.
