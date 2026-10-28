@@ -6,7 +6,7 @@
 
 | التاريخ | من ← إلى | الطلب | السياق |
 |---|---|---|---|
-| 2026-10-28 | ChatGPT ← المالك | **التالي لتشخيص Sitemap:** في Search Console افتح Rapport «Sitemaps»، انقر صف `https://ratenest.pages.dev/sitemap.xml` أو رسالة «Impossible de récupérer»، ثم أرسل نص التفاصيل الحرفي أو لقطة الشاشة (état, dernière lecture, erreurs détectées). لا تعِد الإرسال الآن. | فحص URL Inspection المؤرّخ 28-10-2026: Google يقول إن الصفحة الرئيسية «Google ne reconnaît pas cette URL»؛ aucun sitemap référent détecté, aucune page d'origine, dernière exploration sans objet. الاختبار المباشر منفصلًا أكد أن Google peut accéder à l'URL et qu'elle peut être indexée. |
+| 2026-10-28 | ChatGPT ← المالك | **التالي لتشخيص Sitemap:** في Search Console افتح Rapport «Sitemaps»، انقر صف `https://ratenest.pages.dev/sitemap.xml` أو رسالة «Impossible de récupérer»، ثم أرسل نص التفاصيل الحرفي أو لقطة الشاشة (état, dernière lecture, erreurs détectées). لا تعِد الإرسال الآن. | المالك أرسل الجدول الرئيسي: Sitemap `/sitemap.xml`, Type Inconnu, date `27 oct. 2026`, état `Impossible de récupérer le sitemap`, pages découvertes `0`. فحص URL Inspection التاريخي يقول `Google ne reconnaît pas cette URL`; الاختبار المباشر منفصلًا يؤكد الوصول. المطلوب الآن فتح صف Sitemap نفسه ثم تفاصيل الخطأ؛ لم يُعرف السبب الدقيق بعد. |
 | 2026-10-28 | Claude ← المالك | **تحقق حي (اختياري):** افتح https://ratenest.pages.dev/ وتأكد أن الحاسبة تعرض $57.29/hr والرابط «Pricing a fixed project?» يعمل؛ وانسخ لنا حرفيًا أي خطأ لـSitemap في Search Console أو Bing. | لا نستطيع الوصول إلى النطاق من جلساتنا؛ Cloudflare check-run ناجح لكن لا دليل على سلوك الصفحة. |
 | 2026-10-27 | ChatGPT ← المالك | **إنشاء مشروع Cloudflare Pages (اختياري، لا يحجب شيئًا):** سجّل الدخول إلى https://dash.cloudflare.com/ وأنشئ Pages project باسم `ratenest` (أو `ratenest-tools` / `getratenest` إن كان محجوزًا)، اربط `Fadhel-docom/RateNest` فقط، production branch = `main`، Build command فارغ، output directory = الجذر، ثم أخبرنا بالعنوان الناتج. | لا نغيّر canonical أو sitemap أو Search Console ولا نوقف GitHub Pages قبل اختبار العنوان الجديد (PR #34). توفّر الاسم لم يُتحقَّق منه. |
 | 2026-10-25 | Claude ← المالك أو ChatGPT | (تبقّى جزء واحد) افتح الصفحة الرئيسية https://fadhel-docom.github.io/RateNest/ وتأكد أن الرابط «Pricing a fixed project?…» ينقلك إلى صفحة المشروع. | تأكد من لقطتي المالك (2026-10-26 13:32–13:33 بتوقيت تونس) أن صفحة المشروع الحية تعرض $1,350.00 ومخصص 0% و$67.50/hr؛ لم تظهر في اللقطتين الصفحة الرئيسية ولا النقر على الرابط منها. |
@@ -89,6 +89,14 @@
 هذه الإشارة **ليست** إذنًا لتجاوز الأمان أو حماية `main` أو حدود الخصوصية. وبموجب التفويض المؤكَّد نصًا في 2026-10-28 (القاعدة 11) يجوز بدء تحسينات المرحلة 4 ذات القيمة الواضحة دون سؤال؛ وتبقى التغييرات المتعلقة بالخصوصية أو التكلفة الخارجية أو الصلاحيات خارج أي تفويض. (أُضيفت صيغتها الكاملة 2026-10-25/26 بطلب المالك بعد أن وجد أن صفحة جديدة لا تعرف شيئًا.)
 
 ## سجل العمل
+### 2026-10-28 — ChatGPT: قراءة جدول Sitemaps وتحديد فتح التفاصيل
+- **الطرف:** ChatGPT
+- **ما أُنجز فعليًا:** قرأت نص جدول Search Console الذي أرسله المالك: `/sitemap.xml`, النوع `Inconnu`, تاريخ ظاهر `27 oct. 2026`, الحالة `Impossible de récupérer le sitemap`, والصفحات المكتشفة `0`. لم تظهر تفاصيل محاولة الجلب في الجدول الرئيسي.
+- **التفسير:** هذا يؤكد أن آخر حالة معروضة لجلب Sitemap غير ناجحة، لكنه لا يحدد السبب. بحسب توثيق Google، يجب فتح صف Sitemap ثم تفاصيل الخطأ لمعرفة سبب تعذّر الجلب. نتائج Live Test التي تؤكد الوصول لا تعني أن تقرير Sitemaps عالج الملف.
+- **التغيير:** تحديث توثيق التسليم فقط على فرع `docs/refresh-live-state-20261028`؛ لا تغيير للموقع أو Cloudflare أو إعدادات Search Console.
+- **الخطوة التالية للمالك:** اضغط صف `/sitemap.xml` في تقرير Sitemaps، ثم افتح/اضغط اسم الخطأ في صفحة التفاصيل، وأرسل لقطة الشاشة أو النص الحرفي.
+- **ما لا يزال مجهولًا:** HTTP status الذي رآه Google، وسبب الفشل الفعلي. لا نغيّر إعدادات ولا نعيد الإرسال قبل رؤية التفاصيل.
+
 ### 2026-10-28 — ChatGPT: نتيجة URL Inspection من المالك وتحديد الخطوة التالية
 - **التاريخ والوقت (UTC):** 2026-10-28 (وقت إرسال نتيجة المالك؛ وقت الفحص في Search Console 01:03)
 - **الطرف:** ChatGPT
