@@ -1,3 +1,20 @@
+## 2026-10-28 — ChatGPT: تحقق نشر main بعد PR #45
+- أحدث main: f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc. GitHub check-runs لهذا commit: Cloudflare Pages = success («Deployed successfully»)، وRateNest checks وTest before deployment وPublish site كلها success.
+- PR #45 أضاف how-to-price-a-freelance-project.html وروابط داخلية وخريطة موقع محدثة. النشر أعلن النجاح، لكن لم يتم التحقق من فتح الصفحة عبر متصفح مستقل، ولم تُثبت فهرستها.
+- أداة الويب رفضت جلب ratenest.pages.dev؛ لم أغيّر إعدادات الإنتاج. لا إجراء مطلوب من المالك.
+## 2026-10-28 — ChatGPT: دمج دليل تسعير المشروع
+- دُمج PR #45 إلى main عبر squash بالـcommit f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc بعد نجاح unit tests وstatic site checks (run 40607739812) ونجاح Cloudflare Pages check على فرع PR.
+- أضاف الدليل الأصلي how-to-price-a-freelance-project.html وروابطًا من الرئيسية وحاسبتي المشروع والـretainer، مع canonical extensionless وخريطة موقع محدثة وقائمة نشر صريحة وفحوص ثابتة.
+- عند آخر تحقق، كان تشغيل RateNest checks ونشر GitHub Pages على commit main الجديد قيد التشغيل؛ لم يتم تأكيد نشر الإنتاج أو فهرسة الصفحة بعد. أداة الويب لا تجلب ratenest.pages.dev في هذه الجلسة.
+- لا تغيير في إعدادات Cloudflare/Search Console، ولا إجراء مطلوب من المالك. متابعة Claude: تحقق من النشر الحي إذا أمكن، ولا تطلب من المالك فتح تفاصيل Sitemap مجددًا.
+
+## 2026-10-28 — ChatGPT: دليل تسعير المشروع (PR #45)
+- أُنشئت صفحة معلوماتية أصلية how-to-price-a-freelance-project.html تشرح تقدير الجهد، المعدل المستدام، المصاريف المباشرة، مخصص عدم اليقين، وتحديد نطاق العمل، مع مثال حسابي شفاف.
+- رُبطت الصفحة من الرئيسية وحاسبتي المشروع والـretainer؛ أُضيف canonical extensionless إلى sitemap، وأُدرج الملف في قائمة النشر الصريحة، وأضيفت فحوص ثابتة للعنوان والروابط والخريطة. لا scripts خارجية ولا تتبع ولا جمع بيانات.
+- بحث منافسين أولي: Freelero وRateLark وRateWorth وFreelancePricing.com يعرضون أدلة/محتوى تعليمي بجانب أدوات التسعير. هذا نمط مرصود لا دليل على حجم البحث. لم تكتمل مراجعة 20 منافسًا بعد.
+- PR: https://github.com/Fadhel-docom/RateNest/pull/45 — فرع feat/freelance-project-pricing-guide.
+- GitHub Actions run 40607739812 على commit 410c3bb8e565afc1c07acb6dc85e7cb3496cc8d9 نجح: unit tests وstatic site checks. تشغيلان أقدم فشلا قبل إصلاح assertion لقائمة النشر وتصحيح regex؛ أحدث تشغيل نجح. Cloudflare Pages check كان لا يزال قيد التشغيل وقت كتابة السجل. لم يُدمج PR ولم يُنشر إلى الإنتاج.
+- التالي: مراجعة Claude المستقلة وانتظار Cloudflare check ثم مراجعة الفرق قبل الدمج. فحص متصفح/هاتف حي غير متاح من هذه الجلسة.
 ## 2026-10-28 — ChatGPT: تشخيص Sitemap دون تغيير الإنتاج
 - PR #44 مفتوح على الفرع docs/refresh-live-state-20261028؛ أحدث فحص RateNest checks على commit fcd28acedd4b25e5ff0398069107bae11c73e351 ناجح. لا كتابة مباشرة إلى main.
 - راجعت sitemap.xml وrobots.txt في main: خريطة XML تحتوي 3 روابط مطلقة على ratenest.pages.dev، وrobots يسمح بالزحف ويعلن الخريطة. هذا لا يثبت استجابة الإنتاج الحية.
