@@ -1,3 +1,10 @@
+## 2026-10-28 — ChatGPT: دليل تسعير المشروع (PR #45)
+- أُنشئت صفحة معلوماتية أصلية how-to-price-a-freelance-project.html تشرح تقدير الجهد، المعدل المستدام، المصاريف المباشرة، مخصص عدم اليقين، وتحديد نطاق العمل، مع مثال حسابي شفاف.
+- رُبطت الصفحة من الرئيسية وحاسبتي المشروع والـretainer؛ أُضيف canonical extensionless إلى sitemap، وأُدرج الملف في قائمة النشر الصريحة، وأضيفت فحوص ثابتة للعنوان والروابط والخريطة. لا scripts خارجية ولا تتبع ولا جمع بيانات.
+- بحث منافسين أولي: Freelero وRateLark وRateWorth وFreelancePricing.com يعرضون أدلة/محتوى تعليمي بجانب أدوات التسعير. هذا نمط مرصود لا دليل على حجم البحث. لم تكتمل مراجعة 20 منافسًا بعد.
+- PR: https://github.com/Fadhel-docom/RateNest/pull/45 — فرع feat/freelance-project-pricing-guide.
+- GitHub Actions run 40607739812 على commit 410c3bb8e565afc1c07acb6dc85e7cb3496cc8d9 نجح: unit tests وstatic site checks. تشغيلان أقدم فشلا قبل إصلاح assertion لقائمة النشر وتصحيح regex؛ أحدث تشغيل نجح. Cloudflare Pages check كان لا يزال قيد التشغيل وقت كتابة السجل. لم يُدمج PR ولم يُنشر إلى الإنتاج.
+- التالي: مراجعة Claude المستقلة وانتظار Cloudflare check ثم مراجعة الفرق قبل الدمج. فحص متصفح/هاتف حي غير متاح من هذه الجلسة.
 ## 2026-10-28 — ChatGPT: تشخيص Sitemap دون تغيير الإنتاج
 - PR #44 مفتوح على الفرع docs/refresh-live-state-20261028؛ أحدث فحص RateNest checks على commit fcd28acedd4b25e5ff0398069107bae11c73e351 ناجح. لا كتابة مباشرة إلى main.
 - راجعت sitemap.xml وrobots.txt في main: خريطة XML تحتوي 3 روابط مطلقة على ratenest.pages.dev، وrobots يسمح بالزحف ويعلن الخريطة. هذا لا يثبت استجابة الإنتاج الحية.
