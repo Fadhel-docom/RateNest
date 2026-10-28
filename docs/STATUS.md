@@ -70,6 +70,9 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — Claude: IFTTT connection checked (read-only)
+- IFTTT account is on the free plan; connected services are Email, Email Digest, Date & Time, Weather, Space, IFTTT, RSS only. The IFTTT catalog has **no** Google Search Console or Bing service, and its only outbound-HTTP action (Webhooks "Make a web request") is Pro-only, i.e. a paid plan (external cost, outside the standing authorization). IndexNow would reach Bing/Yandex, not Google. No Applets were created. Indexing/sitemap actions stay with the owner's own Google/Bing accounts.
+
 ### 2026-10-28 — Claude: post-merge review of the pricing guide (#45), reflow fix
 - Reviewed `how-to-price-a-freelance-project.html`: original content, no invented market numbers, example math correct ($1,530), canonical/OG/JSON-LD/sitemap extensionless. Found horizontal overflow at 320px with 200% text (405 > 320) from long words; fixed with `.explainer{overflow-wrap:break-word}`; `a11y-measurements.py` now covers the guide. After the fix no page overflows.
 - Local: unit 45/45, static clean, browser 42/6/13/31/37, accessibility clean on 4 pages. Not verified: live host, screen reader, real phone. Owner's pasted live text confirms a deployment containing the guide link is live (host not shown).
