@@ -68,3 +68,5 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .guide-faq summary{cursor:pointer;font-weight:700;padding:14px 0;min-height:44px}
 .guide-faq details[open] summary{border-bottom:1px solid var(--line);margin-bottom:12px}
 .guide-faq details p{margin:0 0 14px;font-size:.9rem;color:var(--muted)}
+/* Long words in headings and paragraphs must wrap at 320px with 200% text (WCAG reflow). */
+.explainer{overflow-wrap:break-word}

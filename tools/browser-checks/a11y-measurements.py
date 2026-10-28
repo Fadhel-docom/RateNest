@@ -39,14 +39,16 @@ try:
     with sync_playwright() as p:
         b=p.chromium.launch()
         # (page, state, label) — the project quote page was added with Phase 3
-        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large")]+[("retainer-pricing.html",s) for s in ("default","error","large")]
+        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large")]+[("retainer-pricing.html",s) for s in ("default","error","large")]+[("how-to-price-a-freelance-project.html","default")]
         for page,state in CASES:
-            tag=({"index.html":"","project-pricing.html":"project ","retainer-pricing.html":"retainer "}[page])+state
+            tag=({"index.html":"","project-pricing.html":"project ","retainer-pricing.html":"retainer ","how-to-price-a-freelance-project.html":"guide "}[page])+state
             for w in (320,1280):
                 pg=b.new_page(viewport={"width":w,"height":900}); pg.goto(f"http://127.0.0.1:{port}/{page}"); pg.wait_for_timeout(300)
                 if page=="index.html":
                     if state=="error": pg.fill("#income",""); pg.wait_for_timeout(200)
                     if state=="adjusted": pg.click("#adjustments summary"); pg.fill("#fee","10"); pg.fill("#buffer","10"); pg.wait_for_timeout(250)
+                elif page=="how-to-price-a-freelance-project.html":
+                    pass
                 elif page=="retainer-pricing.html":
                     if state=="error": pg.fill("#monthlyHours",""); pg.click(".calculate-button"); pg.wait_for_timeout(250)
                     if state=="large": pg.fill("#monthlyHours","160"); pg.fill("#hourlyRate","500"); pg.fill("#discountPercent","5"); pg.fill("#months","24"); pg.wait_for_timeout(250)
@@ -59,7 +61,7 @@ try:
                 if state=="default" and w==1280: print("   headings:", r["headings"]); print("   landmarks:", r["landmarks"])
                 pg.close()
         # Every focusable element must show a visible focus indicator; reflow at 200% text on 320 px
-        for page in ("index.html","project-pricing.html","retainer-pricing.html"):
+        for page in ("index.html","project-pricing.html","retainer-pricing.html","how-to-price-a-freelance-project.html"):
             pg=b.new_page(viewport={"width":375,"height":900}); pg.goto(f"http://127.0.0.1:{port}/{page}"); pg.wait_for_timeout(300)
             bad=[]
             for _ in range(14):
