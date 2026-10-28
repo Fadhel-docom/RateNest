@@ -1,3 +1,23 @@
+## 2026-10-28 — ChatGPT: تشخيص Sitemap دون تغيير الإنتاج
+- PR #44 مفتوح على الفرع docs/refresh-live-state-20261028؛ أحدث فحص RateNest checks على commit fcd28acedd4b25e5ff0398069107bae11c73e351 ناجح. لا كتابة مباشرة إلى main.
+- راجعت sitemap.xml وrobots.txt في main: خريطة XML تحتوي 3 روابط مطلقة على ratenest.pages.dev، وrobots يسمح بالزحف ويعلن الخريطة. هذا لا يثبت استجابة الإنتاج الحية.
+- حاولت فتح ملفات الإنتاج عبر الويب؛ الأداة رفضت الجلب، لذلك لا يوجد HTTP status أو Content-Type مؤكد من جهتي. بحث site:ratenest.pages.dev لم يُظهر نتائج، لكنه ليس حاسمًا.
+- المالك أبلغ أن تفاصيل خطأ Search Console لا تفتح. لن نكرر الطلب ولن نعيد إرسال Sitemap أو نغيّر Cloudflare الآن. Google يذكر أن بعض أخطاء الجلب مؤقتة وأنه يعيد المحاولة لبضعة أيام؛ Live Test الذي أرسله المالك قال إن Google يستطيع الوصول للعنوان.
+- **الحالة:** سبب الفشل غير معروف؛ احتمال المؤقت قائم، وليس هناك دليل حالي يبرر تعديلًا جديدًا للموقع. لا إجراء مطلوب من المالك الآن.
+- **التسليم:** Claude، لا تطلب من المالك فتح التفاصيل مجددًا. إذا أمكن، تحقق من HTTP GET/HEAD للملف الحي وترويساته، وإلا استمر في تطوير الموقع ضمن التفويض.
+## 2026-10-28 — Search Console Sitemaps report (owner-provided)
+- Main table shows `/sitemap.xml`, type `Inconnu`, date `27 oct. 2026`, status `Impossible de récupérer le sitemap`, discovered pages `0`.
+- This confirms the displayed sitemap-fetch status is unsuccessful, but the main table does not reveal the cause. The owner separately opened the sitemap in a browser and saw valid XML with three URLs; Live URL Inspection separately reported that Google can access the URL. Neither fact proves the sitemap report successfully fetched/processed it.
+- Next diagnostic: owner should open the `/sitemap.xml` row, then click/open the error details and share the exact error/detail screen. No resubmission or Cloudflare changes yet.
+- Root cause and HTTP status observed by Google remain unknown.
+
+## 2026-10-28 — ChatGPT: نتيجة Google Search Console بعد فحص المالك
+- **النتيجة التاريخية لفهرسة الصفحة الرئيسية** `https://ratenest.pages.dev/` (فحص 01:03): «Cette URL n'a pas été indexée par Google» / «Google ne reconnaît pas cette URL». يعرض التقرير «Aucun sitemap référent détecté» و«Aucune page d'origine détectée»، و«Dernière exploration: Sans objet»، وحقول الزحف/الجلب/canonical بلا بيانات. الدلالة: لا يوجد اكتشاف/زحف مسجّل لهذه الصفحة في بيانات الفهرسة المعروضة؛ السبب المحدد لم يُحسم.
+- **الاختبار المباشر منفصل:** فحص المالك المباشر للصفحة الرئيسية ولـ`/sitemap.xml` قال «Google a accès à cette URL» و«La page peut être indexée». لا يثبت ذلك أن الصفحة مفهرسة أو أن Google عالج Sitemap.
+- **فحص يدوي من المالك:** `/sitemap.xml` يعرض ثلاث صفحات: الرئيسية و`/project-pricing` و`/retainer-pricing`; `/robots.txt` يسمح بالزحف ويشير إلى Sitemap. هذا يؤكد المحتوى عند فتحه بالمتصفح فقط، لا نجاح جلب Googlebot.
+- **الخطوة التالية:** من تقرير «Sitemaps» في Search Console افتح صف `https://ratenest.pages.dev/sitemap.xml` ورسالة «Impossible de récupérer» وأرسل تفاصيل الحالة/آخر قراءة/الأخطاء. لا تعِد الإرسال الآن ولا تغيّر Cloudflare/SEO حتى نعرف الرسالة الدقيقة.
+- **حدود التحقق:** لم أفتح حساب Search Console بنفسي ولم أتحقق من HTTP status أو headers من جلسة المساعد. السبب الجذري ما زال غير محسوم.
+
 ## 2026-10-27 — ChatGPT: تصحيح العنوان الأساسي وتجهيز الفهرسة
 - كشف فحص المصدر أن `index.html` و`project-pricing.html` و`og:url` وبيانات `WebApplication` و`sitemap.xml` كانت تشير إلى GitHub Pages رغم اختيار المالك `https://ratenest.pages.dev`.
 - على فرع PR #36 `docs/cloudflare-pages-url-20261027`: حُدّثت روابط canonical وOpen Graph وJSON-LD في الصفحتين، وحُدّث `sitemap.xml` ليحتوي رابطَي Cloudflare فقط. أُضيف `robots.txt` يسمح بالزحف ويشير إلى `https://ratenest.pages.dev/sitemap.xml`، وأُضيف إلى ملفات النشر في workflow الخاص بـGitHub Pages كنسخة احتياطية. عُدّلت فحوص المصدر للتحقق من العنوان الأساسي وSitemap.
@@ -326,3 +346,12 @@ Phase 3 (project quote calculator, PR #13) and its research (PR #11) are merged 
 - canonical وOpen Graph وJSON-LD في الصفحة الرئيسية تشير إلى `https://ratenest.pages.dev/`; Sitemap يضم ثلاث صفحات وrobots يشير إليه ويسمح بالزحف وفق ملفات GitHub.
 - تعذر الوصول إلى النطاق الحي من أدوات الجلسة، لذلك لا توجد أدلة على رموز HTTP أو قبول Google/Bing. لم تُغيّر ملفات الموقع.
 - التسليم إلى Claude: إن أمكن الوصول الحي، اختبر النطاق الإنتاجي ومعاينة Cloudflare وسجّل رموز HTTP والترويسات والوجهة النهائية؛ PR #42 يوثّق هذه الجلسة.
+
+
+## 2026-10-28 — ChatGPT: تحديث لقطة الحالة بعد PR #43
+- أحدث `main` وقت التحقق: `51707d3e616e56e1542e7ac3db1bf8a64b4edf15` (PR #43، روابط canonical وOpen Graph وJSON-LD وSitemap لصفحات المشروع والـretainer أصبحت بلا `.html` على نطاق Cloudflare).
+- GitHub Actions: `RateNest checks` ناجح، ونشر GitHub Pages ناجح على هذا الـcommit. Check-run الخاص بـCloudflare Pages مكتمل بنتيجة `success` وملخصه `Deployed successfully`؛ رابط المعاينة الظاهر في check-run هو `https://5c9d11aa.ratenest.pages.dev`.
+- لا توجد PRs مفتوحة حسب استجابة GitHub API وقت الفحص.
+- حالة الموقع الحية والفهرسة: **غير محسومة**. أدوات هذه الجلسة لم تجلب نطاق الإنتاج أو المعاينة، لذلك لم أتحقق من HTTP status أو redirects أو content-type أو استجابة sitemap الفعلية. لا دليل حتى الآن على أن Google/Bing قبلا Sitemap أو فهرسا الصفحات.
+- حاسبة الـretainer (Phase 4) موجودة في `main`، مع توثيق اختبارات Claude المحلية في سجل 2026-10-28 أعلاه؛ لا أنسب تلك الاختبارات إلى تشغيل محلي في جلسة ChatGPT.
+- التالي: انتظار دليل Search Console/URL Inspection من المالك أو استجابة HTTP فعلية من جلسة قادرة على الوصول؛ لا تغيّر SEO ولا تعِد إرسال Sitemap على أساس التخمين.
