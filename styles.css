@@ -59,3 +59,12 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .site-header nav a{color:var(--green);font-size:.85rem;font-weight:700;text-decoration-thickness:1px;text-underline-offset:3px}
 
 .result-equivalent-note{color:#d2e1d9;font-size:.72rem;margin:10px 0 0}
+
+
+/* Long-form pricing guide content and native disclosure controls */
+.guide-faq{display:block!important;text-align:left;max-width:760px;margin:48px auto 64px}
+.guide-faq h2{text-align:center;margin-bottom:18px}
+.guide-faq details{background:var(--white);border:1px solid var(--line);border-radius:12px;margin:0 0 10px;padding:0 16px}
+.guide-faq summary{cursor:pointer;font-weight:700;padding:14px 0;min-height:44px}
+.guide-faq details[open] summary{border-bottom:1px solid var(--line);margin-bottom:12px}
+.guide-faq details p{margin:0 0 14px;font-size:.9rem;color:var(--muted)}
