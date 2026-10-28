@@ -70,6 +70,10 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+### 2026-10-28 — Claude: post-merge review of the pricing guide (#45), reflow fix
+- Reviewed `how-to-price-a-freelance-project.html`: original content, no invented market numbers, example math correct ($1,530), canonical/OG/JSON-LD/sitemap extensionless. Found horizontal overflow at 320px with 200% text (405 > 320) from long words; fixed with `.explainer{overflow-wrap:break-word}`; `a11y-measurements.py` now covers the guide. After the fix no page overflows.
+- Local: unit 45/45, static clean, browser 42/6/13/31/37, accessibility clean on 4 pages. Not verified: live host, screen reader, real phone. Owner's pasted live text confirms a deployment containing the guide link is live (host not shown).
+
 ### 2026-10-28 — Claude: extensionless canonical/sitemap URLs for subpages
 - Cloudflare Pages redirects `/page.html` to `/page` (Cloudflare docs); our canonical, og:url, JSON-LD and sitemap used `.html` for the project and retainer pages. Switched them to `/project-pricing` and `/retainer-pricing`; `scripts/check-site.mjs` now fails on any `.html` URL on `ratenest.pages.dev`. Internal links stay `./page.html`.
 - Merged #42 (docs). Our sessions cannot reach `ratenest.pages.dev` (curl: proxy 403; WebFetch allowlist), so no live HTTP evidence; the redirect behaviour is from documentation, not observed. This may not be the cause of the sitemap fetch failure.
