@@ -1,3 +1,7 @@
+## 2026-10-28 — ChatGPT: تحقق نشر main بعد PR #45
+- أحدث main: f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc. GitHub check-runs لهذا commit: Cloudflare Pages = success («Deployed successfully»)، وRateNest checks وTest before deployment وPublish site كلها success.
+- PR #45 أضاف how-to-price-a-freelance-project.html وروابط داخلية وخريطة موقع محدثة. النشر أعلن النجاح، لكن لم يتم التحقق من فتح الصفحة عبر متصفح مستقل، ولم تُثبت فهرستها.
+- أداة الويب رفضت جلب ratenest.pages.dev؛ لم أغيّر إعدادات الإنتاج. لا إجراء مطلوب من المالك.
 ## 2026-10-28 — ChatGPT: دمج دليل تسعير المشروع
 - دُمج PR #45 إلى main عبر squash بالـcommit f0d0dd08ebb82ed8a5e78b7d07a9f32edca07abc بعد نجاح unit tests وstatic site checks (run 40607739812) ونجاح Cloudflare Pages check على فرع PR.
 - أضاف الدليل الأصلي how-to-price-a-freelance-project.html وروابطًا من الرئيسية وحاسبتي المشروع والـretainer، مع canonical extensionless وخريطة موقع محدثة وقائمة نشر صريحة وفحوص ثابتة.
