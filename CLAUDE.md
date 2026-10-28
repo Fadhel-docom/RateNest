@@ -44,6 +44,7 @@ Phase 3: `project-pricing-calculator.mjs` (pure logic) · `project-pricing.mjs` 
 - Pushing needs the Claude GitHub App installed on the repo; the Pages settings API is blocked (the owner must change Pages settings).
 - Shell cannot reach github.io or the npm registry (policy 403); do not try to bypass. Check the live site with the web-fetch tool (text only) and GitHub's deployments API. axe-core/Lighthouse could therefore not be run.
 - Clone with `git clone --depth 1`. The "unpushed commits / no remote branch" stop-hook warning is a **false alarm** after a push on a shallow clone: confirm with `git ls-remote --heads origin <branch>` and `git rev-list --count origin/<branch>..HEAD` instead of pushing again.
+- IFTTT is connected (free plan, checked 2026-10-28) but has **no** Google Search Console or Bing service and its web-request action is Pro-only; do not spend time trying to automate indexing through it.
 - Playwright + Chromium are preinstalled (`/opt/pw-browsers`); use `fill()` only on text-compatible inputs (number inputs reject non-numeric text).
 
 ## Verified ground truth
