@@ -3,8 +3,8 @@ import { calculateRetainer, validateRetainer } from "./retainer-pricing-calculat
 const $ = (selector) => document.querySelector(selector);
 const form = $("#retainer-form");
 const currency = $("#currency");
-const fields = ["monthlyHours", "hourlyRate", "discountPercent", "months"];
-const outputIds = ["full-value", "discount-total", "retainer-total", "effective-rate", "contract-total"];
+const fields = ["monthlyHours", "hourlyRate", "discountPercent", "expectedHours", "months"];
+const outputIds = ["full-value", "discount-total", "retainer-total", "effective-rate", "usage-rate", "contract-total"];
 let lastResult = null;
 
 function moneyFor(value, code) {
@@ -33,8 +33,20 @@ function clearResult() {
   lastResult = null;
   for (const id of outputIds) document.getElementById(id).textContent = "—";
   $("#retainer-summary").textContent = "Enter your retainer assumptions to estimate a monthly fee.";
+  $("#usage-note").hidden = true;
+  $("#usage-note").textContent = "";
   $("#copy-retainer").disabled = true;
   $("#copy-status").textContent = "";
+}
+
+const hoursText = (n) => `${Number(n.toFixed(2))} ${Number(n.toFixed(2)) === 1 ? "hour" : "hours"}`;
+
+function usageNote(usage) {
+  if (!usage) return "";
+  if (!usage.calculable) return "With 0 hours worked there is no hourly rate to calculate.";
+  if (usage.overReserved) return `Overage scenario: you expect ${hoursText(usage.hoursDifference)} more than the reserved hours. This rate assumes no extra charge, so agree in advance how extra hours are billed.`;
+  if (usage.underReserved) return `You expect ${hoursText(usage.hoursDifference)} fewer than the reserved hours, so this rate is higher than the all-hours rate if the retainer is paid in full.`;
+  return "";
 }
 
 function render(values, result) {
@@ -44,6 +56,11 @@ function render(values, result) {
   $("#retainer-total").textContent = money(result.monthlyRetainer);
   $("#effective-rate").textContent = `${money(result.effectiveHourlyRate)}/hr`;
   $("#contract-total").textContent = money(result.contractValue);
+  const usage = result.usage;
+  $("#usage-rate").textContent = !usage ? "—" : usage.calculable ? `${money(usage.effectiveHourlyRate)}/hr` : "Not calculable";
+  const note = usageNote(usage);
+  $("#usage-note").textContent = note;
+  $("#usage-note").hidden = note === "";
   $("#retainer-summary").textContent = `Based on ${result.monthlyHours} reserved hours per month at ${money(result.hourlyRate)}/hr, a ${result.discountPercent}% retainer discount, over ${result.months} ${result.months === 1 ? "month" : "months"}.`;
   $("#copy-retainer").disabled = false;
   $("#copy-status").textContent = "";
@@ -86,6 +103,7 @@ $("#copy-retainer").addEventListener("click", async () => {
     `Retainer discount (${values.discountPercent}%): −${moneyFor(result.discountAmount, code)}`,
     `Suggested monthly retainer: ${moneyFor(result.monthlyRetainer, code)}`,
     `Effective hourly rate if all reserved hours are used: ${moneyFor(result.effectiveHourlyRate, code)}/hr`,
+    ...(result.usage ? [`Effective hourly rate at expected usage (${values.expectedHours} h/month actually worked): ${result.usage.calculable ? `${moneyFor(result.usage.effectiveHourlyRate, code)}/hr` : "not calculable at 0 hours"}${result.usage.overReserved ? " (overage scenario: assumes no extra charge for hours beyond the reserved hours)" : ""}`] : []),
     `Contract value over ${values.months} ${values.months === 1 ? "month" : "months"}: ${moneyFor(result.contractValue, code)}`,
     "Assumptions: estimate only; taxes and any payment/platform fees are excluded. Define scope, unused hours and extra-work terms in your agreement."
   ].join("\n");

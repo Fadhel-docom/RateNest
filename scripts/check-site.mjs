@@ -60,6 +60,8 @@ check("pricing guide is linked from the homepage and both calculators", html.inc
 const retainerDefault = calculateRetainer({ monthlyHours: 20, hourlyRate: 60, discountPercent: 0, months: 12 });
 check("static retainer default matches calculation", retainerDefault.monthlyRetainer === 1200 && retainerDefault.effectiveHourlyRate === 60 && retainerDefault.contractValue === 14400 && retainerHtml.includes('id="retainer-total" class="rate-result">$1,200.00<') && retainerHtml.includes('id="contract-total">$14,400.00<') && retainerHtml.includes('id="effective-rate">$60.00/hr<'));
 check("retainer discount input defaults to 0 (percentages are entered by the user)", /<input id="discountPercent"[^>]*\svalue="0"/.test(retainerHtml));
+check("retainer expected-hours input is optional and starts blank (no assumed usage)", /<input id="expectedHours"[^>]*\svalue=""/.test(retainerHtml) && !/<input id="expectedHours"[^>]*\srequired/.test(retainerHtml) && retainerHtml.includes('id="usage-rate">—<'));
+check("retainer calculator returns no usage scenario by default", retainerDefault.usage === null);
 check("retainer page has no external scripts or stylesheets", ![...retainerHtml.matchAll(/<(?:script|link)[^>]*(?:src|href)="(https?:)?\/\/[^"]*"/gi)].some((m) => !/rel="canonical"/i.test(m[0])));
 
 check("calculator form exists", /<form[^>]*id="rate-form"/i.test(html));
