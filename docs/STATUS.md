@@ -76,6 +76,7 @@ _Last updated: 2026-10-26. New sessions start from `CLAUDE.md` at the repo root,
 
 ## Session log (newest first — add an entry at the end of every working session)
 
+- **2026-10-29 (Claude):** Merged #48 (research, after resolving a room-file conflict keeping all entries). Retainer calculator: optional "expected hours actually worked" (0–744, blank by default, no cap, no assumed usage) → second effective rate, "not calculable" at 0, overage-scenario note above the reserved hours, assumption in the copied summary. Local: unit 52/52, static clean, browser retainer 50 / behaviour 42 / regression 6 / phase2 13 / project 31, accessibility measurements clean incl. new states. Not verified: live host, screen reader, real phone.
 - **2026-10-28 (Claude):** Search Console connected via Composio (read-only diagnosis). `ratenest.pages.dev` sitemap: 0 errors/0 warnings, status pending; 5 inspected URLs "unknown to Google" (new site). Sitemap resubmitted once. Bing connection failed owner-side; nothing submitted to Bing. PR #48 (retainer expected-hours research) is still a draft; recommendation accepted, implementation waits for its merge. No code changes.
 
 ### 2026-10-28 — Claude: IFTTT connection checked (read-only)

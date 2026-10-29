@@ -8,7 +8,7 @@ function finiteNumber(value, name) {
   return value;
 }
 
-export function calculateRetainer({ monthlyHours, hourlyRate, discountPercent = 0, months = 12 }) {
+export function calculateRetainer({ monthlyHours, hourlyRate, discountPercent = 0, months = 12, expectedHours = null }) {
   const hours = finiteNumber(monthlyHours, "monthlyHours");
   const rate = finiteNumber(hourlyRate, "hourlyRate");
   const discount = finiteNumber(discountPercent, "discountPercent");
@@ -22,10 +22,24 @@ export function calculateRetainer({ monthlyHours, hourlyRate, discountPercent = 
   const monthlyRetainer = fullRateValue - discountAmount;
   const effectiveHourlyRate = monthlyRetainer / hours;
   const contractValue = monthlyRetainer * length;
-  if (![fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue].every(Number.isFinite)) {
+  // Optional scenario: the hours the freelancer expects to work. Never defaulted, never capped.
+  let usage = null;
+  if (expectedHours !== null && expectedHours !== undefined) {
+    const expected = finiteNumber(expectedHours, "expectedHours");
+    if (expected < 0 || expected > MAX_MONTHLY_HOURS) throw new RangeError("expectedHours must be between 0 and 744");
+    usage = {
+      expectedHours: expected,
+      calculable: expected > 0,
+      effectiveHourlyRate: expected > 0 ? monthlyRetainer / expected : null,
+      overReserved: expected > hours,
+      underReserved: expected < hours,
+      hoursDifference: Math.abs(expected - hours)
+    };
+  }
+  if (![fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue].every(Number.isFinite) || (usage?.calculable && !Number.isFinite(usage.effectiveHourlyRate))) {
     throw new RangeError("The result is too large to calculate safely");
   }
-  return { monthlyHours: hours, hourlyRate: rate, discountPercent: discount, months: length, fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue };
+  return { monthlyHours: hours, hourlyRate: rate, discountPercent: discount, months: length, fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue, usage };
 }
 
 export function validateRetainer(raw = {}) {
@@ -34,7 +48,7 @@ export function validateRetainer(raw = {}) {
     const rawValue = raw[key];
     if (rawValue === undefined || rawValue === null || String(rawValue).trim() === "") {
       if (required) errors[key] = `${label} is required.`;
-      return required ? null : (key === "months" ? 12 : 0);
+      return required ? null : (key === "months" ? 12 : key === "expectedHours" ? null : 0);
     }
     const text = String(rawValue).trim();
     // Reject hexadecimal, Infinity, and other JavaScript numeric syntaxes not intended for form input.
@@ -65,7 +79,8 @@ export function validateRetainer(raw = {}) {
     monthlyHours: parse("monthlyHours", "Monthly hours", { required: true, max: MAX_MONTHLY_HOURS, min: Number.MIN_VALUE, minLabel: "greater than 0" }),
     hourlyRate: parse("hourlyRate", "Hourly rate", { required: true, max: MAX_RATE }),
     discountPercent: parse("discountPercent", "Retainer discount", { max: MAX_DISCOUNT_PERCENT, maxLabel: "at most 100%" }),
-    months: parse("months", "Contract length", { integer: true, min: 1, minLabel: "at least 1 month", max: MAX_MONTHS, maxLabel: "at most 120 months" })
+    months: parse("months", "Contract length", { integer: true, min: 1, minLabel: "at least 1 month", max: MAX_MONTHS, maxLabel: "at most 120 months" }),
+    expectedHours: parse("expectedHours", "Expected hours worked", { max: MAX_MONTHLY_HOURS })
   };
   const ok = Object.keys(errors).length === 0;
   return { ok, values: ok ? values : null, errors };
