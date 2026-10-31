@@ -76,6 +76,12 @@
           <p class="field-error" id="discountPercent-error" hidden></p>
         </div>
         <div class="field">
+          <label for="expectedHours">Expected hours actually worked per month <span class="field-help">(optional)</span></label>
+          <p class="field-help" id="expectedHours-help">Optional. Enter the hours you expect to work, which may be fewer or more than the reserved hours, to see your effective rate at that usage. Blank means no usage scenario; 0 to 744.</p>
+          <input id="expectedHours" name="expectedHours" type="number" min="0" max="744" step="any" value="" inputmode="decimal" aria-describedby="expectedHours-help expectedHours-error">
+          <p class="field-error" id="expectedHours-error" hidden></p>
+        </div>
+        <div class="field">
           <label for="months">Contract length (months)</label>
           <p class="field-help" id="months-help">Whole months, 1 to 120. Used only for the total contract value. Blank means 12.</p>
           <input id="months" name="months" type="number" min="1" max="120" step="1" value="12" inputmode="numeric" aria-describedby="months-help months-error">
@@ -93,6 +99,8 @@
         <div class="result-stat"><span>Value at full rate</span><strong id="full-value">$1,200.00</strong></div>
         <div class="result-stat"><span>Retainer discount</span><strong id="discount-total">−$0.00</strong></div>
         <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$60.00/hr</strong></div>
+        <div class="result-stat"><span>Effective rate at expected usage</span><strong id="usage-rate">—</strong></div>
+        <p id="usage-note" class="result-summary" hidden></p>
         <div class="result-stat"><span>Contract value</span><strong id="contract-total">$14,400.00</strong></div>
         <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of income. The effective rate assumes every reserved hour is used and paid. Taxes and platform/payment fees are excluded. Agree scope, unused hours and extra-work terms with your client.</p></div>
         <button id="copy-retainer" class="copy-button" type="button">Copy retainer summary</button>
@@ -108,9 +116,10 @@
         <li><strong>Retainer discount</strong> = value at full rate × discount percentage. It is zero unless you enter one.</li>
         <li><strong>Monthly retainer</strong> = value at full rate − retainer discount.</li>
         <li><strong>Effective hourly rate</strong> = monthly retainer ÷ reserved hours. It equals your rate reduced by the discount.</li>
+        <li><strong>Effective rate at expected usage</strong> (optional) = monthly retainer ÷ the hours you expect to actually work. It appears only if you enter those hours, and it is not calculable at 0 hours.</li>
         <li><strong>Contract value</strong> = monthly retainer × contract length in months.</li>
       </ol>
-      <p class="fine-print">This tool does not estimate taxes, market rates or demand, and it cannot tell whether a client will accept the price. It does not model overage or rollover; it prices the reserved hours only.</p>
+      <p class="fine-print">This tool does not estimate taxes, market rates or demand, and it cannot tell whether a client will accept the price. It does not price overage or rollover: if your expected hours exceed the reserved hours, the extra-hour rate shown assumes no additional charge, so agree extra-hour billing in advance.</p>
       <p><a href="./">Need to calculate your sustainable hourly rate first? Use the hourly rate calculator.</a></p>
     </section>
     <section class="explainer">
@@ -128,6 +137,7 @@
       <h2 id="faq-heading">Common questions</h2>
       <details><summary>Do I have to offer a discount on a retainer?</summary><p>No. A discount is optional. If you choose one, enter the percentage yourself; the calculator starts at 0% and shows the effective hourly rate so you can see what the discount costs you.</p></details>
       <details><summary>What does the effective hourly rate mean?</summary><p>It is the monthly retainer divided by the reserved hours. It describes what you earn per reserved hour if every reserved hour is used and the client pays in full, so it is not a guarantee of income.</p></details>
+      <details><summary>Why enter the hours I expect to actually work?</summary><p>Clients rarely use exactly the reserved hours. Entering your expected hours shows what the same monthly fee works out to per hour if you work fewer hours (a higher rate) or more hours (a lower rate). Nothing is assumed for you: the field starts blank and the all-hours rate is always shown too.</p></details>
       <details><summary>Does the retainer include tax or platform fees?</summary><p>No automatic tax or fee is applied. Rules and platform fees vary, so confirm the treatment that applies to you.</p></details>
       <details><summary>Are my inputs saved or sent anywhere?</summary><p>No. Calculations run in your browser. RateNest does not send or store the values you enter.</p></details>
     </section>
