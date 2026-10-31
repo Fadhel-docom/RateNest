@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102c26">
-  <meta name="description" content="Price a monthly freelance retainer from reserved hours, your hourly rate, and an optional discount you choose. See the effective rate and contract value.">
+  <meta name="description" content="Price a monthly freelance retainer from reserved hours, your hourly rate, and an optional discount. See your effective rate, break-even usage hours and contract value.">
   <title>Freelance Retainer Calculator — RateNest</title>
   <link rel="canonical" href="https://ratenest.pages.dev/retainer-pricing">
   <meta property="og:type" content="website">
@@ -99,6 +99,8 @@
         <div class="result-stat"><span>Value at full rate</span><strong id="full-value">$1,200.00</strong></div>
         <div class="result-stat"><span>Retainer discount</span><strong id="discount-total">−$0.00</strong></div>
         <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$60.00/hr</strong></div>
+        <div id="break-even-row" class="result-stat" hidden><span>Break-even actual hours</span><strong id="break-even-hours">—</strong></div>
+        <p id="break-even-note" class="result-summary" hidden></p>
         <div class="result-stat"><span>Effective rate at expected usage</span><strong id="usage-rate">—</strong></div>
         <p id="usage-note" class="result-summary" hidden></p>
         <div class="result-stat"><span>Contract value</span><strong id="contract-total">$14,400.00</strong></div>
@@ -117,6 +119,7 @@
         <li><strong>Monthly retainer</strong> = value at full rate − retainer discount.</li>
         <li><strong>Effective hourly rate</strong> = monthly retainer ÷ reserved hours. It equals your rate reduced by the discount.</li>
         <li><strong>Effective rate at expected usage</strong> (optional) = monthly retainer ÷ the hours you expect to actually work. It appears only if you enter those hours, and it is not calculable at 0 hours.</li>
+        <li><strong>Break-even actual hours</strong> (shown only when you choose a discount) = reserved hours × (100 − discount percentage) ÷ 100. At this usage, your effective rate equals your baseline hourly rate. Below it, your effective rate is higher; above it, lower. A $0 baseline rate has no calculable threshold.</li>
         <li><strong>Contract value</strong> = monthly retainer × contract length in months.</li>
       </ol>
       <p class="fine-print">This tool does not estimate taxes, market rates or demand, and it cannot tell whether a client will accept the price. It does not price overage or rollover: if your expected hours exceed the reserved hours, the extra-hour rate shown assumes no additional charge, so agree extra-hour billing in advance.</p>
@@ -138,6 +141,7 @@
       <details><summary>Do I have to offer a discount on a retainer?</summary><p>No. A discount is optional. If you choose one, enter the percentage yourself; the calculator starts at 0% and shows the effective hourly rate so you can see what the discount costs you.</p></details>
       <details><summary>What does the effective hourly rate mean?</summary><p>It is the monthly retainer divided by the reserved hours. It describes what you earn per reserved hour if every reserved hour is used and the client pays in full, so it is not a guarantee of income.</p></details>
       <details><summary>Why enter the hours I expect to actually work?</summary><p>Clients rarely use exactly the reserved hours. Entering your expected hours shows what the same monthly fee works out to per hour if you work fewer hours (a higher rate) or more hours (a lower rate). Nothing is assumed for you: the field starts blank and the all-hours rate is always shown too.</p></details>
+      <details><summary>What are break-even actual hours?</summary><p>When you choose a discount, this is the number of hours you can actually work before the effective hourly rate falls below the hourly rate you entered. At the threshold, both rates are equal. Fewer hours means a higher effective rate; more hours means a lower one. It is hidden when there is no discount because the threshold would simply repeat your reserved hours. A $0 hourly rate has no meaningful break-even threshold.</p></details>
       <details><summary>Does the retainer include tax or platform fees?</summary><p>No automatic tax or fee is applied. Rules and platform fees vary, so confirm the treatment that applies to you.</p></details>
       <details><summary>Are my inputs saved or sent anywhere?</summary><p>No. Calculations run in your browser. RateNest does not send or store the values you enter.</p></details>
     </section>

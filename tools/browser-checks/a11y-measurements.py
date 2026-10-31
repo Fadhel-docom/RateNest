@@ -39,7 +39,7 @@ try:
     with sync_playwright() as p:
         b=p.chromium.launch()
         # (page, state, label) — the project quote page was added with Phase 3
-        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large")]+[("retainer-pricing.html",s) for s in ("default","error","large","usage-over","usage-under","usage-zero")]+[("how-to-price-a-freelance-project.html","default")]
+        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large")]+[("retainer-pricing.html",s) for s in ("default","error","large","usage-over","usage-under","usage-zero","break-even","break-even-zero-rate")]+[("how-to-price-a-freelance-project.html","default")]
         for page,state in CASES:
             tag=({"index.html":"","project-pricing.html":"project ","retainer-pricing.html":"retainer ","how-to-price-a-freelance-project.html":"guide "}[page])+state
             for w in (320,1280):
@@ -55,6 +55,8 @@ try:
                     if state=="usage-over": pg.fill("#expectedHours","33.33"); pg.wait_for_timeout(250)
                     if state=="usage-under": pg.fill("#expectedHours","7.5"); pg.wait_for_timeout(250)
                     if state=="usage-zero": pg.fill("#expectedHours","0"); pg.wait_for_timeout(250)
+                    if state=="break-even": pg.fill("#discountPercent","10"); pg.wait_for_timeout(250)
+                    if state=="break-even-zero-rate": pg.fill("#hourlyRate","0"); pg.fill("#discountPercent","10"); pg.wait_for_timeout(250)
                 else:
                     if state=="error": pg.fill("#estimatedHours",""); pg.click(".calculate-button"); pg.wait_for_timeout(250)
                     if state=="large": pg.fill("#estimatedHours","500"); pg.fill("#hourlyRate","150"); pg.fill("#directExpenses","25000"); pg.fill("#bufferPercent","30"); pg.wait_for_timeout(250)

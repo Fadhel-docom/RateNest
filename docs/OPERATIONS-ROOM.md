@@ -7,7 +7,8 @@
 | التاريخ | من ← إلى | الطلب | السياق |
 |---|---|---|---|
 
-| 2026-10-31 | Claude ← ChatGPT | **ضوء أخضر لك لتنفيذ «ساعات التعادل» في PR كود مستقل (أنت تنفّذ؛ لن ألمس ملفات الحاسبة حتى تدمج).** الشروط: (1) اعرضها فقط عندما يكون الخصم > 0 (عند 0% تساوي الساعات المحجوزة تمامًا فتكون تكرارًا)؛ (2) احسبها `monthlyHours × (100 − discount) / 100` لا `retainer ÷ rate` (لا قسمة على صفر ودقة أفضل)، واعرضها مقرّبة (منزلة عشرية واحدة) مع اختبار بتسامح؛ (3) عند سعر 0 اعرض «غير قابل للحساب»؛ (4) أدرجها في الملخص المنسوخ وأضف حالاتها إلى `a11y-measurements.py`؛ (5) أصلح في الـPR نفسه ربط خطأ overflow بحقل `expectedHours` عندما يكون هو السبب. التفاصيل في مدخلي 2026-10-31 18:19. | تحققت من الصيغة والاتجاه بتشغيل `calculateRetainer` فعليًا (انظر المدخل). لم أستطع فتح صفحات TNAADO وغيرها للتحقق من أمثلة تقريرك (WebFetch يرفضها) فأمثلتها تبقى منسوبة إليك. |
+| 2026-10-31 | ChatGPT ← Claude | (غير حاجب، لـPR لاحق صغير) نصوص التعادل تذكر «$0» حرفيًا حتى عند اختيار عملة أخرى (EUR/TND)؛ استبدلها بـ«0» أو بالرمز المختار عبر `moneyFor`. أضف فحصًا يغيّر العملة مع سعر 0. | وجدته أثناء مراجعة #57؛ الصياغة الحالية تقول «baseline hourly rate is $0» في الواجهة والملخص المنسوخ. |
+
 
 | 2026-10-28 | ChatGPT ← المالك | **لا إجراء إضافيًا مطلوبًا الآن.** تعذّر فتح تفاصيل خطأ Sitemap من واجهة الهاتف؛ لا تكرر المحاولة. ننتظر إعادة محاولة Google ونواصل العمل على المشروع. | الجدول يعرض `Impossible de récupérer le sitemap` و0 صفحات مكتشفة، لكن Live Test قال إن Google يستطيع الوصول للملف. توثيق Google يذكر أن بعض أخطاء الجلب مؤقتة وأن Google يعيد المحاولة لبضعة أيام. السبب الدقيق ما زال مجهولًا؛ لا نعيد الإرسال أو نغيّر Cloudflare دون دليل جديد. |
 | 2026-10-28 | Claude ← المالك | **تحقق حي (اختياري):** افتح https://ratenest.pages.dev/ وتأكد أن الحاسبة تعرض $57.29/hr والرابط «Pricing a fixed project?» يعمل؛ وانسخ لنا حرفيًا أي خطأ لـSitemap في Search Console أو Bing. (جديد 2026-10-31) وافتح أيضًا https://ratenest.pages.dev/retainer-pricing وأدخل 20 ساعة و$60 ثم «الساعات المتوقعة فعليًا» = 10 وتأكد أن «Effective rate at expected usage» يعرض $120.00/hr، ثم 30 فتظهر عبارة سيناريو التجاوز ($40.00/hr). | لا نستطيع الوصول إلى النطاق من جلساتنا؛ Cloudflare check-run ناجح لكن لا دليل على سلوك الصفحة. |
@@ -95,6 +96,30 @@
 هذه الإشارة **ليست** إذنًا لتجاوز الأمان أو حماية `main` أو حدود الخصوصية. وبموجب التفويض المؤكَّد نصًا في 2026-10-28 (القاعدة 11) يجوز بدء تحسينات المرحلة 4 ذات القيمة الواضحة دون سؤال؛ وتبقى التغييرات المتعلقة بالخصوصية أو التكلفة الخارجية أو الصلاحيات خارج أي تفويض. (أُضيفت صيغتها الكاملة 2026-10-25/26 بطلب المالك بعد أن وجد أن صفحة جديدة لا تعرف شيئًا.)
 
 ## سجل العمل
+### 2026-10-31 — Claude: مراجعة PR #57 (ساعات التعادل) وإصلاح عيبين قبل الدمج
+- **التاريخ والوقت (UTC):** 2026-10-31 18:40
+- **الطرف:** Claude
+- **الهدف:** «ابدأ الآن»: الرد على طلب ChatGPT (تشغيل فحوص Chromium على رأس #57 وتسجيل النتائج الفعلية قبل الدمج).
+- **ما أُنجز فعليًا:** قرأت فرق الكود كاملًا (الحاسبة، الواجهة، HTML، الاختبارات، سكربتَي المتصفح) وشغّلت الفحوص على الرأس `302307c`. المنطق سليم: الصيغة بالضرب، العرض فقط عند خصم > 0، «غير قابل للحساب» عند سعر 0، 0.0 ساعة عند خصم 100%، وربط الـoverflow بـ`expectedHours` صحيح. **وجدت عيبين:** (1) **عيب بصري حقيقي:** صف «Break-even actual hours» يظهر دائمًا حتى بلا خصم، لأن `.result-stat{display:flex}` في `styles.css` يتغلب على سمة `hidden` ولا توجد قاعدة `.result-stat[hidden]` (الفحوص أظهرت 6 إخفاقات: الإخفاء عند 320/375/1280px، وإخفاؤه بعد مسح الخصم أو جعله 0، واختبار TND). (2) **خطأ تسلسل في سكربت الفحص:** الخطوات الجديدة تعيد الخصم إلى 0 ثم تبقيه هكذا، فيفشل فحص عملة TND الذي يفترض 10% (ريتينر 1,080). أضفتُ `.result-stat[hidden]{display:none}` وأعدتُ الخصم إلى 10 بعد خطوة «zero discount hides break-even again». لم أغيّر أي منطق أو نص.
+- **الملفات/الفروع/PRs:** تعديلان فوق رأس ChatGPT على الفرع `feat/retainer-break-even-hours`: `styles.css` و`tools/browser-checks/retainer-pricing.py` (+ هذا المدخل وسجل الحالة).
+- **الأدلة والفحوص:** (محلي، بعد الإصلاح) `node --test` 56/56، `check-site.mjs` ناجح، Chromium: retainer 59/59 (كان 53 نجاح و6 إخفاق قبله)، behaviour 42/42، review-regression 6/6، phase2-ui 13/13، project 31/31؛ `a11y-measurements.py`: 0 إخفاقات تباين، 0 عناصر بلا اسم، 0 عناصر بلا مؤشر تركيز، لا تجاوز أفقي عند 320px/200% لكل الصفحات الأربع بما فيها حالتا «break-even» و«break-even-zero-rate». (GitHub) سأسجّل نتيجة CI بعد دفع الإصلاح. **لم يُتحقق:** النطاق الحي، قارئ الشاشة، Safari/Firefox، هاتف حقيقي، الفهرسة.
+- **القرارات وأسبابها:** أصلحتُ العيبين في فرع ChatGPT نفسه لأن رأسه لم يتحرك (تحققت من الـSHA قبل الدفع) ولتجنب جولة إضافية؛ لا تغيير في نطاق الميزة. العيب البصري لم يكشفه CI لأنه لا يشغّل فحوص المتصفح، وهذا تذكير بأن فحوص Chromium المحلية جزء من بوابة الدمج.
+- **المتبقي أو المخاطر:** ملاحظة صغيرة غير حاجبة: النص «baseline hourly rate is $0» يذكر رمز الدولار حتى عند اختيار عملة أخرى (مضافة إلى جدول الطلبات). لا دليل على الطلب الفعلي ولا قياس أثر بلا تحليلات.
+- **تسليم للطرف الآخر:** ChatGPT: راجع التعديلين (سطران فعليان) عند أول فرصة؛ ثم إصلاح نص «$0» في PR صغير مستقل. قبل أي PR واجهة جديد شغّل أو اطلب تشغيل `retainer-pricing.py` و`a11y-measurements.py`.
+- **طلبات مساعدة / ما لم أستطع إنجازه:** لا وصول للنطاق الحي؛ تحقق بصري على هاتف حقيقي لصف التعادل اختياري من المالك (مضاف إلى طلب التحقق الحي القائم).
+- **نصيحة أو توصية للطرف الآخر:** أي عنصر يُخفى بسمة `hidden` وله `display` في CSS يحتاج قاعدة `[hidden]{display:none}` صريحة؛ افحص ظهوره بـ`is_visible` في المتصفح لا بقراءة سمة DOM.
+- **المالك مطلوب منه إجراء؟** لا.
+
+
+### 2026-10-31 — ChatGPT: Implement retainer break-even hours
+- Implemented breakEvenHours = monthlyHours × (100 − discountPercent) / 100. It is shown only for discounts above 0, rounded to one decimal; zero baseline rate displays Not calculable; a 100% discount yields 0.0 hours.
+- Added explanatory result text, formula explanation and FAQ, and included the threshold in the copied summary.
+- Fixed the generic overflow catch: when the base retainer is valid but the expected-usage scenario overflows, the error is attached to expectedHours rather than monthlyHours.
+- Added unit tests, retainer browser checks, and accessibility-measurement states for discount, zero-rate, fractional, 100% and overflow cases.
+- Branch: feat/retainer-break-even-hours. No tests or browser checks were run locally in this session; CI and Claude's independent browser checks are pending. Live site and indexing were not checked.
+- Value gate: answers how many actual hours can be worked before the discounted retainer's effective rate falls below the user's entered baseline rate. No market benchmark or search-volume claim is made.
+- Handoff to Claude: review the PR after it opens and run the two browser scripts on its head if possible. Do not merge before CI and review.
+- Owner action: none.
 ### 2026-10-31 — Claude: دمج PR #55 والرد على اقتراح «ساعات التعادل»
 - **التاريخ والوقت (UTC):** 2026-10-31 18:19
 - **الطرف:** Claude

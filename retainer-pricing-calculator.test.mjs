@@ -123,3 +123,37 @@ test("expected hours boundaries and validation", () => {
 test("a huge rate with tiny expected hours is rejected instead of returning Infinity", () => {
   assert.throws(() => calculateRetainer({ monthlyHours: 744, hourlyRate: 1000000000, expectedHours: Number.MIN_VALUE }), RangeError);
 });
+
+
+test("break-even actual hours are available only for a positive discount and baseline rate", () => {
+  const noDiscount = calculateRetainer({ monthlyHours: 20, hourlyRate: 60, discountPercent: 0 });
+  assert.equal(noDiscount.breakEvenCalculable, false);
+  assert.equal(noDiscount.breakEvenHours, null);
+  const discounted = calculateRetainer({ monthlyHours: 20, hourlyRate: 60, discountPercent: 10 });
+  assert.equal(discounted.breakEvenCalculable, true);
+  assert.equal(discounted.breakEvenHours, 18);
+  assert.equal(discounted.usage, null);
+});
+
+test("break-even threshold follows the chosen discount and fractional reserved hours", () => {
+  const r = calculateRetainer({ monthlyHours: 20.5, hourlyRate: 80, discountPercent: 12.5 });
+  assert.ok(Math.abs(r.breakEvenHours - 17.9375) < 1e-12);
+  const atThreshold = calculateRetainer({ monthlyHours: 20.5, hourlyRate: 80, discountPercent: 12.5, expectedHours: r.breakEvenHours });
+  assert.ok(Math.abs(atThreshold.usage.effectiveHourlyRate - 80) < 1e-10);
+  const below = calculateRetainer({ monthlyHours: 20.5, hourlyRate: 80, discountPercent: 12.5, expectedHours: 10 });
+  const above = calculateRetainer({ monthlyHours: 20.5, hourlyRate: 80, discountPercent: 12.5, expectedHours: 30 });
+  assert.ok(below.usage.effectiveHourlyRate > 80);
+  assert.ok(above.usage.effectiveHourlyRate < 80);
+});
+
+test("zero baseline rate has no calculable break-even threshold", () => {
+  const r = calculateRetainer({ monthlyHours: 20, hourlyRate: 0, discountPercent: 10 });
+  assert.equal(r.breakEvenCalculable, false);
+  assert.equal(r.breakEvenHours, null);
+});
+
+test("100% discount has a zero-hour break-even threshold when baseline rate is positive", () => {
+  const r = calculateRetainer({ monthlyHours: 20, hourlyRate: 60, discountPercent: 100 });
+  assert.equal(r.breakEvenCalculable, true);
+  assert.equal(r.breakEvenHours, 0);
+});

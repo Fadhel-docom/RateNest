@@ -22,6 +22,9 @@ export function calculateRetainer({ monthlyHours, hourlyRate, discountPercent = 
   const monthlyRetainer = fullRateValue - discountAmount;
   const effectiveHourlyRate = monthlyRetainer / hours;
   const contractValue = monthlyRetainer * length;
+  // At break-even usage, the discounted retainer equals the user's baseline hourly rate.
+  const breakEvenCalculable = discount > 0 && rate > 0;
+  const breakEvenHours = breakEvenCalculable ? hours * (100 - discount) / 100 : null;
   // Optional scenario: the hours the freelancer expects to work. Never defaulted, never capped.
   let usage = null;
   if (expectedHours !== null && expectedHours !== undefined) {
@@ -39,7 +42,7 @@ export function calculateRetainer({ monthlyHours, hourlyRate, discountPercent = 
   if (![fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue].every(Number.isFinite) || (usage?.calculable && !Number.isFinite(usage.effectiveHourlyRate))) {
     throw new RangeError("The result is too large to calculate safely");
   }
-  return { monthlyHours: hours, hourlyRate: rate, discountPercent: discount, months: length, fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue, usage };
+  return { monthlyHours: hours, hourlyRate: rate, discountPercent: discount, months: length, fullRateValue, discountAmount, monthlyRetainer, effectiveHourlyRate, contractValue, breakEvenCalculable, breakEvenHours, usage };
 }
 
 export function validateRetainer(raw = {}) {
