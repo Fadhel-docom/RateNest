@@ -52,7 +52,7 @@ try:
                 ok("zero-rate break-even note follows EUR currency", "€0.00" in pg.inner_text("#break-even-note") and "$0" not in pg.inner_text("#break-even-note"), pg.inner_text("#break-even-note"))
                 pg.click("#copy-retainer"); pg.wait_for_timeout(200)
                 clip = pg.evaluate("navigator.clipboard.readText()")
-                ok("copied zero-rate break-even uses EUR currency", "baseline hourly rate is €0.00" in clip and "$0" not in clip, clip.replace("\\n", " | ")[:360])
+                ok("copied zero-rate break-even uses EUR currency", "baseline hourly rate is €0.00" in clip and "$0" not in clip, clip.replace("\n", " | ")[:360])
                 pg.select_option("#currency", "TND"); pg.wait_for_timeout(150)
                 ok("zero-rate break-even note follows TND currency", "TND" in pg.inner_text("#break-even-note") and "$0" not in pg.inner_text("#break-even-note"), pg.inner_text("#break-even-note"))
                 pg.fill("#hourlyRate", "60"); pg.fill("#discountPercent", "0"); pg.wait_for_timeout(150)
