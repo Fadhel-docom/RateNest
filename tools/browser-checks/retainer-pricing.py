@@ -66,6 +66,9 @@ try:
                 for bad in ("745", "-1"):
                     pg.fill("#expectedHours", bad); pg.wait_for_timeout(150)
                     ok(f"expectedHours='{bad}' shows error, aria-invalid, clears result", pg.is_visible("#expectedHours-error") and pg.get_attribute("#expectedHours", "aria-invalid") == "true" and pg.inner_text("#retainer-total") == "—" and pg.inner_text("#usage-rate") == "—" and pg.is_disabled("#copy-retainer"), pg.inner_text("#expectedHours-error"))
+                pg.fill("#monthlyHours", "744"); pg.fill("#hourlyRate", "1000000000"); pg.fill("#discountPercent", "0"); pg.fill("#expectedHours", "1e-300"); pg.wait_for_timeout(150)
+                ok("usage-result overflow is attached to expectedHours, not monthlyHours", pg.is_visible("#expectedHours-error") and not pg.is_visible("#monthlyHours-error") and pg.get_attribute("#expectedHours", "aria-invalid") == "true", pg.inner_text("#expectedHours-error"))
+                setv(pg, 20, 60, 0, 12); pg.fill("#expectedHours", "30"); pg.wait_for_timeout(150)
                 pg.fill("#expectedHours", "30"); pg.fill("#retainerName", "Acme support"); pg.wait_for_timeout(150)
                 pg.click("#copy-retainer"); pg.wait_for_timeout(200)
                 clip = pg.evaluate("navigator.clipboard.readText()")
