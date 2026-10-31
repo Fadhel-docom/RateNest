@@ -44,6 +44,7 @@ try:
                 pg.click("#copy-retainer"); pg.wait_for_timeout(200)
                 clip = pg.evaluate("navigator.clipboard.readText()")
                 ok("copy summary has name, retainer, effective rate, contract, assumptions", all(s in clip for s in ("Acme support", "$1,080.00", "$54.00/hr", "$6,480.00", "Assumptions")), clip.replace("\n", " | ")[:260])
+                ok("copy summary includes break-even hours and interpretation", "Break-even actual hours: 18.0 hours/month" in clip and "Below this threshold" in clip, clip.replace("\n", " | ")[:360])
                 ok("copy status announced", "copied" in pg.inner_text("#copy-status").lower(), pg.inner_text("#copy-status"))
                 pg.fill("#hourlyRate", "0"); pg.wait_for_timeout(150)
                 ok("zero baseline rate shows not calculable for break-even", pg.is_visible("#break-even-row") and pg.inner_text("#break-even-hours") == "Not calculable" and "baseline hourly rate is $0" in pg.inner_text("#break-even-note"), pg.inner_text("#break-even-hours"))
