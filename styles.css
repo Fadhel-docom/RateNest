@@ -9,6 +9,7 @@
 .range-ends{font-size:.75rem}
 .field-error{color:#b42318;font-size:.8rem;font-weight:600;margin:6px 0 0}
 .field-error[hidden]{display:none}
+.result-stat[hidden]{display:none}
 .field input[aria-invalid=true]{border-color:#b42318;background:#fff8f7}
 input[type=range]:focus-visible{outline:3px solid #8ac8a7;outline-offset:4px}
 .rate-result.is-empty{color:#c5d9ce}

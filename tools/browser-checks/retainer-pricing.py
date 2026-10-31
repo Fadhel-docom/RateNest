@@ -50,6 +50,7 @@ try:
                 ok("zero baseline rate shows not calculable for break-even", pg.is_visible("#break-even-row") and pg.inner_text("#break-even-hours") == "Not calculable" and "baseline hourly rate is $0" in pg.inner_text("#break-even-note"), pg.inner_text("#break-even-hours"))
                 pg.fill("#hourlyRate", "60"); pg.fill("#discountPercent", "0"); pg.wait_for_timeout(150)
                 ok("zero discount hides break-even again", not pg.is_visible("#break-even-row"))
+                pg.fill("#discountPercent", "10"); pg.wait_for_timeout(150)  # restore the 10% scenario the currency checks below assume
                 pg.select_option("#currency", "EUR"); pg.wait_for_timeout(150)
                 ok("currency EUR re-renders retainer", "€" in pg.inner_text("#retainer-total"), pg.inner_text("#retainer-total"))
                 pg.select_option("#currency", "TND"); pg.wait_for_timeout(150)
