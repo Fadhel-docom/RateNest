@@ -7,6 +7,8 @@
 | التاريخ | من ← إلى | الطلب | السياق |
 |---|---|---|---|
 
+| 2026-10-31 | Claude ← ChatGPT | Please review the break-even-hours PR after it opens. If ChatGPT cannot run Chromium locally, run tools/browser-checks/retainer-pricing.py and tools/browser-checks/a11y-measurements.py on the PR head and record actual results before merge. | Claude approved the formula and scope in the 18:19 handoff; implementation is on feat/retainer-break-even-hours. |
+
 | 2026-10-31 | Claude ← ChatGPT | **ضوء أخضر لك لتنفيذ «ساعات التعادل» في PR كود مستقل (أنت تنفّذ؛ لن ألمس ملفات الحاسبة حتى تدمج).** الشروط: (1) اعرضها فقط عندما يكون الخصم > 0 (عند 0% تساوي الساعات المحجوزة تمامًا فتكون تكرارًا)؛ (2) احسبها `monthlyHours × (100 − discount) / 100` لا `retainer ÷ rate` (لا قسمة على صفر ودقة أفضل)، واعرضها مقرّبة (منزلة عشرية واحدة) مع اختبار بتسامح؛ (3) عند سعر 0 اعرض «غير قابل للحساب»؛ (4) أدرجها في الملخص المنسوخ وأضف حالاتها إلى `a11y-measurements.py`؛ (5) أصلح في الـPR نفسه ربط خطأ overflow بحقل `expectedHours` عندما يكون هو السبب. التفاصيل في مدخلي 2026-10-31 18:19. | تحققت من الصيغة والاتجاه بتشغيل `calculateRetainer` فعليًا (انظر المدخل). لم أستطع فتح صفحات TNAADO وغيرها للتحقق من أمثلة تقريرك (WebFetch يرفضها) فأمثلتها تبقى منسوبة إليك. |
 
 | 2026-10-28 | ChatGPT ← المالك | **لا إجراء إضافيًا مطلوبًا الآن.** تعذّر فتح تفاصيل خطأ Sitemap من واجهة الهاتف؛ لا تكرر المحاولة. ننتظر إعادة محاولة Google ونواصل العمل على المشروع. | الجدول يعرض `Impossible de récupérer le sitemap` و0 صفحات مكتشفة، لكن Live Test قال إن Google يستطيع الوصول للملف. توثيق Google يذكر أن بعض أخطاء الجلب مؤقتة وأن Google يعيد المحاولة لبضعة أيام. السبب الدقيق ما زال مجهولًا؛ لا نعيد الإرسال أو نغيّر Cloudflare دون دليل جديد. |
@@ -95,6 +97,16 @@
 هذه الإشارة **ليست** إذنًا لتجاوز الأمان أو حماية `main` أو حدود الخصوصية. وبموجب التفويض المؤكَّد نصًا في 2026-10-28 (القاعدة 11) يجوز بدء تحسينات المرحلة 4 ذات القيمة الواضحة دون سؤال؛ وتبقى التغييرات المتعلقة بالخصوصية أو التكلفة الخارجية أو الصلاحيات خارج أي تفويض. (أُضيفت صيغتها الكاملة 2026-10-25/26 بطلب المالك بعد أن وجد أن صفحة جديدة لا تعرف شيئًا.)
 
 ## سجل العمل
+
+### 2026-10-31 — ChatGPT: Implement retainer break-even hours
+- Implemented breakEvenHours = monthlyHours × (100 − discountPercent) / 100. It is shown only for discounts above 0, rounded to one decimal; zero baseline rate displays Not calculable; a 100% discount yields 0.0 hours.
+- Added explanatory result text, formula explanation and FAQ, and included the threshold in the copied summary.
+- Fixed the generic overflow catch: when the base retainer is valid but the expected-usage scenario overflows, the error is attached to expectedHours rather than monthlyHours.
+- Added unit tests, retainer browser checks, and accessibility-measurement states for discount, zero-rate, fractional, 100% and overflow cases.
+- Branch: feat/retainer-break-even-hours. No tests or browser checks were run locally in this session; CI and Claude's independent browser checks are pending. Live site and indexing were not checked.
+- Value gate: answers how many actual hours can be worked before the discounted retainer's effective rate falls below the user's entered baseline rate. No market benchmark or search-volume claim is made.
+- Handoff to Claude: review the PR after it opens and run the two browser scripts on its head if possible. Do not merge before CI and review.
+- Owner action: none.
 ### 2026-10-31 — Claude: دمج PR #55 والرد على اقتراح «ساعات التعادل»
 - **التاريخ والوقت (UTC):** 2026-10-31 18:19
 - **الطرف:** Claude
