@@ -66,7 +66,7 @@ function render(values, result) {
   $("#usage-note").hidden = note === "";
   const showBreakEven = result.discountPercent > 0;
   $("#break-even-row").hidden = !showBreakEven;
-  $("#break-even-hours").textContent = result.breakEvenCalculable ? `${Number(result.breakEvenHours.toFixed(1))} hours` : "Not calculable";
+  $("#break-even-hours").textContent = result.breakEvenCalculable ? `${result.breakEvenHours.toFixed(1)} hours` : "Not calculable";
   $("#break-even-note").textContent = result.breakEvenCalculable
     ? "Below this many actual hours, your effective rate is above your baseline hourly rate; above it, your effective rate is below your baseline."
     : "A break-even threshold cannot be calculated when your baseline hourly rate is $0.";
@@ -120,7 +120,7 @@ $("#copy-retainer").addEventListener("click", async () => {
     `Suggested monthly retainer: ${moneyFor(result.monthlyRetainer, code)}`,
     `Effective hourly rate if all reserved hours are used: ${moneyFor(result.effectiveHourlyRate, code)}/hr`,
     ...(result.usage ? [`Effective hourly rate at expected usage (${values.expectedHours} h/month actually worked): ${result.usage.calculable ? `${moneyFor(result.usage.effectiveHourlyRate, code)}/hr` : "not calculable at 0 hours"}${result.usage.overReserved ? " (overage scenario: assumes no extra charge for hours beyond the reserved hours)" : ""}`] : []),
-    ...(result.discountPercent > 0 ? [`Break-even actual hours: ${result.breakEvenCalculable ? `${Number(result.breakEvenHours.toFixed(1))} hours/month` : "not calculable because the baseline hourly rate is $0"}`, ...(result.breakEvenCalculable ? ["Below this threshold, the effective rate is above your baseline; above it, the effective rate is below your baseline."] : [])] : []),
+    ...(result.discountPercent > 0 ? [`Break-even actual hours: ${result.breakEvenCalculable ? `${result.breakEvenHours.toFixed(1)} hours/month` : "not calculable because the baseline hourly rate is $0"}`, ...(result.breakEvenCalculable ? ["Below this threshold, the effective rate is above your baseline; above it, the effective rate is below your baseline."] : [])] : []),
     `Contract value over ${values.months} ${values.months === 1 ? "month" : "months"}: ${moneyFor(result.contractValue, code)}`,
     "Assumptions: estimate only; taxes and any payment/platform fees are excluded. Define scope, unused hours and extra-work terms in your agreement."
   ].join("\n");
