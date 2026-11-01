@@ -131,9 +131,11 @@ function renderScenarios(values) {
     head.textContent = `${row.billablePercent}% billable`;
     const hours = document.createElement("td");
     hours.textContent = `${formatNumber(row.billableHours)} hrs`;
+    const nonBillable = document.createElement("td");
+    nonBillable.textContent = `${formatNumber(row.nonBillableHours)} hrs`;
     const rate = document.createElement("td");
     rate.textContent = `${money(row.hourlyRate)}/hr`;
-    tr.append(head, hours, rate);
+    tr.append(head, hours, nonBillable, rate);
     return tr;
   }));
 }

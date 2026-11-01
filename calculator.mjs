@@ -103,10 +103,16 @@ export function validateRateInputs(raw) {
 
 /** Compare the hourly rate at several billable percentages, keeping all other inputs fixed. */
 export function billableScenarios(values, percents = [40, 60, 80]) {
-  return percents.map((billablePercent) => ({
-    billablePercent,
-    ...calculateHourlyRate({ ...values, billablePercent })
-  }));
+  return percents.map((billablePercent) => {
+    const result = calculateHourlyRate({ ...values, billablePercent });
+    const totalWorkingHours = values.hoursPerWeek * result.workingWeeks;
+    return {
+      billablePercent,
+      ...result,
+      totalWorkingHours,
+      nonBillableHours: totalWorkingHours - result.billableHours
+    };
+  });
 }
 
 /**
