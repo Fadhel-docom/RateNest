@@ -127,10 +127,12 @@ test("validateRateInputs accepts decimals and numbers typed as numbers", () => {
   assert.equal(values.hoursPerWeek, 37.5);
 });
 
-test("billableScenarios shows the rate falling as billable time rises", () => {
+test("billableScenarios shows billable and non-billable annual hours as billable share changes", () => {
   const rows = billableScenarios(defaults);
   assert.deepEqual(rows.map((r) => r.billablePercent), [40, 60, 80]);
+  assert.deepEqual(rows.map((r) => r.totalWorkingHours), [1920, 1920, 1920]);
   assert.deepEqual(rows.map((r) => r.billableHours), [768, 1152, 1536]);
+  assert.deepEqual(rows.map((r) => r.nonBillableHours), [1152, 768, 384]);
   assert.deepEqual(rows.map((r) => formatCurrency(r.hourlyRate, "USD", "en-US")), ["$85.94", "$57.29", "$42.97"]);
 });
 
