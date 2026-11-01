@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102c26">
-  <meta name="description" content="Estimate a fair fixed-price freelance project quote from hours, your hourly rate, direct costs, and a clearly explained uncertainty buffer.">
+  <meta name="description" content="Estimate a fixed-price freelance project quote, then check its effective hourly rate against actual hours worked and direct costs.">
   <title>Freelance Project Quote Calculator — RateNest</title>
   <link rel="canonical" href="https://ratenest.pages.dev/project-pricing">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="RateNest">
   <meta property="og:title" content="Freelance Project Quote Calculator — RateNest">
-  <meta property="og:description" content="Build a transparent fixed-price project estimate from effort, direct costs, and an uncertainty allowance.">
+  <meta property="og:description" content="Build a fixed-price project quote and see how actual hours worked change its effective hourly rate.">
   <meta property="og:url" content="https://ratenest.pages.dev/project-pricing">
   <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="./styles.css">
@@ -82,6 +82,12 @@
           <input id="bufferPercent" name="bufferPercent" type="number" min="0" max="100" step="any" value="0" inputmode="decimal" aria-describedby="bufferPercent-help bufferPercent-error">
           <p class="field-error" id="bufferPercent-error" hidden></p>
         </div>
+        <div class="field">
+          <label for="actualHours">Actual hours worked <span class="field-help">(optional)</span></label>
+          <p class="field-help" id="actualHours-help">After the project, enter the total time actually spent, including meetings and revisions. Leave blank until you have a reliable total. Zero is accepted but no hourly rate can be calculated; maximum 100,000 hours.</p>
+          <input id="actualHours" name="actualHours" type="number" min="0" max="100000" step="any" value="" inputmode="decimal" aria-describedby="actualHours-help actualHours-error">
+          <p class="field-error" id="actualHours-error" hidden></p>
+        </div>
         <button class="calculate-button" type="submit">Calculate project quote <span aria-hidden="true">→</span></button>
         <p class="privacy-note">Your numbers stay in your browser.</p>
       </form>
@@ -94,7 +100,9 @@
         <div class="result-stat"><span>Labour subtotal</span><strong id="labour-total">$1,200.00</strong></div>
         <div class="result-stat"><span>Uncertainty allowance</span><strong id="buffer-total">$0.00</strong></div>
         <div class="result-stat"><span>Direct expenses</span><strong id="expenses-total">$150.00</strong></div>
-        <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$67.50/hr</strong></div>
+        <div class="result-stat"><span>Effective hourly rate at estimated hours</span><strong id="effective-rate">$67.50/hr</strong></div>
+        <div class="result-stat"><span>Effective hourly rate at actual hours</span><strong id="actual-effective-rate">—</strong></div>
+        <p id="actual-hours-note" class="result-summary" hidden></p>
         <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of profit. Taxes and platform/payment fees are excluded unless you include them in direct expenses. Confirm scope, deliverables, and revision limits with your client.</p></div>
         <button id="copy-quote" class="copy-button" type="button">Copy quote summary</button>
         <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
@@ -108,7 +116,8 @@
         <li><strong>Labour subtotal</strong> = estimated hours × selected hourly rate.</li>
         <li><strong>Uncertainty allowance</strong> = labour subtotal × buffer percentage. It applies to labour only.</li>
         <li><strong>Suggested quote</strong> = labour subtotal + uncertainty allowance + direct project expenses.</li>
-        <li><strong>Effective hourly rate</strong> = suggested quote ÷ estimated hours. This includes direct expenses, so it is not the same as your labour rate or profit.</li>
+        <li><strong>Effective hourly rate at estimated hours</strong> = suggested quote ÷ estimated hours. This includes direct expenses, so it is not the same as your labour rate or profit.</li>
+        <li><strong>Effective hourly rate at actual hours</strong> (optional) = the unchanged fixed quote ÷ the hours you actually worked. Enter the final hours after delivery to see how an overrun lowers the rate or a faster finish raises it. This quote-per-hour figure includes direct expenses; it is not profit or take-home pay.</li>
       </ol>
       <p class="fine-print">The buffer is a markup allowance, not a true target profit margin. A true profit-margin calculation uses a different formula. This tool does not estimate taxes, market rates, or whether a client will accept the quote.</p>
       <p><a href="./">Need to calculate your sustainable hourly rate first? Use the hourly rate calculator.</a></p>
@@ -117,6 +126,7 @@
       <h2 id="faq-heading">Common questions</h2>
       <details><summary>Should I include direct expenses?</summary><p>Include project-specific costs that you want the client price to cover, such as materials or subcontractors. Avoid counting the same expense twice if your hourly rate already accounts for it.</p></details>
       <details><summary>Is the uncertainty buffer profit margin?</summary><p>No. This calculator adds a percentage of the labour subtotal. That is a markup-style allowance for uncertain work or revisions, not a true profit margin. A true target margin requires dividing cost by one minus the margin percentage.</p></details>
+      <details><summary>What happens to my effective hourly rate if a fixed-price project takes longer?</summary><p>The agreed project quote stays the same unless you and the client approve a change order. Divide that quote by the actual hours worked to see the quote per hour: more hours lower the rate, while fewer hours raise it. Include meetings and revisions in your time total. This figure includes direct project expenses and is not profit or take-home pay.</p></details>
       <details><summary>Does the quote include tax or platform fees?</summary><p>No automatic tax or fee is applied. Rules and platform fees vary. Add a known direct project cost only when appropriate, and confirm any required tax or fee treatment for your situation.</p></details>
       <details><summary>Are my inputs saved or sent anywhere?</summary><p>No. Calculations run in your browser. RateNest does not send or store the values you enter.</p></details>
     </section>
