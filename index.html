@@ -158,15 +158,16 @@
     </section>
 
     <section class="explainer scenarios" aria-labelledby="scenario-heading">
-      <h2 id="scenario-heading">How billable time changes your rate</h2>
-      <p>Most freelancers can't bill every working hour—admin, sales, and learning take time. Here is your base rate at three billable levels, keeping your other numbers the same (before any fee or buffer you add).</p>
+      <h2 id="scenario-heading">How billable and non-billable time change your rate</h2>
+      <p>Not every working hour can be charged to a client. Admin, proposals, invoicing, finding clients and learning may be non-billable; client calls or revisions depend on your agreement. Your billable percentage is the share of working hours you expect to invoice. The remaining hours are non-billable.</p>
+      <p>Annual working hours = weekly work hours × working weeks (after time off). Non-billable hours = annual working hours − billable hours. For the default 40 hours × 48 weeks, there are 1,920 working hours: at 60% billable, 1,152 are billable and 768 are non-billable. Time off is already excluded through the weeks-off input.</p>
       <div class="table-scroll" role="region" aria-labelledby="scenario-heading" tabindex="0">
       <table class="scenario-table">
-        <thead><tr><th scope="col">Billable share</th><th scope="col">Billable hours per year</th><th scope="col">Base hourly rate</th></tr></thead>
+        <thead><tr><th scope="col">Billable share</th><th scope="col">Billable hours per year</th><th scope="col">Non-billable hours per year</th><th scope="col">Base hourly rate</th></tr></thead>
         <tbody id="scenario-rows">
-          <tr><th scope="row">40% billable</th><td>768 hrs</td><td>$85.94/hr</td></tr>
-          <tr><th scope="row">60% billable</th><td>1,152 hrs</td><td>$57.29/hr</td></tr>
-          <tr><th scope="row">80% billable</th><td>1,536 hrs</td><td>$42.97/hr</td></tr>
+          <tr><th scope="row">40% billable</th><td>768 hrs</td><td>1,152 hrs</td><td>$85.94/hr</td></tr>
+          <tr><th scope="row">60% billable</th><td>1,152 hrs</td><td>768 hrs</td><td>$57.29/hr</td></tr>
+          <tr><th scope="row">80% billable</th><td>1,536 hrs</td><td>384 hrs</td><td>$42.97/hr</td></tr>
         </tbody>
       </table>
       </div>
