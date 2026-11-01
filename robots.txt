@@ -1,3 +1,8 @@
+# A crawler that matches a named group ignores the "*" group below.
+# If a Disallow is ever added to "*", repeat it in this group too.
+User-agent: OAI-SearchBot
+Allow: /
+
 User-agent: *
 Allow: /
 
