@@ -1,7 +1,7 @@
 // Dependency-free static checks for the site. Run with: node scripts/check-site.mjs
 // These are regex-based sanity checks, not a full HTML validator or accessibility audit.
 import { readFileSync, existsSync } from "node:fs";
-import { calculateHourlyRate, billableScenarios, formatCurrency, formatNumber } from "../calculator.mjs";
+import { calculateHourlyRate, billableScenarios, rateEquivalents, formatCurrency, formatNumber } from "../calculator.mjs";
 import { calculateProjectQuote } from "../project-pricing-calculator.mjs";
 import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
 
@@ -103,6 +103,11 @@ check(`static billable hours show ${formatNumber(result.billableHours, "en-US")}
   html.includes(`id="billable-hours">${formatNumber(result.billableHours, "en-US")} hrs<`));
 check("static scenario table matches calculator output", billableScenarios(defaults).every((row) =>
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
+const dayRateSection = (html.match(/<section class="explainer" aria-labelledby="day-rate-heading">[\s\S]*?<\/section>/) || [""])[0];
+check("static day-rate example (6 h and 8 h) matches calculator output",
+  dayRateSection.includes(`base rate of ${rate} per hour`)
+  && dayRateSection.includes(`is ${formatCurrency(result.hourlyRate * 6, "USD", "en-US")} (using the unrounded`)
+  && dayRateSection.includes(`equivalent is ${formatCurrency(rateEquivalents(result.hourlyRate).dailyRate, "USD", "en-US")}.`));
 
 const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
 check("robots explicitly allows OAI-SearchBot for ChatGPT Search", /(?:^|\n)User-agent: OAI-SearchBot\s*\nAllow: \//.test(robots));
