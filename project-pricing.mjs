@@ -3,7 +3,7 @@ import { calculateProjectQuote, validateProjectQuote } from "./project-pricing-c
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
 const currency = $("#currency");
-const outputIds = ["labour-total", "buffer-total", "expenses-total", "quote-total", "effective-rate"];
+const outputIds = ["labour-total", "buffer-total", "expenses-total", "quote-total", "effective-rate", "actual-effective-rate"];
 let lastResult = null;
 
 function money(value) {
@@ -14,8 +14,10 @@ function money(value) {
   }
 }
 
+const hoursText = (n) => { const value = Number(n.toFixed(2)); return value + (value === 1 ? " hour" : " hours"); };
+
 function showErrors(errors) {
-  for (const key of ["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent"]) {
+  for (const key of ["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent", "actualHours"]) {
     const input = document.getElementById(key);
     const message = document.getElementById(`${key}-error`);
     if (errors[key]) {
@@ -34,6 +36,8 @@ function clearResult() {
   lastResult = null;
   for (const id of outputIds) document.getElementById(id).textContent = "—";
   $("#quote-summary").textContent = "Enter your project assumptions to estimate a fixed quote.";
+  $("#actual-hours-note").hidden = true;
+  $("#actual-hours-note").textContent = "";
   $("#copy-quote").disabled = true;
   $("#copy-status").textContent = "";
 }
@@ -45,13 +49,24 @@ function render(values, result) {
   $("#expenses-total").textContent = money(result.directExpenses);
   $("#quote-total").textContent = money(result.quote);
   $("#effective-rate").textContent = `${money(result.effectiveHourlyRate)}/hr`;
+  const actualUsage = result.actualUsage;
+  $("#actual-effective-rate").textContent = !actualUsage ? "—" : actualUsage.calculable ? `${money(actualUsage.effectiveHourlyRate)}/hr` : "Not calculable";
+  const actualNote = !actualUsage ? "" : !actualUsage.calculable
+    ? "At 0 actual hours, an hourly rate cannot be calculated."
+    : actualUsage.overEstimate
+      ? `You worked ${hoursText(actualUsage.hoursDifference)} more than estimated. The fixed quote stays the same, so the effective hourly rate is lower.`
+      : actualUsage.underEstimate
+        ? `You worked ${hoursText(actualUsage.hoursDifference)} fewer than estimated, so the effective hourly rate is higher.`
+        : "Actual hours matched your estimate.";
+  $("#actual-hours-note").textContent = actualNote;
+  $("#actual-hours-note").hidden = actualNote === "";
   $("#quote-summary").textContent = `Based on ${result.estimatedHours} estimated hours, a ${result.bufferPercent}% labour-only uncertainty allowance, and ${money(result.directExpenses)} in direct expenses.`;
   $("#copy-quote").disabled = false;
   $("#copy-status").textContent = "";
 }
 
 function readForm() {
-  return Object.fromEntries(["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent"].map((key) => [key, document.getElementById(key).value]));
+  return Object.fromEntries(["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent", "actualHours"].map((key) => [key, document.getElementById(key).value]));
 }
 
 function calculate({ focusFirstError = false } = {}) {
@@ -67,9 +82,14 @@ function calculate({ focusFirstError = false } = {}) {
     render(checked.values, calculateProjectQuote(checked.values));
   } catch (error) {
     clearResult();
-    $("#estimatedHours-error").textContent = error.message;
-    $("#estimatedHours-error").hidden = false;
-    $("#estimatedHours").setAttribute("aria-invalid", "true");
+    let errorField = "estimatedHours";
+    if (checked.values.actualHours !== null) {
+      try { calculateProjectQuote({ ...checked.values, actualHours: null }); errorField = "actualHours"; }
+      catch { /* The base quote itself is invalid/too large; keep the estimated-hours fallback. */ }
+    }
+    $(`#${errorField}-error`).textContent = error.message;
+    $(`#${errorField}-error`).hidden = false;
+    $(`#${errorField}`).setAttribute("aria-invalid", "true");
   }
 }
 
@@ -88,8 +108,9 @@ $("#copy-quote").addEventListener("click", async () => {
     `Labour-only uncertainty allowance (${values.bufferPercent}%): ${moneyFor(result.uncertaintyAllowance, code)}`,
     `Direct project expenses: ${moneyFor(result.directExpenses, code)}`,
     `Suggested fixed-price quote: ${moneyFor(result.quote, code)}`,
-    `Effective hourly rate at estimated effort: ${moneyFor(result.effectiveHourlyRate, code)}/hr`,
-    "Assumptions: estimate only; taxes and any payment/platform fees are excluded unless included in direct expenses."
+    `Effective hourly rate at estimated hours: ${moneyFor(result.effectiveHourlyRate, code)}/hr`,
+    ...(result.actualUsage ? [`Actual hours worked: ${values.actualHours}`, `Effective hourly rate at actual hours: ${result.actualUsage.calculable ? `${moneyFor(result.actualUsage.effectiveHourlyRate, code)}/hr` : "not calculable at 0 hours"} (fixed quote ÷ actual hours; includes direct expenses)`] : []),
+    "Assumptions: estimate only; the actual-hours rate divides the fixed quote by actual hours and includes direct expenses. It is not profit or take-home pay. Taxes and payment/platform fees are excluded unless included in direct expenses."
   ].join("\n");
   try {
     await navigator.clipboard.writeText(summary);

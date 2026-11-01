@@ -39,10 +39,60 @@ test("rejects missing and non-finite required values", () => {
   assert.throws(() => calculateProjectQuote({ estimatedHours: 1, hourlyRate: Infinity }), TypeError);
 });
 
+test("calculates the effective quote rate from actual hours without changing the fixed quote", () => {
+  const result = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0, actualHours: 30 });
+  assert.equal(result.quote, 1350);
+  assert.equal(result.effectiveHourlyRate, 67.5);
+  assert.deepEqual(result.actualUsage, {
+    actualHours: 30,
+    calculable: true,
+    effectiveHourlyRate: 45,
+    overEstimate: true,
+    underEstimate: false,
+    hoursDifference: 10
+  });
+});
+
+test("actual hours below or equal to estimate are identified correctly", () => {
+  const faster = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, actualHours: 10 }).actualUsage;
+  assert.equal(faster.effectiveHourlyRate, 120);
+  assert.equal(faster.underEstimate, true);
+  assert.equal(faster.overEstimate, false);
+  const onTime = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, actualHours: 20 }).actualUsage;
+  assert.equal(onTime.effectiveHourlyRate, 60);
+  assert.equal(onTime.hoursDifference, 0);
+});
+
+test("zero actual hours is not calculable and blank actual hours adds no scenario", () => {
+  const zero = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, actualHours: 0 }).actualUsage;
+  assert.equal(zero.calculable, false);
+  assert.equal(zero.effectiveHourlyRate, null);
+  assert.equal(calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60 }).actualUsage, null);
+});
+
+test("rejects negative, excessive, and non-finite actual hours", () => {
+  for (const actualHours of [-1, 100001]) {
+    assert.throws(() => calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, actualHours }), RangeError);
+  }
+  assert.throws(() => calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, actualHours: Infinity }), TypeError);
+});
+
 test("validates strings and treats blank optional fields as zero", () => {
   const result = validateProjectQuote({ estimatedHours: "12.5", hourlyRate: "80", directExpenses: "", bufferPercent: "" });
   assert.equal(result.ok, true);
-  assert.deepEqual(result.values, { estimatedHours: 12.5, hourlyRate: 80, directExpenses: 0, bufferPercent: 0 });
+  assert.deepEqual(result.values, { estimatedHours: 12.5, hourlyRate: 80, directExpenses: 0, bufferPercent: 0, actualHours: null });
+});
+
+test("validates optional actual hours and accepts zero while rejecting values above the limit", () => {
+  const blank = validateProjectQuote({ estimatedHours: "20", hourlyRate: "60", actualHours: "" });
+  assert.equal(blank.ok, true);
+  assert.equal(blank.values.actualHours, null);
+  const zero = validateProjectQuote({ estimatedHours: "20", hourlyRate: "60", actualHours: "0" });
+  assert.equal(zero.ok, true);
+  assert.equal(zero.values.actualHours, 0);
+  const excessive = validateProjectQuote({ estimatedHours: "20", hourlyRate: "60", actualHours: "100001" });
+  assert.equal(excessive.ok, false);
+  assert.match(excessive.errors.actualHours, /100,000/);
 });
 
 test("reports missing, invalid, negative, and out-of-range form values", () => {

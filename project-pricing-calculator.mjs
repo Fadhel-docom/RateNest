@@ -8,7 +8,7 @@ function finiteNumber(value, name) {
   return value;
 }
 
-export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0 }) {
+export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0, actualHours = null }) {
   const hours = finiteNumber(estimatedHours, "estimatedHours");
   const rate = finiteNumber(hourlyRate, "hourlyRate");
   const expenses = finiteNumber(directExpenses, "directExpenses");
@@ -21,10 +21,23 @@ export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpens
   const uncertaintyAllowance = labour * buffer / 100;
   const quote = labour + uncertaintyAllowance + expenses;
   const effectiveHourlyRate = quote / hours;
-  if (![labour, uncertaintyAllowance, quote, effectiveHourlyRate].every(Number.isFinite)) {
+  let actualUsage = null;
+  if (actualHours !== null && actualHours !== undefined) {
+    const actual = finiteNumber(actualHours, "actualHours");
+    if (actual < 0 || actual > MAX_HOURS) throw new RangeError("actualHours must be between 0 and 100,000");
+    actualUsage = {
+      actualHours: actual,
+      calculable: actual > 0,
+      effectiveHourlyRate: actual > 0 ? quote / actual : null,
+      overEstimate: actual > hours,
+      underEstimate: actual < hours,
+      hoursDifference: Math.abs(actual - hours)
+    };
+  }
+  if (![labour, uncertaintyAllowance, quote, effectiveHourlyRate].every(Number.isFinite) || (actualUsage?.calculable && !Number.isFinite(actualUsage.effectiveHourlyRate))) {
     throw new RangeError("The result is too large to calculate safely");
   }
-  return { estimatedHours: hours, hourlyRate: rate, directExpenses: expenses, bufferPercent: buffer, labour, uncertaintyAllowance, quote, effectiveHourlyRate };
+  return { estimatedHours: hours, hourlyRate: rate, directExpenses: expenses, bufferPercent: buffer, labour, uncertaintyAllowance, quote, effectiveHourlyRate, actualUsage };
 }
 
 export function validateProjectQuote(raw = {}) {
@@ -33,7 +46,7 @@ export function validateProjectQuote(raw = {}) {
     const rawValue = raw[key];
     if (rawValue === undefined || rawValue === null || String(rawValue).trim() === "") {
       if (required) errors[key] = `${label} is required.`;
-      return required ? null : 0;
+      return required ? null : (key === "actualHours" ? null : 0);
     }
     const text = String(rawValue).trim();
     // Reject hexadecimal, Infinity, and other JavaScript numeric syntaxes not intended for form input.
@@ -60,7 +73,8 @@ export function validateProjectQuote(raw = {}) {
     estimatedHours: parse("estimatedHours", "Estimated hours", { required: true, max: MAX_HOURS }),
     hourlyRate: parse("hourlyRate", "Hourly rate", { required: true, max: MAX_RATE }),
     directExpenses: parse("directExpenses", "Direct expenses", { max: MAX_EXPENSES }),
-    bufferPercent: parse("bufferPercent", "Uncertainty buffer", { max: MAX_BUFFER_PERCENT, maxLabel: "at most 100%" })
+    bufferPercent: parse("bufferPercent", "Uncertainty buffer", { max: MAX_BUFFER_PERCENT, maxLabel: "at most 100%" }),
+    actualHours: parse("actualHours", "Actual hours worked", { max: MAX_HOURS })
   };
   const ok = Object.keys(errors).length === 0;
   return { ok, values: ok ? values : null, errors };
