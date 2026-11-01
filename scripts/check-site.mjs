@@ -9,6 +9,7 @@ const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.url), "utf8");
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
 const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
+const robots = readFileSync(new URL("../robots.txt", import.meta.url), "utf8");
 const failures = [];
 const check = (label, condition) => {
   console.log(`${condition ? "OK  " : "FAIL"}: ${label}`);
@@ -104,6 +105,8 @@ check("static scenario table matches calculator output", billableScenarios(defau
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
 
 const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
+check("robots explicitly allows OAI-SearchBot for ChatGPT Search", /(?:^|\\n)User-agent: OAI-SearchBot\\s*\\nAllow: \\//.test(robots));
+check("robots advertises the primary-host sitemap", robots.includes("Sitemap: https://ratenest.pages.dev/sitemap.xml"));
 check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing</loc>"));
 check("canonical, Open Graph, JSON-LD and sitemap URLs on the primary host are extensionless (Cloudflare Pages redirects .html to extensionless)", ![html, projectHtml, retainerHtml, guideHtml, sitemap].some((text) => /https:\/\/ratenest\.pages\.dev\/[^"<\s]*\.html/.test(text)));
 check("sitemap lists the retainer page", sitemap.includes("<loc>https://ratenest.pages.dev/retainer-pricing</loc>"));
