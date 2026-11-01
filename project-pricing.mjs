@@ -14,6 +14,8 @@ function money(value) {
   }
 }
 
+const hoursText = (n) => { const value = Number(n.toFixed(2)); return value + (value === 1 ? " hour" : " hours"); };
+
 function showErrors(errors) {
   for (const key of ["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent", "actualHours"]) {
     const input = document.getElementById(key);
@@ -52,9 +54,9 @@ function render(values, result) {
   const actualNote = !actualUsage ? "" : !actualUsage.calculable
     ? "At 0 actual hours, an hourly rate cannot be calculated."
     : actualUsage.overEstimate
-      ? `You worked ${actualUsage.hoursDifference} more hours than estimated. The fixed quote stays the same, so the effective hourly rate is lower.`
+      ? `You worked ${hoursText(actualUsage.hoursDifference)} more than estimated. The fixed quote stays the same, so the effective hourly rate is lower.`
       : actualUsage.underEstimate
-        ? `You worked ${actualUsage.hoursDifference} fewer hours than estimated, so the effective hourly rate is higher.`
+        ? `You worked ${hoursText(actualUsage.hoursDifference)} fewer than estimated, so the effective hourly rate is higher.`
         : "Actual hours matched your estimate.";
   $("#actual-hours-note").textContent = actualNote;
   $("#actual-hours-note").hidden = actualNote === "";
