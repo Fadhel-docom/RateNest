@@ -24,9 +24,9 @@ try:
                 ok("blank optional fields treated as 0 without error", pg.inner_text("#quote-total") == "$1,000.00" and not pg.is_visible("#directExpenses-error"))
                 # actual-hours scenario: fixed quote stays unchanged while quote-per-hour responds to actual time
                 pg.fill("#estimatedHours", "20"); pg.fill("#hourlyRate", "60"); pg.fill("#directExpenses", "150"); pg.fill("#bufferPercent", "0"); pg.fill("#actualHours", "30"); pg.wait_for_timeout(150)
-                ok("30 actual hours: quote remains $1,350 and effective rate is $45/hr", pg.inner_text("#quote-total") == "$1,350.00" and pg.inner_text("#actual-effective-rate") == "$45.00/hr" and "10 more hours" in pg.inner_text("#actual-hours-note"))
+                ok("30 actual hours: quote remains $1,350 and effective rate is $45/hr", pg.inner_text("#quote-total") == "$1,350.00" and pg.inner_text("#actual-effective-rate") == "$45.00/hr" and "10 hours more" in pg.inner_text("#actual-hours-note"))
                 pg.fill("#actualHours", "10"); pg.wait_for_timeout(150)
-                ok("10 actual hours: effective rate rises to $135/hr", pg.inner_text("#actual-effective-rate") == "$135.00/hr" and "10 fewer hours" in pg.inner_text("#actual-hours-note"))
+                ok("10 actual hours: effective rate rises to $135/hr", pg.inner_text("#actual-effective-rate") == "$135.00/hr" and "10 hours fewer" in pg.inner_text("#actual-hours-note"))
                 pg.fill("#actualHours", "20"); pg.wait_for_timeout(150)
                 ok("20 actual hours: effective rate matches estimate", pg.inner_text("#actual-effective-rate") == "$67.50/hr" and "matched your estimate" in pg.inner_text("#actual-hours-note"))
                 pg.fill("#actualHours", "0"); pg.wait_for_timeout(150)
