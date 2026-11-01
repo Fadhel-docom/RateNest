@@ -108,6 +108,7 @@ check(`static billable hours show ${formatNumber(result.billableHours, "en-US")}
 check("static scenario table matches billable and non-billable hours from calculator output", billableScenarios(defaults).every((row) =>
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatNumber(row.nonBillableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
 check("homepage explains non-billable time separately from time off", html.includes("Non-billable hours = annual working hours − billable hours") && html.includes("Time off is already excluded through the weeks-off input."));
+check("scenario table states that it shows the base rate before any fee or buffer", html.includes("shows the base rate before any fee or buffer you add"));
 const dayRateSection = (html.match(/<section class="explainer" aria-labelledby="day-rate-heading">[\s\S]*?<\/section>/) || [""])[0];
 check("static day-rate example (6 h and 8 h) matches calculator output",
   dayRateSection.includes(`base rate of ${rate} per hour`)
