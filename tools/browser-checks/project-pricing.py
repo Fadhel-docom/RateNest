@@ -14,6 +14,7 @@ try:
             pg.goto(URL); pg.wait_for_timeout(400)
             ok(f"[{w}px] default quote $1,350.00 after JS", pg.inner_text("#quote-total") == "$1,350.00", pg.inner_text("#quote-total"))
             ok(f"[{w}px] defaults: labour/buffer/expenses/effective", (pg.inner_text("#labour-total"), pg.inner_text("#buffer-total"), pg.inner_text("#expenses-total"), pg.inner_text("#effective-rate")) == ("$1,200.00", "$0.00", "$150.00", "$67.50/hr"))
+            ok(f"[{w}px] actual-hours scenario is blank by default", pg.inner_text("#actual-effective-rate") == "—" and not pg.is_visible("#actual-hours-note"))
             ok(f"[{w}px] no horizontal overflow", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"), pg.evaluate("document.documentElement.scrollWidth+'>'+document.documentElement.clientWidth"))
             if w == 375:
                 # live recalculation
@@ -21,8 +22,19 @@ try:
                 ok("recalc 10h x 100, no buffer/expenses = $1,000.00", pg.inner_text("#quote-total") == "$1,000.00", pg.inner_text("#quote-total"))
                 pg.fill("#directExpenses", ""); pg.fill("#bufferPercent", ""); pg.wait_for_timeout(200)
                 ok("blank optional fields treated as 0 without error", pg.inner_text("#quote-total") == "$1,000.00" and not pg.is_visible("#directExpenses-error"))
+                # actual-hours scenario: fixed quote stays unchanged while quote-per-hour responds to actual time
+                pg.fill("#estimatedHours", "20"); pg.fill("#hourlyRate", "60"); pg.fill("#directExpenses", "150"); pg.fill("#bufferPercent", "0"); pg.fill("#actualHours", "30"); pg.wait_for_timeout(150)
+                ok("30 actual hours: quote remains $1,350 and effective rate is $45/hr", pg.inner_text("#quote-total") == "$1,350.00" and pg.inner_text("#actual-effective-rate") == "$45.00/hr" and "10 more hours" in pg.inner_text("#actual-hours-note"))
+                pg.fill("#actualHours", "10"); pg.wait_for_timeout(150)
+                ok("10 actual hours: effective rate rises to $135/hr", pg.inner_text("#actual-effective-rate") == "$135.00/hr" and "10 fewer hours" in pg.inner_text("#actual-hours-note"))
+                pg.fill("#actualHours", "20"); pg.wait_for_timeout(150)
+                ok("20 actual hours: effective rate matches estimate", pg.inner_text("#actual-effective-rate") == "$67.50/hr" and "matched your estimate" in pg.inner_text("#actual-hours-note"))
+                pg.fill("#actualHours", "0"); pg.wait_for_timeout(150)
+                ok("zero actual hours is explicitly not calculable", pg.inner_text("#actual-effective-rate") == "Not calculable" and "0 actual hours" in pg.inner_text("#actual-hours-note"))
+                pg.fill("#actualHours", ""); pg.wait_for_timeout(150)
+                ok("blank actual hours clears the optional scenario", pg.inner_text("#actual-effective-rate") == "—" and not pg.is_visible("#actual-hours-note"))
                 # validation messages
-                for fld, bad in (("estimatedHours", "0"), ("estimatedHours", ""), ("estimatedHours", "-3"), ("hourlyRate", "-1"), ("bufferPercent", "101"), ("directExpenses", "-5")):
+                for fld, bad in (("estimatedHours", "0"), ("estimatedHours", ""), ("estimatedHours", "-3"), ("hourlyRate", "-1"), ("bufferPercent", "101"), ("directExpenses", "-5"), ("actualHours", "-1"), ("actualHours", "100001")):
                     pg.fill("#estimatedHours", "10"); pg.fill("#hourlyRate", "100"); pg.fill("#directExpenses", "0"); pg.fill("#bufferPercent", "0")
                     pg.fill(f"#{fld}", bad); pg.wait_for_timeout(150)
                     vis = pg.is_visible(f"#{fld}-error")
@@ -34,10 +46,10 @@ try:
                 active = pg.evaluate("document.activeElement.id")
                 ok("typing in hourlyRate while hours is invalid keeps focus in hourlyRate", active == "hourlyRate", f"activeElement={active}")
                 # copy
-                pg.fill("#estimatedHours", "20"); pg.fill("#hourlyRate", "60"); pg.fill("#directExpenses", "150"); pg.fill("#bufferPercent", "25"); pg.fill("#projectTitle", "Logo redesign"); pg.wait_for_timeout(150)
+                pg.fill("#estimatedHours", "20"); pg.fill("#hourlyRate", "60"); pg.fill("#directExpenses", "150"); pg.fill("#bufferPercent", "25"); pg.fill("#actualHours", "30"); pg.fill("#projectTitle", "Logo redesign"); pg.wait_for_timeout(150)
                 pg.click("#copy-quote"); pg.wait_for_timeout(200)
                 clip = pg.evaluate("navigator.clipboard.readText()")
-                ok("copy summary has project, quote, assumptions", all(s in clip for s in ("Logo redesign", "$1,650.00", "$82.50/hr", "Assumptions")), clip.replace("\n", " | ")[:260])
+                ok("copy summary has project, estimate, actual hours, actual rate and assumptions", all(s in clip for s in ("Logo redesign", "$1,650.00", "$82.50/hr", "Actual hours worked: 30", "$55.00/hr", "includes direct expenses", "Assumptions")), clip.replace("\n", " | ")[:260])
                 ok("copy status announced", "copied" in pg.inner_text("#copy-status").lower(), pg.inner_text("#copy-status"))
                 # currency
                 pg.select_option("#currency", "EUR"); pg.wait_for_timeout(150)
