@@ -25,6 +25,8 @@ try:
         ok("annual total after JS", pg.inner_text("#annual-total")=="$66,000", pg.inner_text("#annual-total"))
         ok("steps rendered (3)", pg.locator("#formula-steps li").count()==3)
         ok("scenario rows (3)", pg.locator("#scenario-rows tr").count()==3)
+        ok("scenario table shows non-billable annual hours", pg.locator("#scenario-rows tr").nth(1).locator("td").nth(1).inner_text()=="768 hrs")
+        ok("scenario table has four cells including non-billable hours", pg.locator("#scenario-rows tr").nth(1).locator("th,td").count()==4)
         # Clear income -> error state, no stale result
         pg.fill("#income",""); pg.wait_for_timeout(200)
         ok("clear income: rate shows dash", pg.inner_text("#rate-result")=="—", pg.inner_text("#rate-result"))
