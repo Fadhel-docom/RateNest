@@ -105,7 +105,7 @@ check("static scenario table matches calculator output", billableScenarios(defau
   html.includes(`<th scope="row">${row.billablePercent}% billable</th><td>${formatNumber(row.billableHours, "en-US")} hrs</td><td>${formatCurrency(row.hourlyRate, "USD", "en-US")}/hr</td>`)));
 
 const sitemap = existsSync(new URL("../sitemap.xml", import.meta.url)) ? readFileSync(new URL("../sitemap.xml", import.meta.url), "utf8") : "";
-check("robots explicitly allows OAI-SearchBot for ChatGPT Search", /(?:^|\\n)User-agent: OAI-SearchBot\\s*\\nAllow: \\//.test(robots));
+check("robots explicitly allows OAI-SearchBot for ChatGPT Search", /(?:^|\n)User-agent: OAI-SearchBot\s*\nAllow: \//.test(robots));
 check("robots advertises the primary-host sitemap", robots.includes("Sitemap: https://ratenest.pages.dev/sitemap.xml"));
 check("sitemap lists both selected canonical URLs", sitemap.includes(`<loc>${canonical}</loc>`) && sitemap.includes("<loc>https://ratenest.pages.dev/project-pricing</loc>"));
 check("canonical, Open Graph, JSON-LD and sitemap URLs on the primary host are extensionless (Cloudflare Pages redirects .html to extensionless)", ![html, projectHtml, retainerHtml, guideHtml, sitemap].some((text) => /https:\/\/ratenest\.pages\.dev\/[^"<\s]*\.html/.test(text)));
