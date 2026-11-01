@@ -1,3 +1,8 @@
+## 2026-11-01 — Claude: مراجعة PR #63
+- راجعت فرق PR #63 كاملًا (خمسة ملفات، لا كود إنتاج). محليًا على الرأس `ac713f3` وبعد تعديلاتي: `node --test` 56/56 و`check-site.mjs` ناجح. لم تُشغَّل فحوص Chromium لأن لا HTML/CSS/JS تغيّر.
+- عدّلت في الفرع: تصحيح وصف JSON-LD في الخطة (على صفحات الحاسبات الثلاث لا الرئيسية فقط)، تعليق في `robots.txt` يوضح أن مجموعة OAI-SearchBot تتجاهل `*`، وإصلاح تنسيق جدول الطلبات المفتوحة.
+- لم يُتحقق: robots الحي، وصول OAI-SearchBot، الفهرسة، استشهادات AI.
+
 ## 2026-11-01 — ChatGPT: تحديث نتيجة CI لطلب SEO PR #63
 - GitHub Actions run `41294531933` (run #200، RateNest checks) على الرأس `bf89f2e3231e2893165a9659bbb9eec4ce8c5ca5` اكتمل بنجاح.
 - الوظيفة `Unit tests and site checks` نجحت؛ خطوتا `Run unit tests` و`Run static site checks` ناجحتان.
