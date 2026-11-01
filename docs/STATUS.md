@@ -3,7 +3,7 @@
 - راجعت سبعة بدائل مباشرة: Harvest وToggl وMeadow Desk وSpirelight وNumoo وFreelero وClockbill. تقرير الدليل: `docs/non-billable-hours-search-intent-audit-2026-11-01.md`. هذا تدقيق موجّه، لا دراسة حجم بحث؛ المسح المنفصل لعشرين منافسًا موجود في ملفه السابق.
 - أضفت إلى جدول السيناريوهات عمود non-billable hours/year، وشرحًا للصيغة وللفرق بين الوقت غير القابل للفوترة والإجازات. أضفت حساب القيم إلى `billableScenarios`، واختبار وحدة، وفحصًا ثابتًا، وفحوص Chromium للسطر والعمود الإضافي. لم أضف صفحة أو متعقب وقت أو جمع بيانات.
 - القيم الافتراضية: 40 ساعة × 48 أسبوعًا = 1,920 ساعة عمل سنوية؛ عند 60% billable تكون 1,152 billable و768 non-billable؛ السعر الأساسي يبقى $57.29/hr.
-- الفرع: `seo/nonbillable-hours-explainer-20261101`. PR #66 مفتوح: https://github.com/Fadhel-docom/RateNest/pull/66. الفرع متقدم 9 commits على main ولا commits خلفه؛ لم يظهر GitHub Actions run للـPR عند آخر تحقق، وحالة mergeable لم تستقر بعد.
+- الفرع: `seo/nonbillable-hours-explainer-20261101`. PR #66 مفتوح: https://github.com/Fadhel-docom/RateNest/pull/66. GitHub Actions run #219 (`41297790984`) على رأس الفرع `69469af` اكتمل بنجاح؛ Unit tests وstatic site checks كلاهما success. Cloudflare Pages أعلن نجاح معاينة على commit `a73952f` بعنوان https://0ee3ed91.ratenest.pages.dev؛ أداة الويب لم تتمكن من فتح المعاينة للتحقق المرئي. فحوص Chromium المحلية لم تُشغّل بعد، ومراجعة Claude مطلوبة قبل الدمج.
 - **التحقق:** لم أشغّل الاختبارات محليًا؛ CI وChromium ينتظران PR. لم يُتحقق من الإنتاج أو الفهرسة أو ظهور AI أو بيانات الطلب.
 - **المتبقي:** مراجعة مستقلة من Claude بعد فتح PR ونجاح CI؛ فحص عرض الجدول على الهاتف بواسطة Chromium. لا إجراء مطلوب من المالك.
 - **قرار القيمة:** تحسين الصفحة الموجودة بدل إنشاء صفحة مكررة أو أداة جديدة؛ لا ادعاء بحجم بحث أو معيار billable عالمي.
