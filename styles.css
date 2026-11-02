@@ -77,3 +77,30 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .hours-breakdown .field-row .field label{display:block;min-height:0}
 .hours-breakdown .copy-button{color:var(--ink);border-color:#9bb3a6}
 .hours-breakdown .copy-status{color:var(--ink);text-align:left}
+
+/* Printable client-facing project quote: keep internal actual-hours analysis off the shared sheet. */
+.print-only{display:none}
+@page{size:auto;margin:16mm}
+@media print{
+  body{background:#fff!important;color:#172b25!important;font-size:11pt;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .site-header,.skip-link,.hero,.calculator-card,.explainer,footer{display:none!important}
+  main{max-width:none;margin:0;padding:0}
+  .calculator-layout{display:block;margin:0}
+  .result-card{display:block;width:100%;min-height:0;padding:0;border:0;border-radius:0;box-shadow:none;background:#fff!important;color:#172b25!important}
+  .result-card *{color:#172b25!important}
+  .result-top,.copy-button,.copy-status,.internal-stat,#actual-hours-note{display:none!important}
+  .print-only{display:block!important}
+  .quote-document-heading{margin:0 0 20pt;padding-bottom:12pt;border-bottom:2px solid #176b50}
+  .quote-document-heading .eyebrow{margin-bottom:4pt}
+  .quote-document-heading h2{font-size:22pt;margin:0;overflow-wrap:anywhere}
+  .rate-result{font-size:30pt;margin:18pt 0 8pt;overflow-wrap:anywhere}
+  .result-summary{color:#34463f!important;font-size:11pt}
+  .result-divider{background:#b9c8bf;height:1px;margin:18pt 0 12pt}
+  .result-stat{font-size:10.5pt;margin-bottom:10pt;break-inside:avoid}
+  .result-stat span{color:#34463f!important}
+  .result-stat strong{text-align:right}
+  .result-tip{margin-top:18pt;padding:12pt;background:#f1f5f2!important;border:1px solid #cbd8cf;border-radius:6pt;break-inside:avoid}
+  .result-tip p{font-size:9.5pt;color:#34463f!important}
+  .result-tip strong{color:#172b25!important}
+  .quote-print-note{margin-top:16pt;padding-top:10pt;border-top:1px solid #cbd8cf;font-size:9pt;color:#52635b!important}
+}
