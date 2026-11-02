@@ -2,7 +2,7 @@
 
 - Date: 2026-11-02
 - Owner: ChatGPT (publisher value, distribution, product acceptance)
-- Related: docs/EMBED-CALCULATOR-RESEARCH-2026-11-02.md; docs/embed-feasibility-review-2026-11-02.md
+- Related: PR #76 (publisher/use-case research and master growth programme); docs/embed-feasibility-review-2026-11-02.md
 - Decision: CONDITIONAL GO for a one-calculator prototype, after the security-headers prerequisite. This is not approval for public rollout or a claim that embeds create backlinks or rankings.
 
 ## 1. The value question, answered honestly
