@@ -43,6 +43,11 @@ check("payout fee inputs default to blank (no built-in fee rate, no provider pre
 check("payout fee labels name the fee base and say the fixed fee is deducted once", projectHtml.includes("Percentage fee on the client-paid quote (%)") && projectHtml.includes("Fixed payout fee (deducted once)"));
 check("payout fee result lines are hidden by default and the amount remaining is internal (not printed)", /id="pct-fee-line" hidden/.test(projectHtml) && /id="fixed-fee-line" hidden/.test(projectHtml) && /class="result-stat internal-stat" id="remaining-line" hidden/.test(projectHtml) && /id="fee-note" class="result-summary internal-stat" hidden/.test(projectHtml));
 check("static default quote has no fee applied", calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0, feePercent: 0, fixedFee: 0 }).fees === null);
+const headersFile = readFileSync(new URL("../_headers", import.meta.url), "utf8");
+const catchAll = /^\/\*\s*\n((?:[ \t]+.*\n?)+)/m.exec(headersFile)?.[1] ?? "";
+check("_headers denies framing on every page by default (frame-ancestors 'none' and X-Frame-Options DENY)", /Content-Security-Policy:\s*frame-ancestors 'none'\s*$/m.test(catchAll) && /X-Frame-Options:\s*DENY\s*$/m.test(catchAll));
+check("_headers framing policy sets only frame-ancestors and has no embed exception without an embed page", !/Content-Security-Policy:[^\n]*(?:script-src|default-src|style-src)/i.test(headersFile) && !/\/embed\//.test(headersFile.replace(/^\s*#.*$/gm, "")));
+check("_headers keeps noindex for internal paths", ["/docs/*", "/scripts/*", "/tools/*", "/.github/*"].every((p) => new RegExp(`^${p.replace(/[*.]/g, "\\$&")}\\s*\\n\\s+X-Robots-Tag: noindex, nofollow`, "m").test(headersFile)));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
 const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));

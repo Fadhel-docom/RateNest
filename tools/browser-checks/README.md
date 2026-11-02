@@ -9,6 +9,7 @@ python3 -I tools/browser-checks/review-regression.py  . 8802   # 6 checks from P
 python3 -I tools/browser-checks/phase2-ui.py          . 8803   # 13 checks: fee/buffer inputs, errors, adjusted result, copy
 python3 -I tools/browser-checks/project-pricing.py     . 8805   # 41 checks: project quote page incl. actual-hours scenarios (needs PR #13 code)
 python3 -I tools/browser-checks/retainer-pricing.py   . 8806   # 50 checks: Phase 4 retainer page (incl. expected hours)
+python3 -I tools/browser-checks/frame-headers.py      . 8830   # 9 checks: deny-by-default framing from `_headers` (uses ports 8830-8832; emulates the documented format locally, does not prove Cloudflare parsing)
 python3 -I tools/browser-checks/a11y-measurements.py  . 8804   # contrast, names, headings, focus rings, zoom reflow on homepage, project, retainer and guide (NOT axe-core)
 ```
 
