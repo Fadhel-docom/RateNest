@@ -16,8 +16,20 @@ function money(value) {
 
 const hoursText = (n) => { const value = Number(n.toFixed(2)); return value + (value === 1 ? " hour" : " hours"); };
 
+const FORM_KEYS = ["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent", "feePercent", "fixedFee", "actualHours"];
+const FEE_KEYS = ["feePercent", "fixedFee"];
+const PRINT_NOTE_DEFAULT = "This estimate is not a contract or invoice. Confirm the scope, deliverables, timeline, revision limits, payment schedule and applicable taxes with your client. Taxes and platform/payment fees are not included unless listed in direct expenses.";
+const PRINT_NOTE_WITH_FEES = "This estimate is not a contract or invoice. Confirm the scope, deliverables, timeline, revision limits, payment schedule and applicable taxes with your client. Payment and payout fees are included as listed above; taxes are not included unless listed in direct expenses.";
+const TIP_DEFAULT = "This is a planning estimate, not a guarantee of profit. Taxes and platform/payment fees are excluded unless you include them in direct expenses. Confirm scope, deliverables, and revision limits with your client.";
+const TIP_WITH_FEES = "This is a planning estimate, not a guarantee of profit. The payment fees are your own estimate on the client-paid quote; a provider may charge on a different base, so check the real fees. Taxes are excluded. Confirm scope, deliverables, and revision limits with your client.";
+
+// The fee fields live in a collapsed section: open it whenever one of them has an error so the message is visible.
+function openFeesIfNeeded() {
+  if (FEE_KEYS.some((key) => !document.getElementById(`${key}-error`).hidden)) $("#payout-fees").open = true;
+}
+
 function showErrors(errors) {
-  for (const key of ["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent", "actualHours"]) {
+  for (const key of FORM_KEYS) {
     const input = document.getElementById(key);
     const message = document.getElementById(`${key}-error`);
     if (errors[key]) {
@@ -30,6 +42,7 @@ function showErrors(errors) {
       message.hidden = true;
     }
   }
+  openFeesIfNeeded();
 }
 
 function clearResult() {
@@ -39,6 +52,9 @@ function clearResult() {
   $("#print-quote").disabled = true;
   $("#actual-hours-note").hidden = true;
   $("#actual-hours-note").textContent = "";
+  for (const id of ["pct-fee-line", "fixed-fee-line", "remaining-line", "fee-note"]) document.getElementById(id).hidden = true;
+  $("#quote-print-note").textContent = PRINT_NOTE_DEFAULT;
+  $("#quote-tip").innerHTML = `<strong>Remember:</strong> ${TIP_DEFAULT}`;
   $("#copy-quote").disabled = true;
   $("#copy-status").textContent = "";
 }
@@ -79,12 +95,22 @@ function render(values, result, breakdown = readBreakdown()) {
   $("#actual-hours-note").textContent = actualNote;
   $("#actual-hours-note").hidden = actualNote === "";
   $("#quote-summary").textContent = `Based on ${result.estimatedHours} estimated hours, a ${result.bufferPercent}% labour-only uncertainty allowance, and ${money(result.directExpenses)} in direct expenses.`;
+  const fees = result.fees;
+  for (const id of ["pct-fee-line", "fixed-fee-line", "remaining-line", "fee-note"]) document.getElementById(id).hidden = !fees;
+  if (fees) {
+    $("#pct-fee-total").textContent = money(fees.percentageFee);
+    $("#fixed-fee-total").textContent = money(fees.fixedFee);
+    $("#remaining-total").textContent = money(fees.estimatedRemaining);
+    $("#fee-note").textContent = `The client-paid quote includes your entered fees (${fees.feePercent}% of the quote plus ${money(fees.fixedFee)} fixed), so about ${money(fees.estimatedRemaining)} remains. This is an estimate from your own inputs, not profit or take-home pay; the effective hourly rates use this remaining amount.`;
+  }
+  $("#quote-print-note").textContent = fees ? PRINT_NOTE_WITH_FEES : PRINT_NOTE_DEFAULT;
+  $("#quote-tip").innerHTML = `<strong>Remember:</strong> ${fees ? TIP_WITH_FEES : TIP_DEFAULT}`;
   $("#copy-quote").disabled = false;
   $("#copy-status").textContent = "";
 }
 
 function readForm() {
-  return Object.fromEntries(["estimatedHours", "hourlyRate", "directExpenses", "bufferPercent", "actualHours"].map((key) => [key, document.getElementById(key).value]));
+  return Object.fromEntries(FORM_KEYS.map((key) => [key, document.getElementById(key).value]));
 }
 
 function calculate({ focusFirstError = false } = {}) {
@@ -100,14 +126,18 @@ function calculate({ focusFirstError = false } = {}) {
     render(checked.values, calculateProjectQuote(checked.values), readBreakdown());
   } catch (error) {
     clearResult();
+    // Work out which input made the result unusable: the base quote, the entered fees, or the actual hours.
     let errorField = "estimatedHours";
-    if (checked.values.actualHours !== null) {
-      try { calculateProjectQuote({ ...checked.values, actualHours: null }); errorField = "actualHours"; }
-      catch { /* The base quote itself is invalid/too large; keep the estimated-hours fallback. */ }
-    }
+    const withoutActual = { ...checked.values, actualHours: null };
+    try {
+      calculateProjectQuote({ ...withoutActual, feePercent: 0, fixedFee: 0 });
+      try { calculateProjectQuote(withoutActual); errorField = "actualHours"; }
+      catch { errorField = "feePercent"; }
+    } catch { /* The base quote itself is invalid/too large; keep the estimated-hours fallback. */ }
     $(`#${errorField}-error`).textContent = error.message;
     $(`#${errorField}-error`).hidden = false;
     $(`#${errorField}`).setAttribute("aria-invalid", "true");
+    openFeesIfNeeded();
   }
 }
 
@@ -139,10 +169,14 @@ $("#copy-quote").addEventListener("click", async () => {
     `Labour subtotal: ${moneyFor(result.labour, code)}`,
     `Labour-only uncertainty allowance (${values.bufferPercent}%): ${moneyFor(result.uncertaintyAllowance, code)}`,
     `Direct project expenses: ${moneyFor(result.directExpenses, code)}`,
+    ...(result.fees ? [`Quote before payment fees: ${moneyFor(result.fees.quoteBeforeFees, code)}`, `Percentage payment fee (${result.fees.feePercent}% of the client-paid quote): ${moneyFor(result.fees.percentageFee, code)}`, `Fixed payout fee: ${moneyFor(result.fees.fixedFee, code)}`] : []),
     `Suggested fixed-price quote: ${moneyFor(result.quote, code)}`,
+    ...(result.fees ? [`Estimated amount remaining after entered fees: ${moneyFor(result.fees.estimatedRemaining, code)}`] : []),
     `Effective hourly rate at estimated hours: ${moneyFor(result.effectiveHourlyRate, code)}/hr`,
-    ...(result.actualUsage ? [`Actual hours worked: ${values.actualHours}`, `Effective hourly rate at actual hours: ${result.actualUsage.calculable ? `${moneyFor(result.actualUsage.effectiveHourlyRate, code)}/hr` : "not calculable at 0 hours"} (fixed quote ÷ actual hours; includes direct expenses)`] : []),
-    "Assumptions: estimate only; the actual-hours rate divides the fixed quote by actual hours and includes direct expenses. It is not profit or take-home pay. Taxes and payment/platform fees are excluded unless included in direct expenses."
+    ...(result.actualUsage ? [`Actual hours worked: ${values.actualHours}`, `Effective hourly rate at actual hours: ${result.actualUsage.calculable ? `${moneyFor(result.actualUsage.effectiveHourlyRate, code)}/hr` : "not calculable at 0 hours"} (${result.fees ? "amount remaining after entered fees" : "fixed quote"} ÷ actual hours; includes direct expenses)`] : []),
+    result.fees
+      ? "Assumptions: estimate only. The payment fees are the user's own inputs (one percentage on the client-paid quote plus one fixed fee); a provider may charge on a different base. The amount remaining is not profit or take-home pay. Taxes are excluded unless included in direct expenses."
+      : "Assumptions: estimate only; the actual-hours rate divides the fixed quote by actual hours and includes direct expenses. It is not profit or take-home pay. Taxes and payment/platform fees are excluded unless included in direct expenses."
   ].join("\n");
   try {
     await navigator.clipboard.writeText(summary);
