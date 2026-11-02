@@ -25,7 +25,7 @@
 
 Definitions (all money in the selected currency, computed in whole cents):
 - `T` = existing quote before fees (labour + labour-only allowance + direct expenses), rounded to the nearest cent exactly as the page already displays it.
-- `p` = percentage entered by the user, `0 <= p <= 50%`, at most 3 decimal places (so `p` is an exact integer count of 0.001%). Blank = 0. Values of 50% or more are rejected as almost certainly a typing error, which also avoids absurd gross-ups near 100%.
+- `p` = percentage entered by the user, `0 <= p <= 50%`, at most 3 decimal places (so `p` is an exact integer count of 0.001%). Blank = 0. Values above 50% are rejected as almost certainly a typing error (50% itself is accepted), which also avoids absurd gross-ups near 100%.
 - `f` = fixed payout fee, `0 <= f <= 1,000,000,000`, blank = 0.
 - `gross = ceil((T + f) / (1 - p))` in cents, using exact integer arithmetic (no floating point in the gross-up, so an exact result is never bumped by a cent).
 - `percentageFee = round_half_up(gross × p)` in cents; `estimatedRemaining = gross − percentageFee − f`.
