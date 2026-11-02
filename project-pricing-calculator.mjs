@@ -8,6 +8,27 @@ function finiteNumber(value, name) {
   return value;
 }
 
+export function sumProjectHoursBreakdown(raw = {}) {
+  const categories = ["planningHours", "productionHours", "meetingsHours", "revisionsHours", "managementHours"];
+  const values = {};
+  let total = 0;
+  for (const key of categories) {
+    const input = raw[key] ?? "";
+    if (String(input).trim() === "") {
+      values[key] = 0;
+      continue;
+    }
+    const text = String(input).trim();
+    if (!/^(?:\\d+\\.?\\d*|\\.\\d+)$/.test(text)) throw new TypeError(`${key} must be a valid non-negative number`);
+    const value = Number(text);
+    if (!Number.isFinite(value) || value < 0 || value > MAX_HOURS) throw new RangeError(`${key} must be between 0 and ${MAX_HOURS}`);
+    values[key] = value;
+    total += value;
+    if (!Number.isFinite(total) || total > MAX_HOURS) throw new RangeError(`Combined breakdown must not exceed ${MAX_HOURS} hours`);
+  }
+  return { total, values };
+}
+
 export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0, actualHours = null }) {
   const hours = finiteNumber(estimatedHours, "estimatedHours");
   const rate = finiteNumber(hourlyRate, "hourlyRate");
