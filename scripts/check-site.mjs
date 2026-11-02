@@ -32,6 +32,8 @@ check("project quote page has the Cloudflare canonical URL", /<link rel="canonic
 check("project page Open Graph URL uses Cloudflare Pages", projectHtml.includes(`<meta property="og:url" content="https://ratenest.pages.dev/project-pricing">`));
 check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) ?? []).length === 1);
 check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
+check("project quote page has five optional labelled effort categories", ["planningHours", "productionHours", "meetingsHours", "revisionsHours", "managementHours"].every((id) => new RegExp(`<input id="${id}"[^>]*value=""`).test(projectHtml) && new RegExp(`<label[^>]*for="${id}"`).test(projectHtml)));
+check("project hours breakdown has an explicit apply action", projectHtml.includes('id="apply-hours-breakdown"') && projectHtml.includes("Blank categories count as zero."));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
 const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
