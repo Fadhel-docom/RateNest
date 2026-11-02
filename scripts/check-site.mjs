@@ -7,6 +7,7 @@ import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.url), "utf8");
+const projectCss = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
 const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
 const robots = readFileSync(new URL("../robots.txt", import.meta.url), "utf8");
@@ -34,6 +35,10 @@ check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) 
 check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
 check("project quote page has five optional labelled effort categories", ["planningHours", "productionHours", "meetingsHours", "revisionsHours", "managementHours"].every((id) => new RegExp(`<input id="${id}"[^>]*value=""`).test(projectHtml) && new RegExp(`<label[^>]*for="${id}"`).test(projectHtml)));
 check("project hours breakdown has an explicit apply action", projectHtml.includes('id="apply-hours-breakdown"') && projectHtml.includes("Blank categories count as zero."));
+check("project quote has a print/save PDF action and a print-only document heading", projectHtml.includes('id="print-quote"') && projectHtml.includes('id="print-project-title"') && projectHtml.includes("Print / Save quote as PDF"));
+check("project quote print sheet explains scope and excluded taxes/fees", projectHtml.includes("This estimate is not a contract or invoice.") && projectHtml.includes("payment schedule"));
+check("actual-hours analysis is marked internal and excluded from print", projectHtml.includes('class="result-stat internal-stat"><span>Effective hourly rate at actual hours') && projectCss.includes(".internal-stat,#actual-hours-note,.result-tip{display:none!important}"));
+check("freelancer-facing effective rate and planning tip are excluded from the client print sheet", projectHtml.includes('class="result-stat internal-stat"><span>Effective hourly rate at estimated hours') && projectCss.includes(".result-tip{display:none!important}"));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
 const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
