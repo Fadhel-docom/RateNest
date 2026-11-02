@@ -37,7 +37,8 @@ check("project quote page has five optional labelled effort categories", ["plann
 check("project hours breakdown has an explicit apply action", projectHtml.includes('id="apply-hours-breakdown"') && projectHtml.includes("Blank categories count as zero."));
 check("project quote has a print/save PDF action and a print-only document heading", projectHtml.includes('id="print-quote"') && projectHtml.includes('id="print-project-title"') && projectHtml.includes("Print / Save quote as PDF"));
 check("project quote print sheet explains scope and excluded taxes/fees", projectHtml.includes("This estimate is not a contract or invoice.") && projectHtml.includes("payment schedule"));
-check("actual-hours analysis is marked internal and excluded from print", projectHtml.includes('class="result-stat internal-stat"') && projectCss.includes(".internal-stat,#actual-hours-note{display:none!important}"));
+check("actual-hours analysis is marked internal and excluded from print", projectHtml.includes('class="result-stat internal-stat"><span>Effective hourly rate at actual hours') && projectCss.includes(".internal-stat,#actual-hours-note,.result-tip{display:none!important}"));
+check("freelancer-facing effective rate and planning tip are excluded from the client print sheet", projectHtml.includes('class="result-stat internal-stat"><span>Effective hourly rate at estimated hours') && projectCss.includes(".result-tip{display:none!important}"));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
 const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));

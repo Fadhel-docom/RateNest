@@ -112,6 +112,25 @@ try:
             ok(f"[{w}px] breakdown open at 200% text: no horizontal scroll", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"), pg.evaluate("document.documentElement.scrollWidth+'>'+document.documentElement.clientWidth"))
             ok(f"[{w}px] breakdown: no console errors/warnings", not errs, str(errs))
             ctx.close()
+        # Printable client sheet (print media emulation): client-facing figures only, no freelancer-internal lines.
+        for w in (375, 1280):
+            ctx = b.new_context(viewport={"width": w, "height": 900}); pg = ctx.new_page(); errs = []
+            pg.on("pageerror", lambda e: errs.append(str(e))); pg.on("console", lambda m: errs.append(m.text) if m.type in ("error", "warning") else None)
+            pg.goto(URL); pg.wait_for_timeout(400)
+            ok(f"[{w}px] print: button visible+enabled on screen, print-only blocks hidden", pg.is_visible("#print-quote") and pg.is_enabled("#print-quote") and not pg.is_visible(".quote-document-heading") and not pg.is_visible(".quote-print-note"))
+            pg.fill("#estimatedHours", "0"); pg.wait_for_timeout(150)
+            ok(f"[{w}px] print: button disabled when there is no valid quote", pg.is_disabled("#print-quote"))
+            pg.fill("#estimatedHours", "20"); pg.fill("#actualHours", "30"); pg.fill("#projectTitle", "Acme website"); pg.wait_for_timeout(200)
+            pg.emulate_media(media="print")
+            shown = lambda s: pg.evaluate("s=>{const e=document.querySelector(s);if(!e)return false;const r=e.getBoundingClientRect();return getComputedStyle(e).display!=='none'&&r.width>0&&r.height>0}", s)
+            ok(f"[{w}px] print: title, total, subtotals and not-a-contract note are shown", shown(".quote-document-heading") and "Acme website" in pg.inner_text("#print-project-title") and shown("#quote-total") and shown("#labour-total") and shown("#expenses-total") and shown(".quote-print-note"))
+            ok(f"[{w}px] print: nav, form, FAQ, buttons and status are hidden", not any(shown(s) for s in (".site-header", "#project-form", ".explainer", "footer", "#copy-quote", "#print-quote", "#copy-status")))
+            ok(f"[{w}px] print: freelancer-internal lines hidden (actual-hours analysis, effective rate, planning tip)", not any(shown(s) for s in ("#actual-hours-note", "#actual-effective-rate", "#effective-rate", ".result-tip")))
+            ok(f"[{w}px] print: no horizontal overflow", not pg.evaluate("document.documentElement.scrollWidth>document.documentElement.clientWidth"))
+            if w == 1280:
+                ok("print: Chromium renders a PDF of the quote sheet", len(pg.pdf(prefer_css_page_size=True)) > 1000)
+            ok(f"[{w}px] print: no console errors/warnings", not errs, str(errs))
+            ctx.close()
         b.close()
 finally: srv.terminate()
 for n, c, d in r: print(("PASS" if c else "FAIL"), n, (f"[{d}]" if d else ""))
