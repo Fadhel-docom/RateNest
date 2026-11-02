@@ -19,7 +19,7 @@ export function sumProjectHoursBreakdown(raw = {}) {
       continue;
     }
     const text = String(input).trim();
-    if (!/^(?:\\d+\\.?\\d*|\\.\\d+)$/.test(text)) throw new TypeError(`${key} must be a valid non-negative number`);
+    if (!/^(?:\d+\.?\d*|\.\d+)$/.test(text)) throw new TypeError(`${key} must be a valid non-negative number`);
     const value = Number(text);
     if (!Number.isFinite(value) || value < 0 || value > MAX_HOURS) throw new RangeError(`${key} must be between 0 and ${MAX_HOURS}`);
     values[key] = value;
