@@ -127,3 +127,15 @@ test("rejects malformed, negative, non-finite and excessive breakdown values", (
     { planningHours: "60000", productionHours: "50000" }
   ]) assert.throws(() => sumProjectHoursBreakdown(raw));
 });
+
+test("breakdown total is free of floating-point noise", () => {
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "0.1", productionHours: "0.2" }).total, 0.3);
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "1.1", productionHours: "2.2", meetingsHours: "3.3" }).total, 6.6);
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "0.1", productionHours: "0.7", meetingsHours: "0.2" }).total, 1);
+});
+
+test("breakdown errors name the category in plain language, not the field id", () => {
+  assert.throws(() => sumProjectHoursBreakdown({ planningHours: "-1" }), (e) => e instanceof TypeError && /Discovery and planning hours/.test(e.message) && !/planningHours/.test(e.message));
+  assert.throws(() => sumProjectHoursBreakdown({ revisionsHours: "100001" }), (e) => e instanceof RangeError && /Revisions and QA hours/.test(e.message));
+  assert.throws(() => sumProjectHoursBreakdown({ planningHours: "60000", productionHours: "50000" }), (e) => e instanceof RangeError && /combined breakdown/i.test(e.message));
+});

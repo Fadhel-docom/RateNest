@@ -1,4 +1,4 @@
-import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
@@ -43,7 +43,18 @@ function clearResult() {
 }
 
 function readBreakdown() {
-  return Object.fromEntries(["planningHours", "productionHours", "meetingsHours", "revisionsHours", "managementHours"].map((key) => [key, document.getElementById(key).value]));
+  return Object.fromEntries(PROJECT_HOURS_CATEGORIES.map(({ key }) => [key, document.getElementById(key).value]));
+}
+
+// Category lines for the copied summary: only when a breakdown was entered and it still matches the total-hours field.
+function breakdownSummaryLines(breakdown, estimatedHours) {
+  try {
+    const sum = sumProjectHoursBreakdown(breakdown);
+    if (sum.total <= 0 || sum.total !== estimatedHours) return [];
+    return PROJECT_HOURS_CATEGORIES.filter(({ key }) => sum.values[key] > 0).map(({ key, label }) => `  ${label}: ${sum.values[key]} hours`);
+  } catch {
+    return [];
+  }
 }
 
 function render(values, result, breakdown = readBreakdown()) {
@@ -119,7 +130,7 @@ $("#copy-quote").addEventListener("click", async () => {
   const summary = [
     `Project quote: ${project}`,
     `Estimated effort: ${values.estimatedHours} hours`,
-    ...(() => { try { const b = sumProjectHoursBreakdown(lastResult.breakdown); return b.total > 0 && b.total === values.estimatedHours ? Object.entries(b.values).filter(([, hours]) => hours > 0).map(([key, hours]) => `  ${({ planningHours: "Discovery and planning", productionHours: "Production / delivery", meetingsHours: "Meetings and communication", revisionsHours: "Revisions and QA", managementHours: "Project management and admin" })[key]}: ${hours} hours`) : []; } catch { return []; } })(),
+    ...breakdownSummaryLines(lastResult.breakdown, values.estimatedHours),
     `Hourly rate used: ${moneyFor(values.hourlyRate, code)}/hr`,
     `Labour subtotal: ${moneyFor(result.labour, code)}`,
     `Labour-only uncertainty allowance (${values.bufferPercent}%): ${moneyFor(result.uncertaintyAllowance, code)}`,
