@@ -36,6 +36,7 @@ function clearResult() {
   lastResult = null;
   for (const id of outputIds) document.getElementById(id).textContent = "—";
   $("#quote-summary").textContent = "Enter your project assumptions to estimate a fixed quote.";
+  $("#print-quote").disabled = true;
   $("#actual-hours-note").hidden = true;
   $("#actual-hours-note").textContent = "";
   $("#copy-quote").disabled = true;
@@ -59,6 +60,8 @@ function breakdownSummaryLines(breakdown, estimatedHours) {
 
 function render(values, result, breakdown = readBreakdown()) {
   lastResult = { values, result, breakdown, title: $("#projectTitle").value.trim(), currency: currency.value };
+  $("#print-project-title").textContent = lastResult.title || "Freelance project";
+  $("#print-quote").disabled = false;
   $("#labour-total").textContent = money(result.labour);
   $("#buffer-total").textContent = money(result.uncertaintyAllowance);
   $("#expenses-total").textContent = money(result.directExpenses);
@@ -123,6 +126,7 @@ $("#apply-hours-breakdown").addEventListener("click", () => {
     status.textContent = error.message;
   }
 });
+$("#print-quote").addEventListener("click", () => { if (lastResult) window.print(); });
 $("#copy-quote").addEventListener("click", async () => {
   if (!lastResult) return;
   const { values, result, title, currency: code } = lastResult;
