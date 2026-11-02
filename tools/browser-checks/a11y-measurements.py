@@ -39,7 +39,7 @@ try:
     with sync_playwright() as p:
         b=p.chromium.launch()
         # (page, state, label) — the project quote page was added with Phase 3
-        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large","actual-over","actual-under","actual-zero","actual-invalid","breakdown-applied","breakdown-error")]+[("retainer-pricing.html",s) for s in ("default","error","large","usage-over","usage-under","usage-zero","break-even","break-even-zero-rate")]+[("how-to-price-a-freelance-project.html","default")]
+        CASES=[("index.html",s) for s in ("default","error","adjusted")]+[("project-pricing.html",s) for s in ("default","error","large","actual-over","actual-under","actual-zero","actual-invalid","breakdown-applied","breakdown-error","fees-applied","fees-error")]+[("retainer-pricing.html",s) for s in ("default","error","large","usage-over","usage-under","usage-zero","break-even","break-even-zero-rate")]+[("how-to-price-a-freelance-project.html","default")]
         for page,state in CASES:
             tag=({"index.html":"","project-pricing.html":"project ","retainer-pricing.html":"retainer ","how-to-price-a-freelance-project.html":"guide "}[page])+state
             for w in (320,1280):
@@ -65,6 +65,8 @@ try:
                     if state=="actual-zero": pg.fill("#actualHours","0"); pg.wait_for_timeout(250)
                     if state=="actual-invalid": pg.fill("#actualHours","-1"); pg.click(".calculate-button"); pg.wait_for_timeout(250)
                     if state=="breakdown-applied": pg.click("#hours-breakdown summary"); pg.fill("#planningHours","2"); pg.fill("#productionHours","12"); pg.click("#apply-hours-breakdown"); pg.wait_for_timeout(250)
+                    if state=="fees-applied": pg.click("#payout-fees summary"); pg.fill("#feePercent","10"); pg.fill("#fixedFee","5"); pg.wait_for_timeout(250)
+                    if state=="fees-error": pg.click("#payout-fees summary"); pg.fill("#feePercent","75"); pg.wait_for_timeout(250)
                     if state=="breakdown-error": pg.click("#hours-breakdown summary"); pg.fill("#planningHours","-1"); pg.click("#apply-hours-breakdown"); pg.wait_for_timeout(250)
                 r=pg.evaluate(JS)
                 print(f"[{tag} @{w}] contrast failures: {len(r['contrast'])}; unnamed controls: {len(r['names'])}; dup ids: {r['dupIds']}; notes: {r['small']}")

@@ -95,6 +95,24 @@
           <input id="bufferPercent" name="bufferPercent" type="number" min="0" max="100" step="any" value="0" inputmode="decimal" aria-describedby="bufferPercent-help bufferPercent-error">
           <p class="field-error" id="bufferPercent-error" hidden></p>
         </div>
+        <details class="adjustments payout-fees" id="payout-fees">
+          <summary>Payment and payout fees (optional)</summary>
+          <p class="adjustments-intro">Enter only the fees you know apply to how you will be paid. RateNest adds no default rates and names no provider. The quote is raised so about your target amount remains after the fees you enter. Blank means zero, and with both blank the quote is unchanged.</p>
+          <div class="field-row">
+            <div class="field">
+              <label for="feePercent">Percentage fee on the client-paid quote (%)</label>
+              <p class="field-help" id="feePercent-help">One combined percentage, taken from the whole amount the client pays. Providers can charge on a different base, so treat this as your own estimate. Up to 50%, at most 3 decimal places.</p>
+              <input id="feePercent" name="feePercent" type="number" min="0" max="50" step="any" value="" inputmode="decimal" aria-describedby="feePercent-help feePercent-error">
+              <p class="field-error" id="feePercent-error" hidden></p>
+            </div>
+            <div class="field">
+              <label for="fixedFee">Fixed payout fee (deducted once)</label>
+              <p class="field-help" id="fixedFee-help">A flat amount in the selected currency, taken once from the payment. No currency conversion is applied.</p>
+              <input id="fixedFee" name="fixedFee" type="number" min="0" max="1000000000" step="any" value="" inputmode="decimal" aria-describedby="fixedFee-help fixedFee-error">
+              <p class="field-error" id="fixedFee-error" hidden></p>
+            </div>
+          </div>
+        </details>
         <div class="field">
           <label for="actualHours">Actual hours worked <span class="field-help">(optional)</span></label>
           <p class="field-help" id="actualHours-help">After the project, enter the total time actually spent, including meetings and revisions. Leave blank until you have a reliable total. Zero is accepted but no hourly rate can be calculated; maximum 100,000 hours.</p>
@@ -114,11 +132,15 @@
         <div class="result-stat"><span>Labour subtotal</span><strong id="labour-total">$1,200.00</strong></div>
         <div class="result-stat"><span>Uncertainty allowance</span><strong id="buffer-total">$0.00</strong></div>
         <div class="result-stat"><span>Direct expenses</span><strong id="expenses-total">$150.00</strong></div>
+        <div class="result-stat" id="pct-fee-line" hidden><span>Percentage payment fee</span><strong id="pct-fee-total">—</strong></div>
+        <div class="result-stat" id="fixed-fee-line" hidden><span>Fixed payout fee</span><strong id="fixed-fee-total">—</strong></div>
+        <div class="result-stat internal-stat" id="remaining-line" hidden><span>Estimated amount remaining after entered fees</span><strong id="remaining-total">—</strong></div>
+        <p id="fee-note" class="result-summary internal-stat" hidden></p>
         <div class="result-stat internal-stat"><span>Effective hourly rate at estimated hours</span><strong id="effective-rate">$67.50/hr</strong></div>
         <div class="result-stat internal-stat"><span>Effective hourly rate at actual hours</span><strong id="actual-effective-rate">—</strong></div>
         <p id="actual-hours-note" class="result-summary" hidden></p>
-        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of profit. Taxes and platform/payment fees are excluded unless you include them in direct expenses. Confirm scope, deliverables, and revision limits with your client.</p></div>
-        <p class="print-only quote-print-note">This estimate is not a contract or invoice. Confirm the scope, deliverables, timeline, revision limits, payment schedule and applicable taxes with your client. Taxes and platform/payment fees are not included unless listed in direct expenses.</p>
+        <div class="result-tip"><span aria-hidden="true">✦</span><p id="quote-tip"><strong>Remember:</strong> This is a planning estimate, not a guarantee of profit. Taxes and platform/payment fees are excluded unless you include them in direct expenses. Confirm scope, deliverables, and revision limits with your client.</p></div>
+        <p id="quote-print-note" class="print-only quote-print-note">This estimate is not a contract or invoice. Confirm the scope, deliverables, timeline, revision limits, payment schedule and applicable taxes with your client. Taxes and platform/payment fees are not included unless listed in direct expenses.</p>
         <button id="print-quote" class="copy-button print-action" type="button" disabled>Print / Save quote as PDF</button>
         <button id="copy-quote" class="copy-button" type="button">Copy quote summary</button>
         <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>

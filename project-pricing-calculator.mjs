@@ -2,6 +2,8 @@ export const MAX_HOURS = 100000;
 export const MAX_RATE = 1000000000;
 export const MAX_EXPENSES = 1000000000;
 export const MAX_BUFFER_PERCENT = 100;
+export const MAX_FEE_PERCENT = 50;
+export const MAX_FIXED_FEE = 1000000000;
 
 function finiteNumber(value, name) {
   if (typeof value !== "number" || !Number.isFinite(value)) throw new TypeError(`${name} must be a finite number`);
@@ -37,7 +39,48 @@ export function sumProjectHoursBreakdown(raw = {}) {
   return { total: Number(total.toFixed(6)), values };
 }
 
-export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0, actualHours = null }) {
+// Whole cents, matching how the page displays every currency (two decimals). Going through toPrecision(15)
+// removes binary noise such as 1.005 * 100 = 100.49999999999999 before rounding.
+function toCents(amount) {
+  return Math.round(Number((amount * 100).toPrecision(15)));
+}
+
+/**
+ * Optional user-entered payout fees, model "combined percentage on the client-paid quote + one fixed fee".
+ * gross = ceil((target + fixedFee) / (1 - p)); percentageFee = round(gross * p); remaining = gross - percentageFee - fixedFee.
+ * Everything is done in integer cents (BigInt for the gross-up), so the remaining amount is never below the
+ * target (and at most one cent above it). Both fields blank/zero returns null and the quote is untouched.
+ */
+export function applyPayoutFees(targetQuote, { feePercent = 0, fixedFee = 0 } = {}) {
+  const target = finiteNumber(targetQuote, "targetQuote");
+  const percent = finiteNumber(feePercent, "feePercent");
+  const fixed = finiteNumber(fixedFee, "fixedFee");
+  if (percent < 0 || percent > MAX_FEE_PERCENT) throw new RangeError(`feePercent must be between 0% and ${MAX_FEE_PERCENT}%`);
+  if (Math.abs(percent * 1000 - Math.round(percent * 1000)) > 1e-9) throw new RangeError("feePercent can have at most 3 decimal places");
+  if (fixed < 0 || fixed > MAX_FIXED_FEE) throw new RangeError("fixedFee must be between 0 and 1,000,000,000");
+  if (target < 0) throw new RangeError("targetQuote cannot be negative");
+  if (percent === 0 && fixed === 0) return null;
+  const targetCents = toCents(target);
+  const fixedCents = toCents(fixed);
+  if (!Number.isSafeInteger(targetCents) || !Number.isSafeInteger(targetCents + fixedCents)) throw new RangeError("The result is too large to apply fees safely");
+  const p = BigInt(Math.round(percent * 1000)); // percent in thousandths of a percent: p / 100000 is the fee rate
+  const denominator = 100000n - p;
+  const gross = (BigInt(targetCents + fixedCents) * 100000n + denominator - 1n) / denominator;
+  const percentageFee = (gross * p + 50000n) / 100000n;
+  const remaining = gross - percentageFee - BigInt(fixedCents);
+  if (gross > BigInt(Number.MAX_SAFE_INTEGER)) throw new RangeError("The result is too large to apply fees safely");
+  return {
+    feePercent: percent,
+    quoteBeforeFees: targetCents / 100,
+    grossQuote: Number(gross) / 100,
+    percentageFee: Number(percentageFee) / 100,
+    fixedFee: fixedCents / 100,
+    totalDeductions: Number(percentageFee + BigInt(fixedCents)) / 100,
+    estimatedRemaining: Number(remaining) / 100
+  };
+}
+
+export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0, actualHours = null, feePercent = 0, fixedFee = 0 }) {
   const hours = finiteNumber(estimatedHours, "estimatedHours");
   const rate = finiteNumber(hourlyRate, "hourlyRate");
   const expenses = finiteNumber(directExpenses, "directExpenses");
@@ -48,8 +91,13 @@ export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpens
   if (buffer < 0 || buffer > MAX_BUFFER_PERCENT) throw new RangeError("bufferPercent must be between 0% and 100%");
   const labour = hours * rate;
   const uncertaintyAllowance = labour * buffer / 100;
-  const quote = labour + uncertaintyAllowance + expenses;
-  const effectiveHourlyRate = quote / hours;
+  const quoteBeforeFees = labour + uncertaintyAllowance + expenses;
+  const fees = applyPayoutFees(quoteBeforeFees, { feePercent, fixedFee });
+  // With fees, the client pays the grossed-up quote but the freelancer keeps about quoteBeforeFees,
+  // so the effective hourly rates are based on the amount remaining after the entered fees.
+  const quote = fees ? fees.grossQuote : quoteBeforeFees;
+  const retained = fees ? fees.estimatedRemaining : quote;
+  const effectiveHourlyRate = retained / hours;
   let actualUsage = null;
   if (actualHours !== null && actualHours !== undefined) {
     const actual = finiteNumber(actualHours, "actualHours");
@@ -57,7 +105,7 @@ export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpens
     actualUsage = {
       actualHours: actual,
       calculable: actual > 0,
-      effectiveHourlyRate: actual > 0 ? quote / actual : null,
+      effectiveHourlyRate: actual > 0 ? retained / actual : null,
       overEstimate: actual > hours,
       underEstimate: actual < hours,
       hoursDifference: Math.abs(actual - hours)
@@ -66,7 +114,7 @@ export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpens
   if (![labour, uncertaintyAllowance, quote, effectiveHourlyRate].every(Number.isFinite) || (actualUsage?.calculable && !Number.isFinite(actualUsage.effectiveHourlyRate))) {
     throw new RangeError("The result is too large to calculate safely");
   }
-  return { estimatedHours: hours, hourlyRate: rate, directExpenses: expenses, bufferPercent: buffer, labour, uncertaintyAllowance, quote, effectiveHourlyRate, actualUsage };
+  return { estimatedHours: hours, hourlyRate: rate, directExpenses: expenses, bufferPercent: buffer, labour, uncertaintyAllowance, quoteBeforeFees, fees, quote, effectiveHourlyRate, actualUsage };
 }
 
 export function validateProjectQuote(raw = {}) {
@@ -92,6 +140,10 @@ export function validateProjectQuote(raw = {}) {
       errors[key] = "Estimated hours must be greater than 0.";
       return null;
     }
+    if (key === "feePercent" && (text.split(".")[1] ?? "").length > 3) {
+      errors[key] = "Percentage fee can have at most 3 decimal places.";
+      return null;
+    }
     if (max !== undefined && value > max) {
       errors[key] = `${label} must be ${maxLabel ?? `at most ${max.toLocaleString("en-US")}`}.`;
       return null;
@@ -103,6 +155,8 @@ export function validateProjectQuote(raw = {}) {
     hourlyRate: parse("hourlyRate", "Hourly rate", { required: true, max: MAX_RATE }),
     directExpenses: parse("directExpenses", "Direct expenses", { max: MAX_EXPENSES }),
     bufferPercent: parse("bufferPercent", "Uncertainty buffer", { max: MAX_BUFFER_PERCENT, maxLabel: "at most 100%" }),
+    feePercent: parse("feePercent", "Percentage fee", { max: MAX_FEE_PERCENT, maxLabel: `at most ${MAX_FEE_PERCENT}%` }),
+    fixedFee: parse("fixedFee", "Fixed payout fee", { max: MAX_FIXED_FEE }),
     actualHours: parse("actualHours", "Actual hours worked", { max: MAX_HOURS })
   };
   const ok = Object.keys(errors).length === 0;
