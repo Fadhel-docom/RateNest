@@ -1,4 +1,4 @@
-import { calculateProjectQuote, validateProjectQuote } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown } from "./project-pricing-calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
@@ -42,8 +42,12 @@ function clearResult() {
   $("#copy-status").textContent = "";
 }
 
-function render(values, result) {
-  lastResult = { values, result, title: $("#projectTitle").value.trim(), currency: currency.value };
+function readBreakdown() {
+  return Object.fromEntries(["planningHours", "productionHours", "meetingsHours", "revisionsHours", "managementHours"].map((key) => [key, document.getElementById(key).value]));
+}
+
+function render(values, result, breakdown = readBreakdown()) {
+  lastResult = { values, result, breakdown, title: $("#projectTitle").value.trim(), currency: currency.value };
   $("#labour-total").textContent = money(result.labour);
   $("#buffer-total").textContent = money(result.uncertaintyAllowance);
   $("#expenses-total").textContent = money(result.directExpenses);
@@ -79,7 +83,7 @@ function calculate({ focusFirstError = false } = {}) {
     return;
   }
   try {
-    render(checked.values, calculateProjectQuote(checked.values));
+    render(checked.values, calculateProjectQuote(checked.values), readBreakdown());
   } catch (error) {
     clearResult();
     let errorField = "estimatedHours";
@@ -95,7 +99,19 @@ function calculate({ focusFirstError = false } = {}) {
 
 form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
-currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values)); });
+currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values), lastResult.breakdown); });
+$("#apply-hours-breakdown").addEventListener("click", () => {
+  const status = $("#breakdown-status");
+  try {
+    const breakdown = sumProjectHoursBreakdown(readBreakdown());
+    if (breakdown.total <= 0) throw new RangeError("Enter at least one positive category before adding the breakdown.");
+    $("#estimatedHours").value = String(breakdown.total);
+    status.textContent = `Breakdown total added: ${hoursText(breakdown.total)}. Edit the total above if needed; changing categories later will not update it until you add the breakdown again.`;
+    calculate();
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
 $("#copy-quote").addEventListener("click", async () => {
   if (!lastResult) return;
   const { values, result, title, currency: code } = lastResult;
@@ -103,6 +119,7 @@ $("#copy-quote").addEventListener("click", async () => {
   const summary = [
     `Project quote: ${project}`,
     `Estimated effort: ${values.estimatedHours} hours`,
+    ...(() => { try { const b = sumProjectHoursBreakdown(lastResult.breakdown); return b.total > 0 && b.total === values.estimatedHours ? Object.entries(b.values).filter(([, hours]) => hours > 0).map(([key, hours]) => `  ${({ planningHours: "Discovery and planning", productionHours: "Production / delivery", meetingsHours: "Meetings and communication", revisionsHours: "Revisions and QA", managementHours: "Project management and admin" })[key]}: ${hours} hours`) : []; } catch { return []; } })(),
     `Hourly rate used: ${moneyFor(values.hourlyRate, code)}/hr`,
     `Labour subtotal: ${moneyFor(result.labour, code)}`,
     `Labour-only uncertainty allowance (${values.bufferPercent}%): ${moneyFor(result.uncertaintyAllowance, code)}`,
