@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateProjectQuote, validateProjectQuote } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown } from "./project-pricing-calculator.mjs";
 
 test("calculates labour, labour-only uncertainty allowance, expenses, and quote", () => {
   const result = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 25 });
@@ -105,4 +105,25 @@ test("reports missing, invalid, negative, and out-of-range form values", () => {
   assert.match(invalid.errors.hourlyRate, /negative/);
   assert.match(invalid.errors.directExpenses, /valid number/);
   assert.match(invalid.errors.bufferPercent, /100%/);
+});
+
+test("sums optional project effort categories and treats blanks as zero", () => {
+  const result = sumProjectHoursBreakdown({ planningHours: "1.5", productionHours: "12", meetingsHours: "2", revisionsHours: "", managementHours: "0.5" });
+  assert.equal(result.total, 16);
+  assert.deepEqual(result.values, { planningHours: 1.5, productionHours: 12, meetingsHours: 2, revisionsHours: 0, managementHours: 0.5 });
+});
+
+test("empty or zero breakdown is valid but contributes no hours", () => {
+  assert.deepEqual(sumProjectHoursBreakdown({}), { total: 0, values: { planningHours: 0, productionHours: 0, meetingsHours: 0, revisionsHours: 0, managementHours: 0 } });
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "0", productionHours: "" }).total, 0);
+});
+
+test("rejects malformed, negative, non-finite and excessive breakdown values", () => {
+  for (const raw of [
+    { planningHours: "abc" },
+    { planningHours: "-1" },
+    { planningHours: "Infinity" },
+    { planningHours: "100001" },
+    { planningHours: "60000", productionHours: "50000" }
+  ]) assert.throws(() => sumProjectHoursBreakdown(raw));
 });
