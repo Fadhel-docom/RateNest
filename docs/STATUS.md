@@ -1,3 +1,6 @@
+## 2026-11-02 — Claude: تأكيد قبول Bing للـSitemap وسلامة main
+- Bing: feed `sitemap.xml` حالته `Success` و4 روابط (آخر زحف 2026-11-02 07:50 UTC)؛ Google بلا تغيير (الصفحة «unknown»، Sitemap pending). محليًا على `main` `e5e8d26`: `node --test` 61/61 و`check-site.mjs` ناجح. لا تغيير كود. لم يُتحقق: النطاق الحي والفهرسة. المتابعة بعد ~2026-11-09.
+
 ## 2026-11-02 — ChatGPT: نتيجة Quota exceeded وتسليم المتابعة
 - طلب المالك فهرسة الصفحة الرئيسية https://ratenest.pages.dev/ من Search Console؛ ظهرت رسالة **Quota exceeded**. لم يُكرر الطلب.
 - تمت مراجعة أحدث عمل Claude في PR #69 المدمج: بيانات Google/Bing موثقة، وsitemap أُرسل إلى Bing مرة واحدة. لا تعِد الإرسال.
