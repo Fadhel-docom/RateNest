@@ -1,4 +1,4 @@
-import { calculateProjectQuote, validateProjectQuote } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
@@ -42,8 +42,23 @@ function clearResult() {
   $("#copy-status").textContent = "";
 }
 
-function render(values, result) {
-  lastResult = { values, result, title: $("#projectTitle").value.trim(), currency: currency.value };
+function readBreakdown() {
+  return Object.fromEntries(PROJECT_HOURS_CATEGORIES.map(({ key }) => [key, document.getElementById(key).value]));
+}
+
+// Category lines for the copied summary: only when a breakdown was entered and it still matches the total-hours field.
+function breakdownSummaryLines(breakdown, estimatedHours) {
+  try {
+    const sum = sumProjectHoursBreakdown(breakdown);
+    if (sum.total <= 0 || sum.total !== estimatedHours) return [];
+    return PROJECT_HOURS_CATEGORIES.filter(({ key }) => sum.values[key] > 0).map(({ key, label }) => `  ${label}: ${sum.values[key]} hours`);
+  } catch {
+    return [];
+  }
+}
+
+function render(values, result, breakdown = readBreakdown()) {
+  lastResult = { values, result, breakdown, title: $("#projectTitle").value.trim(), currency: currency.value };
   $("#labour-total").textContent = money(result.labour);
   $("#buffer-total").textContent = money(result.uncertaintyAllowance);
   $("#expenses-total").textContent = money(result.directExpenses);
@@ -79,7 +94,7 @@ function calculate({ focusFirstError = false } = {}) {
     return;
   }
   try {
-    render(checked.values, calculateProjectQuote(checked.values));
+    render(checked.values, calculateProjectQuote(checked.values), readBreakdown());
   } catch (error) {
     clearResult();
     let errorField = "estimatedHours";
@@ -95,7 +110,19 @@ function calculate({ focusFirstError = false } = {}) {
 
 form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
-currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values)); });
+currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values), lastResult.breakdown); });
+$("#apply-hours-breakdown").addEventListener("click", () => {
+  const status = $("#breakdown-status");
+  try {
+    const breakdown = sumProjectHoursBreakdown(readBreakdown());
+    if (breakdown.total <= 0) throw new RangeError("Enter at least one positive category before adding the breakdown.");
+    $("#estimatedHours").value = String(breakdown.total);
+    status.textContent = `Breakdown total added: ${hoursText(breakdown.total)}. Edit the total above if needed; changing categories later will not update it until you add the breakdown again.`;
+    calculate();
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
 $("#copy-quote").addEventListener("click", async () => {
   if (!lastResult) return;
   const { values, result, title, currency: code } = lastResult;
@@ -103,6 +130,7 @@ $("#copy-quote").addEventListener("click", async () => {
   const summary = [
     `Project quote: ${project}`,
     `Estimated effort: ${values.estimatedHours} hours`,
+    ...breakdownSummaryLines(lastResult.breakdown, values.estimatedHours),
     `Hourly rate used: ${moneyFor(values.hourlyRate, code)}/hr`,
     `Labour subtotal: ${moneyFor(result.labour, code)}`,
     `Labour-only uncertainty allowance (${values.bufferPercent}%): ${moneyFor(result.uncertaintyAllowance, code)}`,

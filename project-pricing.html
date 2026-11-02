@@ -64,6 +64,19 @@
           <input id="estimatedHours" name="estimatedHours" type="number" min="0.01" max="100000" step="any" value="20" required inputmode="decimal" aria-describedby="estimatedHours-help estimatedHours-error">
           <p class="field-error" id="estimatedHours-error" hidden></p>
         </div>
+        <details class="adjustments hours-breakdown" id="hours-breakdown">
+          <summary>Break down your estimated hours (optional)</summary>
+          <p class="adjustments-intro">Enter the work you expect in each category, then add the breakdown to the total-hours field above. Blank categories count as zero. These are prompts, not fixed percentages.</p>
+          <div class="field-row">
+            <div class="field"><label for="planningHours">Discovery and planning hours</label><input id="planningHours" type="number" min="0" max="100000" step="any" inputmode="decimal" value=""></div>
+            <div class="field"><label for="productionHours">Production / delivery hours</label><input id="productionHours" type="number" min="0" max="100000" step="any" inputmode="decimal" value=""></div>
+            <div class="field"><label for="meetingsHours">Meetings and communication hours</label><input id="meetingsHours" type="number" min="0" max="100000" step="any" inputmode="decimal" value=""></div>
+            <div class="field"><label for="revisionsHours">Revisions and QA hours</label><input id="revisionsHours" type="number" min="0" max="100000" step="any" inputmode="decimal" value=""></div>
+            <div class="field"><label for="managementHours">Project management and admin hours</label><input id="managementHours" type="number" min="0" max="100000" step="any" inputmode="decimal" value=""></div>
+          </div>
+          <button class="copy-button" id="apply-hours-breakdown" type="button">Add breakdown to total hours</button>
+          <p class="copy-status" id="breakdown-status" role="status" aria-live="polite"></p>
+        </details>
         <div class="field">
           <label for="hourlyRate">Hourly rate to use <span class="required" aria-hidden="true">*</span></label>
           <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a>. This value is not imported automatically.</p>

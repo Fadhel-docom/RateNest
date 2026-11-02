@@ -71,3 +71,9 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .guide-faq details p{margin:0 0 14px;font-size:.9rem;color:var(--muted)}
 /* Long words in headings and paragraphs must wrap at 320px with 200% text (WCAG reflow). */
 .explainer{overflow-wrap:break-word}
+/* Optional project-hours breakdown: wrap categories instead of forcing two fixed columns (320px / 200% text reflow). */
+.hours-breakdown .field-row{grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))}
+.hours-breakdown .field-row .field{min-width:0}
+.hours-breakdown .field-row .field label{display:block;min-height:0}
+.hours-breakdown .copy-button{color:var(--ink);border-color:#9bb3a6}
+.hours-breakdown .copy-status{color:var(--ink);text-align:left}

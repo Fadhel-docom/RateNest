@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateProjectQuote, validateProjectQuote } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown } from "./project-pricing-calculator.mjs";
 
 test("calculates labour, labour-only uncertainty allowance, expenses, and quote", () => {
   const result = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 25 });
@@ -105,4 +105,37 @@ test("reports missing, invalid, negative, and out-of-range form values", () => {
   assert.match(invalid.errors.hourlyRate, /negative/);
   assert.match(invalid.errors.directExpenses, /valid number/);
   assert.match(invalid.errors.bufferPercent, /100%/);
+});
+
+test("sums optional project effort categories and treats blanks as zero", () => {
+  const result = sumProjectHoursBreakdown({ planningHours: "1.5", productionHours: "12", meetingsHours: "2", revisionsHours: "", managementHours: "0.5" });
+  assert.equal(result.total, 16);
+  assert.deepEqual(result.values, { planningHours: 1.5, productionHours: 12, meetingsHours: 2, revisionsHours: 0, managementHours: 0.5 });
+});
+
+test("empty or zero breakdown is valid but contributes no hours", () => {
+  assert.deepEqual(sumProjectHoursBreakdown({}), { total: 0, values: { planningHours: 0, productionHours: 0, meetingsHours: 0, revisionsHours: 0, managementHours: 0 } });
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "0", productionHours: "" }).total, 0);
+});
+
+test("rejects malformed, negative, non-finite and excessive breakdown values", () => {
+  for (const raw of [
+    { planningHours: "abc" },
+    { planningHours: "-1" },
+    { planningHours: "Infinity" },
+    { planningHours: "100001" },
+    { planningHours: "60000", productionHours: "50000" }
+  ]) assert.throws(() => sumProjectHoursBreakdown(raw));
+});
+
+test("breakdown total is free of floating-point noise", () => {
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "0.1", productionHours: "0.2" }).total, 0.3);
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "1.1", productionHours: "2.2", meetingsHours: "3.3" }).total, 6.6);
+  assert.equal(sumProjectHoursBreakdown({ planningHours: "0.1", productionHours: "0.7", meetingsHours: "0.2" }).total, 1);
+});
+
+test("breakdown errors name the category in plain language, not the field id", () => {
+  assert.throws(() => sumProjectHoursBreakdown({ planningHours: "-1" }), (e) => e instanceof TypeError && /Discovery and planning hours/.test(e.message) && !/planningHours/.test(e.message));
+  assert.throws(() => sumProjectHoursBreakdown({ revisionsHours: "100001" }), (e) => e instanceof RangeError && /Revisions and QA hours/.test(e.message));
+  assert.throws(() => sumProjectHoursBreakdown({ planningHours: "60000", productionHours: "50000" }), (e) => e instanceof RangeError && /combined breakdown/i.test(e.message));
 });
