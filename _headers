@@ -1,6 +1,6 @@
 # Framing is denied on every page by default. No page is meant to be embedded in another site today.
-# A deliberate exception for a future /embed/* route must be added only together with that page and verified on a
-# Cloudflare preview (see docs/embed-feasibility-review-2026-11-02.md); do not add it on its own.
+# A deliberate exception for /embed/hourly must be added only together with that exact page and verified on a
+# Cloudflare preview (see docs/embed-feasibility-review-2026-11-02.md and docs/embed-publisher-target-research-2026-11-02.md); do not add it on its own.
 /*
   Content-Security-Policy: frame-ancestors 'none'
   X-Frame-Options: DENY
