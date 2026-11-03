@@ -77,6 +77,13 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .hours-breakdown .field-row .field label,.payout-fees .field-row .field label{display:block;min-height:0}
 #fee-note{margin:0 0 15px}
 .hours-breakdown .copy-button{color:var(--ink);border-color:#9bb3a6}
+.task-estimate .task-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;align-items:end;gap:12px;margin:0 0 12px}
+.task-estimate .task-row .field{min-width:0;margin:0}
+.task-estimate .task-row label{display:block;min-height:0}
+.task-estimate .task-remove{white-space:nowrap;min-height:44px;margin-bottom:0}
+.task-estimate .copy-button{color:var(--ink);border-color:#9bb3a6}
+.task-estimate .copy-status{color:var(--ink);text-align:left}
+@media(max-width:520px){.task-estimate .task-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.task-estimate .task-remove{grid-column:1/-1;justify-self:start}}
 .hours-breakdown .copy-status{color:var(--ink);text-align:left}
 
 /* Printable client-facing project quote: keep internal actual-hours analysis off the shared sheet. */
@@ -94,6 +101,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
   .quote-document-heading{margin:0 0 20pt;padding-bottom:12pt;border-bottom:2px solid #176b50}
   .quote-document-heading .eyebrow{margin-bottom:4pt}
   .quote-document-heading h2{font-size:22pt;margin:0;overflow-wrap:anywhere}
+  #print-effort-details{white-space:pre-line;font-size:10pt;line-height:1.45;margin:10pt 0 14pt;color:#34463f!important}
   .rate-result{font-size:30pt;margin:18pt 0 8pt;overflow-wrap:anywhere}
   .result-summary{color:#34463f!important;font-size:11pt}
   .result-divider{background:#b9c8bf;height:1px;margin:18pt 0 12pt}
