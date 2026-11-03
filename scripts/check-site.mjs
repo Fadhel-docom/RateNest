@@ -10,6 +10,8 @@ const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.
 const projectCss = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
 const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
+const projectScript = readFileSync(new URL("../project-pricing.mjs", import.meta.url), "utf8");
+const retainerScript = readFileSync(new URL("../retainer-pricing.mjs", import.meta.url), "utf8");
 const robots = readFileSync(new URL("../robots.txt", import.meta.url), "utf8");
 const measurementPath = new URL("../docs/measurement-protocol-2026-11-03.md", import.meta.url);
 const measurementExists = existsSync(measurementPath);
@@ -22,6 +24,8 @@ const check = (label, condition) => {
 
 check("measurement protocol exists and distinguishes search visibility from actual tool use", measurementExists && measurement.includes("completed calculator use") && measurement.includes("actual-use totals are **unknown**"));
 check("measurement protocol prohibits unapproved tracking and defines a fixed answer-engine prompt sample", measurement.includes("No analytics") && measurement.includes("Fixed prompt set") && measurement.includes("12. Which freelance pricing calculators"));
+check("project quote screen and printable quote use the shared currency-aware formatter", projectScript.includes('import { formatCurrency } from "./calculator.mjs";') && projectScript.includes('formatCurrency(value, currency.value, "en-US")') && projectScript.includes('formatCurrency(value, code, "en-US")'));
+check("retainer screen, copied summary and printable retainer use the shared currency-aware formatter", retainerScript.includes('import { formatCurrency } from "./calculator.mjs";') && retainerScript.includes('formatCurrency(value, code, "en-US")'));
 
 const title = /<title>([^<]*)<\/title>/i.exec(html)?.[1] ?? "";
 const description = /<meta name="description" content="([^"]*)"/i.exec(html)?.[1] ?? "";
