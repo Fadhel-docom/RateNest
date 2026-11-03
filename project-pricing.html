@@ -77,6 +77,19 @@
           <button class="copy-button" id="apply-hours-breakdown" type="button">Add breakdown to total hours</button>
           <p class="copy-status" id="breakdown-status" role="status" aria-live="polite"></p>
         </details>
+        <details class="adjustments task-estimate" id="task-estimate">
+          <summary>Estimate hours by task (optional)</summary>
+          <p class="adjustments-intro">Add the specific tasks or deliverables in your project and estimate the hours for each. This is an alternative to the five-category breakdown above, not an extra amount to add on top. Blank rows are ignored; each completed row needs both a task name and an hour estimate.</p>
+          <div id="task-list" class="task-list">
+            <div class="task-row">
+              <div class="field"><label for="task-name-1">Task or deliverable</label><input id="task-name-1" class="task-name" type="text" maxlength="100" placeholder="e.g. Design homepage"></div>
+              <div class="field"><label for="task-hours-1">Estimated hours</label><input id="task-hours-1" class="task-hours" type="number" min="0" max="100000" step="any" inputmode="decimal" placeholder="e.g. 4"></div>
+            </div>
+          </div>
+          <button class="copy-button" id="add-task" type="button">Add another task</button>
+          <button class="copy-button" id="apply-task-estimate" type="button">Use task total as estimated hours</button>
+          <p id="task-status" class="copy-status" role="status" aria-live="polite"></p>
+        </details>
         <div class="field">
           <label for="hourlyRate">Hourly rate to use <span class="required" aria-hidden="true">*</span></label>
           <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a>. This value is not imported automatically.</p>
