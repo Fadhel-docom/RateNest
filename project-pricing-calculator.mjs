@@ -18,6 +18,38 @@ export const PROJECT_HOURS_CATEGORIES = [
   { key: "managementHours", label: "Project management and admin" }
 ];
 
+export const MAX_PROJECT_TASKS = 30;
+export const MAX_TASK_LABEL_LENGTH = 100;
+
+/**
+ * Sum a user-defined project task list without changing the quote model.
+ * Blank rows are ignored; partially completed rows are rejected so a named task
+ * cannot silently disappear from the estimate. The total is rounded to 6 decimals.
+ */
+export function sumProjectTaskItems(rawItems = []) {
+  if (!Array.isArray(rawItems)) throw new TypeError("Project tasks must be provided as a list.");
+  if (rawItems.length > MAX_PROJECT_TASKS) throw new RangeError(`A project can contain at most ${MAX_PROJECT_TASKS} tasks.`);
+  let total = 0;
+  const items = [];
+  for (let index = 0; index < rawItems.length; index++) {
+    const raw = rawItems[index] ?? {};
+    const label = typeof raw.label === "string" ? raw.label.trim() : "";
+    const rawHours = raw.hours ?? "";
+    const hoursText = String(rawHours).trim();
+    if (!label && !hoursText) continue;
+    if (!label) throw new TypeError(`Add a name for task ${index + 1}.`);
+    if (label.length > MAX_TASK_LABEL_LENGTH) throw new RangeError(`Task ${index + 1} must be ${MAX_TASK_LABEL_LENGTH} characters or fewer.`);
+    if (!hoursText) throw new TypeError(`Enter estimated hours for "${label}".`);
+    if (!/^(?:\d+\.?\d*|\.\d+)$/.test(hoursText)) throw new TypeError(`Enter valid non-negative hours for "${label}".`);
+    const hours = Number(hoursText);
+    if (!Number.isFinite(hours) || hours < 0 || hours > MAX_HOURS) throw new RangeError(`Hours for "${label}" must be between 0 and ${MAX_HOURS}.`);
+    total += hours;
+    if (!Number.isFinite(total) || total > MAX_HOURS) throw new RangeError(`The combined task estimate must not exceed ${MAX_HOURS} hours.`);
+    items.push({ label, hours });
+  }
+  return { total: Number(total.toFixed(6)), items };
+}
+
 export function sumProjectHoursBreakdown(raw = {}) {
   const values = {};
   let total = 0;
