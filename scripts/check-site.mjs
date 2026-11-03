@@ -2,7 +2,7 @@
 // These are regex-based sanity checks, not a full HTML validator or accessibility audit.
 import { readFileSync, existsSync } from "node:fs";
 import { calculateHourlyRate, billableScenarios, rateEquivalents, formatCurrency, formatNumber } from "../calculator.mjs";
-import { calculateProjectQuote } from "../project-pricing-calculator.mjs";
+import { calculateProjectQuote, sumProjectHoursBreakdown } from "../project-pricing-calculator.mjs";
 import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
@@ -65,6 +65,11 @@ check("project quote page links to local assets that exist", [...projectHtml.mat
 check("project quote page is linked from the homepage", html.includes('href="./project-pricing.html"'));
 const projectDefault = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0 });
 check("static project quote default matches calculation", projectDefault.quote === 1350 && projectDefault.effectiveHourlyRate === 67.5 && projectHtml.includes('id="quote-total" class="rate-result">$1,350.00<'));
+const projectExampleHours = sumProjectHoursBreakdown({ planningHours: 3, productionHours: 12, meetingsHours: 2, revisionsHours: 2, managementHours: 1 });
+const projectExample = calculateProjectQuote({ estimatedHours: projectExampleHours.total, hourlyRate: 60, directExpenses: 150, bufferPercent: 10, actualHours: 25 });
+check("project worked example hours breakdown totals 20 and matches the published category values", projectExampleHours.total === 20 && projectHtml.includes("Discovery and planning</span><strong>3 hours") && projectHtml.includes("Production and delivery</span><strong>12 hours") && projectHtml.includes("Meetings and communication</span><strong>2 hours") && projectHtml.includes("Revisions and quality checks</span><strong>2 hours") && projectHtml.includes("Project management and admin</span><strong>1 hour"));
+check("project worked example matches production quote, allowance, expenses and effective hourly calculations", projectExample.labour === 1200 && projectExample.uncertaintyAllowance === 120 && projectExample.quote === 1470 && projectExample.effectiveHourlyRate === 73.5 && projectExample.actualUsage.effectiveHourlyRate === 58.8 && projectHtml.includes("$1,200") && projectHtml.includes("$120") && projectHtml.includes("$1,470") && projectHtml.includes("$73.50") && projectHtml.includes("$58.80"));
+check("project worked example clearly distinguishes quote-per-hour from profit and states fixed quote does not automatically change after overruns", projectHtml.includes("not profit or take-home pay") && projectHtml.includes("does not automatically change the amount the client owes") && projectHtml.includes("Illustrative assumptions only"));
 check("project quote buffer input defaults to 0 (percentages are entered by the user)", /<input id="bufferPercent"[^>]*\svalue="0"/.test(projectHtml));
 const projectActualScenario = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 0, actualHours: 30 });
 check("project actual-hours input is optional, blank by default, and linked to its error/help text", /<input id="actualHours"[^>]*\svalue=""/.test(projectHtml) && !/<input id="actualHours"[^>]*\srequired/.test(projectHtml) && projectHtml.includes('id="actual-effective-rate">—<') && projectHtml.includes('aria-describedby="actualHours-help actualHours-error"'));
