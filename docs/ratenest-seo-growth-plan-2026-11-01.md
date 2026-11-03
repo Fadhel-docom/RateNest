@@ -72,7 +72,7 @@ These are initial intent hypotheses from observed competitor content and the exi
 | How much should I charge per hour as a freelancer? | Homepage hourly calculator | Strengthen explanation of assumptions and connect to the guide; avoid duplicating the homepage in a second article. |
 | How do I calculate my freelance hourly rate? | Homepage + formula explanation | Ensure the formula, billable-hours logic, expenses and time-off assumptions are explicit and easy to quote. |
 | How do I price a fixed-price freelance project? | Project calculator + project guide | Expand useful worked examples only where they add a distinct case (e.g. revisions, discovery, direct expenses). |
-| What should I charge for a monthly retainer? | Retainer calculator | Clarify reserved hours, actual usage, discount, effective rate and break-even threshold. |
+| What should I charge for a monthly retainer? | Retainer calculator | Clarify reserved hours, actual usage, discount, effective rate and break-even threshold; include a worked example with explicit assumptions and a cross-checkable formula. |
 | How do I calculate a freelance day rate? | Homepage day-rate equivalent | Validate whether a dedicated page/tool adds meaningful value before building it; avoid a thin page that repeats an existing output. |
 | How do I account for non-billable hours? | Homepage + project guide | Add a clear example if research confirms this is a useful unanswered sub-question. |
 | How should I price revisions or scope changes? | Project guide / future scope-change tool | Research first; a revision/scope calculator may be more useful than another generic article. |
