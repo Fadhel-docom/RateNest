@@ -2,7 +2,7 @@
 // These are regex-based sanity checks, not a full HTML validator or accessibility audit.
 import { readFileSync, existsSync } from "node:fs";
 import { calculateHourlyRate, billableScenarios, rateEquivalents, formatCurrency, formatNumber } from "../calculator.mjs";
-import { calculateProjectQuote } from "../project-pricing-calculator.mjs";
+import { calculateProjectQuote, sumProjectTaskItems, MAX_PROJECT_TASKS } from "../project-pricing-calculator.mjs";
 import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
@@ -41,6 +41,15 @@ check("project quote page has exactly one h1", (projectHtml.match(/<h1[\s>]/gi) 
 check("project quote page has a calculator form", /<form[^>]*id="project-form"/i.test(projectHtml));
 check("project quote page has five optional labelled effort categories", ["planningHours", "productionHours", "meetingsHours", "revisionsHours", "managementHours"].every((id) => new RegExp(`<input id="${id}"[^>]*value=""`).test(projectHtml) && new RegExp(`<label[^>]*for="${id}"`).test(projectHtml)));
 check("project hours breakdown has an explicit apply action", projectHtml.includes('id="apply-hours-breakdown"') && projectHtml.includes("Blank categories count as zero."));
+check("project quote offers an optional custom task list with labelled name and hour fields", projectHtml.includes('id="task-estimate"') && projectHtml.includes('id="task-list"') && projectHtml.includes('class="task-name"') && projectHtml.includes('class="task-hours"') && projectHtml.includes("Each completed row needs both a task name and an hour estimate."));
+check("custom task estimator has add/remove row controls and an explicit apply action", projectHtml.includes('id="add-task"') && projectHtml.includes('id="apply-task-estimate"') && projectHtml.includes('id="task-status"'));
+check("custom task estimator is an alternative to category breakdown, not an additive second total", projectHtml.includes("alternative to the five-category breakdown above") && projectHtml.includes("not an extra amount to add on top"));
+const taskExample = sumProjectTaskItems([{ label: "Discovery call", hours: "0.5" }, { label: "Design homepage", hours: "4" }, { label: "Build checkout", hours: "3.25" }]);
+check("custom task estimate sums a transparent worked example to 7.75 hours", taskExample.total === 7.75 && taskExample.items.length === 3);
+check("custom task estimator enforces a 30-task limit and responsive mobile layout", MAX_PROJECT_TASKS === 30 && projectCss.includes(".task-estimate .task-row") && projectCss.includes("@media(max-width:520px)"));
+const projectScript = readFileSync(new URL("../project-pricing.mjs", import.meta.url), "utf8");
+check("task or category effort details are included in copied and printable quote summaries", projectHtml.includes('id="print-effort-details"') && projectScript.includes("Estimated effort breakdown:") && projectScript.includes("effortSummaryLines(lastResult, values.estimatedHours)") && projectCss.includes("#print-effort-details{white-space:pre-line"));
+
 check("project quote has a print/save PDF action and a print-only document heading", projectHtml.includes('id="print-quote"') && projectHtml.includes('id="print-project-title"') && projectHtml.includes("Print / Save quote as PDF"));
 check("project quote print sheet explains scope and excluded taxes/fees", projectHtml.includes("This estimate is not a contract or invoice.") && projectHtml.includes("payment schedule"));
 check("actual-hours analysis is marked internal and excluded from print", projectHtml.includes('class="result-stat internal-stat"><span>Effective hourly rate at actual hours') && projectCss.includes(".internal-stat,#actual-hours-note,.result-tip{display:none!important}"));
