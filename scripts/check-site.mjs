@@ -8,6 +8,7 @@ import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.url), "utf8");
 const projectCss = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
+const projectScript = readFileSync(new URL("../project-pricing.mjs", import.meta.url), "utf8");
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
 const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
 const robots = readFileSync(new URL("../robots.txt", import.meta.url), "utf8");
@@ -47,7 +48,7 @@ check("custom task estimator is presented as an alternative to category breakdow
 const taskExample = sumProjectTaskItems([{ label: "Discovery call", hours: "0.5" }, { label: "Design homepage", hours: "4" }, { label: "Build checkout", hours: "3.25" }]);
 check("custom task estimate sums a transparent worked example to 7.75 hours", taskExample.total === 7.75 && taskExample.items.length === 3);
 check("custom task estimator enforces a 30-task limit and responsive mobile layout", MAX_PROJECT_TASKS === 30 && projectCss.includes(".task-estimate .task-row") && projectCss.includes("@media(max-width:520px)"));
-check("task or category effort details are included in copied and printable quote summaries only when totals match", projectHtml.includes('id="print-effort-details"') && projectHtml.includes("Estimated effort breakdown:") === false && projectCss.includes("#print-effort-details{white-space:pre-line") && readFileSync(new URL("../project-pricing.mjs", import.meta.url), "utf8").includes("effortSummaryLines(lastResult, values.estimatedHours)"));
+check("task or category effort details are included in copied and printable quote summaries only when totals match", projectHtml.includes('id="print-effort-details"') && projectScript.includes("Estimated effort breakdown:") && projectScript.includes("effortSummaryLines(lastResult, values.estimatedHours)") && projectCss.includes("#print-effort-details{white-space:pre-line"));
 
 
 check("project quote has a print/save PDF action and a print-only document heading", projectHtml.includes('id="print-quote"') && projectHtml.includes('id="print-project-title"') && projectHtml.includes("Print / Save quote as PDF"));
