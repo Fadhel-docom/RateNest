@@ -101,6 +101,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
   .quote-document-heading{margin:0 0 20pt;padding-bottom:12pt;border-bottom:2px solid #176b50}
   .quote-document-heading .eyebrow{margin-bottom:4pt}
   .quote-document-heading h2{font-size:22pt;margin:0;overflow-wrap:anywhere}
+  #print-effort-details{white-space:pre-line;font-size:10pt;line-height:1.45;margin:10pt 0 14pt;color:#34463f!important}
   .rate-result{font-size:30pt;margin:18pt 0 8pt;overflow-wrap:anywhere}
   .result-summary{color:#34463f!important;font-size:11pt}
   .result-divider{background:#b9c8bf;height:1px;margin:18pt 0 12pt}
