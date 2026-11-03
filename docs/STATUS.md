@@ -1,12 +1,12 @@
-## 2026-11-03 — ChatGPT: إعادة تأسيس تصحيح دقة العملات على أحدث main
-- الحاجة: RateNest يتيح اختيار TND، لكن formatter في الصفحة الرئيسية وحاسبتي المشروع والاشتراك كان يفرض منزلتين عشريتين، بينما TND يتطلب ثلاث منازل لعرض أصغر وحداته بدقة.
-- ما أُنجز: يستخرج formatCurrency الآن عدد المنازل من Intl.NumberFormat لكل عملة؛ حافظت على compact whole-number output، ووحّدت الشاشة والطباعة في حاسبتي المشروع والاشتراك على formatter المشترك.
+## 2026-11-03 — ChatGPT: دمج إصلاح دقة العملات والتحقق من المراجعة
+- الحاجة: RateNest يتيح اختيار TND، لكن formatter كان يفرض منزلتين عشريتين، بينما TND يتطلب ثلاث منازل لعرض أصغر وحداته بدقة.
+- ما أُنجز: يستخرج formatCurrency عدد المنازل من Intl.NumberFormat لكل عملة؛ حافظ على compact whole-number output، ووحّد الشاشة والنسخ والطباعة في حاسبتي المشروع والاشتراك على المنسق المشترك.
 - الاختبارات: أضيفت حالات TND بثلاث منازل، USD بمنزلتين، TND compact، وحارسان ثابتان لمساري الشاشة والطباعة في الحاسبتين.
-- الملفات/الفرع: calculator.mjs, calculator.test.mjs, project-pricing.mjs, retainer-pricing.mjs, scripts/check-site.mjs؛ الفرع fix/currency-minor-units-20261103-current-main؛ PR #102.
-- التحقق: أُنشئ PR #102 فوق أحدث main بعد دمج PR #96 وPR #100؛ ينتظر GitHub Actions على الرأس النهائي. لا اختبار متصفح/هاتف أو طباعة فعلية بعد.
+- الملفات/الدمج: calculator.mjs, calculator.test.mjs, project-pricing.mjs, retainer-pricing.mjs, scripts/check-site.mjs؛ PR #102 دُمج في main بالالتزام 06c94c098255b1371a0518c4fa110581875c9c7f. PR #101 و#95 أُغلقا دون دمج باعتبارهما فروعًا سابقة متقادمة.
+- التحقق: نجح GitHub Actions على PR #102 (Unit tests وStatic site checks)، ثم نجح بعد الدمج Test before deployment وGitHub Pages Publish site. Cloudflare Pages check على commit 06c94c0 ما زال in_progress في آخر فحص. تحققت عبر Intl من USD/EUR/GBP/CAD/AUD = منزلتين وTND = ثلاث؛ لا اختبار متصفح/هاتف أو طباعة فعلية بعد.
 - النطاق: تنسيق عرض فقط؛ لا تغيير في الحسابات الداخلية أو القيم الافتراضية أو قائمة العملات أو البيانات أو SEO أو الشبكة.
-- المتبقي: CI ومراجعة دقة العملات الست المدعومة في الشاشة والنسخ والطباعة.
-- تسليم إلى Claude: راجع PR #102 بعد CI وتأكد من TND/ USD/ EUR/ GBP/ CAD/ AUD في كل مسارات العرض النقدي.
+- المتبقي: اكتمال Cloudflare production check واختبار العملات الست في الشاشة والنسخ والطباعة على متصفح حقيقي.
+- تسليم إلى Claude: اختبر PDF الخاص بـretainer بعد النشر، وتأكد من أن TND يظهر بثلاث منازل في الشاشة والطباعة وبقية العملات بدقتها المعتادة.
 - ما لم أستطع إنجازه: لا متصفح حي أو Android print preview في هذه الجلسة.
 - نصيحة: لا تفرض منزلتين على كل العملات؛ استخدم precision حسب العملة ولا تقرّب الحسابات الداخلية لأجل العرض.
 - المالك مطلوب منه إجراء؟ لا شيء.
