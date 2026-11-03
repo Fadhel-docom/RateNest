@@ -102,6 +102,8 @@ function effortSummaryLines(result, estimatedHours) {
 function render(values, result, breakdown = readBreakdown(), tasks = readTaskItems()) {
   lastResult = { values, result, breakdown, tasks, estimateMode: activeEstimateMode, title: $("#projectTitle").value.trim(), currency: currency.value };
   $("#print-project-title").textContent = lastResult.title || "Freelance project";
+  const effortLines = effortSummaryLines(lastResult, values.estimatedHours);
+  $("#print-effort-details").textContent = effortLines.length ? `Estimated effort breakdown:\n${effortLines.join("\n")}` : "";
   $("#print-quote").disabled = false;
   $("#labour-total").textContent = money(result.labour);
   $("#buffer-total").textContent = money(result.uncertaintyAllowance);
