@@ -143,7 +143,10 @@ test("formatCurrency formats, supports compact whole amounts, and falls back saf
   assert.equal(formatCurrency(Number.NaN, "USD", "en-US"), "—");
   assert.equal(formatCurrency(12.345, "NOT-A-CURRENCY", "en-US"), "NOT-A-CURRENCY 12.35");
   assert.match(formatCurrency(57.29, "EUR", "en-US"), /57\.29/);
-  assert.match(formatCurrency(57.29, "TND", "en-US"), /57\.29/);
+  assert.match(formatCurrency(57.29, "TND", "en-US"), /57\\.290$/);
+  assert.equal(formatCurrency(57.2, "TND", "en-US"), "TND 57.200");
+  assert.equal(formatCurrency(57290, "TND", "en-US", { compact: true }), "TND 57,290");
+  assert.equal(formatCurrency(57.29, "USD", "en-US"), "$57.29");
 });
 
 test("formatNumber and formulaSteps present the calculation in plain language", () => {
