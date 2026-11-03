@@ -1,4 +1,5 @@
 import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
+import { formatCurrency } from "./calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
@@ -7,11 +8,7 @@ const outputIds = ["labour-total", "buffer-total", "expenses-total", "quote-tota
 let lastResult = null;
 
 function money(value) {
-  try {
-    return new Intl.NumberFormat("en-US", { style: "currency", currency: currency.value, maximumFractionDigits: 2 }).format(value);
-  } catch {
-    return `${currency.value} ${Number(value).toFixed(2)}`;
-  }
+  return formatCurrency(value, currency.value, "en-US");
 }
 
 const hoursText = (n) => { const value = Number(n.toFixed(2)); return value + (value === 1 ? " hour" : " hours"); };
@@ -186,7 +183,6 @@ $("#copy-quote").addEventListener("click", async () => {
   }
 });
 function moneyFor(value, code) {
-  try { return new Intl.NumberFormat("en-US", { style: "currency", currency: code, maximumFractionDigits: 2 }).format(value); }
-  catch { return `${code} ${Number(value).toFixed(2)}`; }
+  return formatCurrency(value, code, "en-US");
 }
 calculate();
