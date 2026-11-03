@@ -77,6 +77,19 @@
           <button class="copy-button" id="apply-hours-breakdown" type="button">Add breakdown to total hours</button>
           <p class="copy-status" id="breakdown-status" role="status" aria-live="polite"></p>
         </details>
+        <details class="adjustments task-estimate" id="task-estimate">
+          <summary>Estimate hours by task (optional)</summary>
+          <p class="adjustments-intro">Add the specific tasks or deliverables in your project and estimate the hours for each. This is an alternative to the five-category breakdown above, not an extra amount to add on top. Blank rows are ignored; each completed row needs both a task name and an hour estimate.</p>
+          <div id="task-list" class="task-list">
+            <div class="task-row">
+              <div class="field"><label for="task-name-1">Task or deliverable</label><input id="task-name-1" class="task-name" type="text" maxlength="100" placeholder="e.g. Design homepage"></div>
+              <div class="field"><label for="task-hours-1">Estimated hours</label><input id="task-hours-1" class="task-hours" type="number" min="0" max="100000" step="any" inputmode="decimal" placeholder="e.g. 4"></div>
+            </div>
+          </div>
+          <button class="copy-button" id="add-task" type="button">Add another task</button>
+          <button class="copy-button" id="apply-task-estimate" type="button">Use task total as estimated hours</button>
+          <p id="task-status" class="copy-status" role="status" aria-live="polite"></p>
+        </details>
         <div class="field">
           <label for="hourlyRate">Hourly rate to use <span class="required" aria-hidden="true">*</span></label>
           <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a>. This value is not imported automatically.</p>
@@ -125,6 +138,7 @@
       <section class="result-card" aria-labelledby="result-heading">
         <h2 id="result-heading" class="sr-only">Your project quote</h2>
         <div class="print-only quote-document-heading"><p class="eyebrow">PROJECT QUOTE</p><h2 id="print-project-title">Freelance project</h2></div>
+        <p id="print-effort-details" class="print-only"></p>
         <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">SUGGESTED FIXED-PRICE QUOTE</span></div>
         <p id="quote-total" class="rate-result">$1,350.00</p>
         <p id="quote-summary" class="result-summary">Based on 20 estimated hours, a 0% labour-only uncertainty allowance, and $150.00 in direct expenses.</p>
@@ -160,22 +174,6 @@
       <p class="fine-print">The buffer is a markup allowance, not a true target profit margin. A true profit-margin calculation uses a different formula. This tool does not estimate taxes, market rates, or whether a client will accept the quote.</p>
       <p><a href="./">Need to calculate your sustainable hourly rate first? Use the hourly rate calculator.</a></p>
     </section>
-    <section class="explainer" aria-labelledby="project-example-heading">
-      <p class="eyebrow">A WORKED EXAMPLE</p>
-      <h2 id="project-example-heading">From estimated hours to the client quote</h2>
-      <p>Suppose a project is expected to take 20 hours at $60 per hour. You choose a 15% uncertainty allowance on labour, include $150 in direct expenses, and enter payment fees of 10% of the client-paid quote plus a $5 fixed deduction.</p>
-      <ol class="steps">
-        <li><strong>Labour:</strong> 20 hours × $60 = $1,200.</li>
-        <li><strong>Uncertainty allowance:</strong> $1,200 × 15% = $180.</li>
-        <li><strong>Project amount before payment fees:</strong> $1,200 + $180 + $150 = $1,530.</li>
-        <li><strong>Client quote after entered fees:</strong> $1,705.56. The estimated percentage deduction is $170.56 and the fixed deduction is $5, leaving an estimated $1,530.00 before tax and other costs.</li>
-        <li><strong>Effective rate at 20 estimated hours:</strong> $1,530 ÷ 20 = $76.50 per hour. This includes direct expenses; it is not profit.</li>
-        <li><strong>If the project takes 24 hours:</strong> the quote stays $1,705.56 unless a change is agreed. The estimated amount remaining divided by 24 hours is $63.75 per hour.</li>
-      </ol>
-      <p class="fine-print">This is an illustrative calculation, not a recommended buffer or fee rate. It assumes the percentage fee applies to the entire client-paid quote and the fixed fee is deducted once. Actual providers may use a different fee base or rounding method. Taxes, currency conversion and other costs are not included. With no fees entered, the project amount before fees remains $1,530.</p>
-      <p><a href="./how-to-price-a-freelance-project.html">Use the project-pricing guide to estimate the work and agree the scope before quoting.</a></p>
-    </section>
-
     <section class="explainer faq" aria-labelledby="faq-heading">
       <h2 id="faq-heading">Common questions</h2>
       <details><summary>Should I include direct expenses?</summary><p>Include project-specific costs that you want the client price to cover, such as materials or subcontractors. Avoid counting the same expense twice if your hourly rate already accounts for it.</p></details>
