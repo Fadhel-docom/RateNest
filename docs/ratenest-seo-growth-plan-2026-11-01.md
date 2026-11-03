@@ -150,14 +150,9 @@ Prioritize channels where the tool genuinely helps the audience:
 
 ## 6. Measurement without invasive tracking
 
-No analytics, advertising pixels, behavioral tracking, newsletter capture or server-side collection is authorized by this plan.
+No analytics, advertising pixels, behavioral tracking, newsletter capture or server-side collection is authorized by this plan. Use `docs/measurement-protocol-2026-11-03.md` as the operational measurement standard. It separates indexing, impressions, clicks, actual calculator use, embed referrals and revenue; provides a fixed AI-answer citation sample and monthly report template; and explicitly records current actual tool-use totals as unknown because calculations remain browser-only.
 
-Use existing search-engine webmaster tools and privacy-preserving evidence:
-- Google Search Console: impressions, clicks, CTR, average position, indexed URLs, sitemap status.
-- Bing Webmaster Tools: impressions, clicks, crawl/index signals, IndexNow receipt.
-- Manual AI citation log: question, engine, date, cited page and accuracy.
-- Embed referrals: ask a willing partner to share aggregate click counts if they already have them; do not add tracking to the embed.
-- Technical quality: test results, page accessibility, mobile reflow, broken links and page performance.
+Use Search Console and Bing Webmaster Tools for page/query visibility, manual dated answer-engine samples for CAO, voluntary aggregate publisher reports for embeds, and qualitative user feedback. Do not infer completed calculations from visits, or add any hidden beacon, analytics SDK, cookie or usage collection without separate owner approval.
 
 Report actual observations and limitations. Avoid setting traffic or revenue forecasts without baseline data.
 
