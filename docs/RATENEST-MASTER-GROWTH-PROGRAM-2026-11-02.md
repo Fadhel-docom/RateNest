@@ -205,7 +205,7 @@ Report observed values, dates and source:
 
 ## 10. Current baseline and constraints (refreshed 2026-11-03)
 
-- Existing core: hourly/day-rate, fixed-project quote, retainer pricing, project guide, billable/non-billable explanations, actual project hours, retainer actual-use/break-even, printable client quote and optional project-hours breakdown.
+- Existing core: hourly/day-rate, fixed-project quote, retainer pricing, project guide, billable/non-billable explanations, actual project hours, retainer actual-use/break-even, optional project-hours categories (PR #73), printable client-facing project quote (PR #74), optional payout-fee gross-up (PR #77), and a verified complete project quote worked example (PR #93). Do not rebuild existing features. The custom task-level estimate list is in progress on a separate feature branch.
 - Search baseline recorded 2026-11-01: four canonical URLs; Google reported unknown/pending in available evidence; Bing sitemap acceptance was later confirmed by Claude on 2026-11-02. No claim of indexing, rankings, traffic or AI citations.
 - PR #77 merged the user-entered payout-fee feature; PR #81 merged deny-by-default framing headers. Local checks passed as documented, but live Cloudflare header delivery remains unverified.
 - PR #82 carries refreshed publisher-fit research and the corrected embed security sequence. The older PR #76 branch is stale; this refreshed growth programme is being rebased onto current main.
