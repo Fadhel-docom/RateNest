@@ -92,20 +92,25 @@
       </form>
       <section class="result-card" aria-labelledby="result-heading">
         <h2 id="result-heading" class="sr-only">Your retainer estimate</h2>
+        <div class="print-only quote-document-heading"><p class="eyebrow">MONTHLY RETAINER ESTIMATE</p><h2 id="print-retainer-title">Freelance retainer</h2></div>
         <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">SUGGESTED MONTHLY RETAINER</span></div>
         <p id="retainer-total" class="rate-result">$1,200.00</p>
-        <p id="retainer-summary" class="result-summary">Based on 20 reserved hours per month at $60.00/hr, a 0% retainer discount, over 12 months.</p>
+        <p id="retainer-summary" class="result-summary internal-stat">Based on 20 reserved hours per month at $60.00/hr, a 0% retainer discount, over 12 months.</p>
+        <p id="print-retainer-summary" class="print-only result-summary">Reserved capacity: 20 hours per month for 12 months.</p>
         <div class="result-divider"></div>
-        <div class="result-stat"><span>Value at full rate</span><strong id="full-value">$1,200.00</strong></div>
-        <div class="result-stat"><span>Retainer discount</span><strong id="discount-total">−$0.00</strong></div>
-        <div class="result-stat"><span>Effective hourly rate</span><strong id="effective-rate">$60.00/hr</strong></div>
-        <div id="break-even-row" class="result-stat" hidden><span>Break-even actual hours</span><strong id="break-even-hours">—</strong></div>
-        <p id="break-even-note" class="result-summary" hidden></p>
-        <div class="result-stat"><span>Effective rate at expected usage</span><strong id="usage-rate">—</strong></div>
-        <p id="usage-note" class="result-summary" hidden></p>
+        <div class="result-stat print-only"><span>Reserved hours per month</span><strong id="print-reserved-hours">20</strong></div>
+        <div class="result-stat internal-stat"><span>Value at full rate</span><strong id="full-value">$1,200.00</strong></div>
+        <div class="result-stat internal-stat"><span>Retainer discount</span><strong id="discount-total">−$0.00</strong></div>
+        <div class="result-stat internal-stat"><span>Effective hourly rate</span><strong id="effective-rate">$60.00/hr</strong></div>
+        <div id="break-even-row" class="result-stat internal-stat" hidden><span>Break-even actual hours</span><strong id="break-even-hours">—</strong></div>
+        <p id="break-even-note" class="result-summary internal-stat" hidden></p>
+        <div class="result-stat internal-stat"><span>Effective rate at expected usage</span><strong id="usage-rate">—</strong></div>
+        <p id="usage-note" class="result-summary internal-stat" hidden></p>
         <div class="result-stat"><span>Contract value</span><strong id="contract-total">$14,400.00</strong></div>
         <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate, not a guarantee of income. The effective rate assumes every reserved hour is used and paid. Taxes and platform/payment fees are excluded. Agree scope, unused hours and extra-work terms with your client.</p></div>
-        <button id="copy-retainer" class="copy-button" type="button">Copy retainer summary</button>
+        <p class="print-only quote-print-note">This is a planning estimate, not a contract or invoice. Confirm the services covered, availability, unused-hour rollover, extra-hour charges, payment dates, review terms, notice period, taxes and applicable fees with your client before agreeing. Terms and legal requirements vary by location.</p>
+        <button id="print-retainer" class="copy-button print-action" type="button" disabled>Print / Save retainer estimate as PDF</button>
+        <button id="copy-retainer" class="copy-button" type="button" disabled>Copy retainer summary</button>
         <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
       </section>
     </section>
