@@ -1,6 +1,43 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, applyPayoutFees } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, sumProjectTaskItems, MAX_PROJECT_TASKS, applyPayoutFees } from "./project-pricing-calculator.mjs";
+
+test("sums named project tasks and rounds decimal noise without changing the quote calculator", () => {
+  const result = sumProjectTaskItems([
+    { label: "Discovery call", hours: "0.5" },
+    { label: "Design homepage", hours: "4" },
+    { label: "Build checkout", hours: "3.25" },
+    { label: "  ", hours: "" }
+  ]);
+  assert.deepEqual(result, {
+    total: 7.75,
+    items: [
+      { label: "Discovery call", hours: 0.5 },
+      { label: "Design homepage", hours: 4 },
+      { label: "Build checkout", hours: 3.25 }
+    ]
+  });
+  assert.equal(sumProjectTaskItems([{ label: "A", hours: "0.1" }, { label: "B", hours: "0.2" }]).total, 0.3);
+});
+
+test("ignores fully blank task rows but rejects partially completed tasks", () => {
+  assert.deepEqual(sumProjectTaskItems([{ label: "", hours: "" }, { label: " ", hours: " " }]), { total: 0, items: [] });
+  assert.throws(() => sumProjectTaskItems([{ label: "Build checkout", hours: "" }]), /Enter estimated hours/);
+  assert.throws(() => sumProjectTaskItems([{ label: "", hours: "2" }]), /Add a name/);
+});
+
+test("validates task hours, labels, and the maximum task count", () => {
+  assert.throws(() => sumProjectTaskItems([{ label: "Design", hours: "-1" }]), /valid non-negative hours/);
+  assert.throws(() => sumProjectTaskItems([{ label: "Design", hours: "1e2" }]), /valid non-negative hours/);
+  assert.throws(() => sumProjectTaskItems([{ label: "Design", hours: "100001" }]), /between 0 and 100,000/);
+  assert.throws(() => sumProjectTaskItems([{ label: "x".repeat(101), hours: "1" }]), /100 characters or fewer/);
+  assert.throws(() => sumProjectTaskItems(Array.from({ length: MAX_PROJECT_TASKS + 1 }, (_, i) => ({ label: `Task ${i}`, hours: "1" }))), /at most 30 tasks/);
+  assert.throws(() => sumProjectTaskItems({ label: "Not an array", hours: "1" }), /provided as a list/);
+});
+
+test("rejects a combined task total above the project hour limit", () => {
+  assert.throws(() => sumProjectTaskItems([{ label: "A", hours: "60000" }, { label: "B", hours: "40000.1" }]), /combined task estimate/);
+});
 
 test("calculates labour, labour-only uncertainty allowance, expenses, and quote", () => {
   const result = calculateProjectQuote({ estimatedHours: 20, hourlyRate: 60, directExpenses: 150, bufferPercent: 25 });
