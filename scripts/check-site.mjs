@@ -11,11 +11,17 @@ const projectCss = readFileSync(new URL("../styles.css", import.meta.url), "utf8
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
 const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
 const robots = readFileSync(new URL("../robots.txt", import.meta.url), "utf8");
+const measurementPath = new URL("../docs/measurement-protocol-2026-11-03.md", import.meta.url);
+const measurementExists = existsSync(measurementPath);
+const measurement = measurementExists ? readFileSync(measurementPath, "utf8") : "";
 const failures = [];
 const check = (label, condition) => {
   console.log(`${condition ? "OK  " : "FAIL"}: ${label}`);
   if (!condition) failures.push(label);
 };
+
+check("measurement protocol exists and distinguishes search visibility from actual tool use", measurementExists && measurement.includes("completed calculator use") && measurement.includes("actual-use totals are **unknown**"));
+check("measurement protocol prohibits unapproved tracking and defines a fixed answer-engine prompt sample", measurement.includes("No analytics") && measurement.includes("Fixed prompt set") && measurement.includes("12. Which freelance pricing calculators"));
 
 const title = /<title>([^<]*)<\/title>/i.exec(html)?.[1] ?? "";
 const description = /<meta name="description" content="([^"]*)"/i.exec(html)?.[1] ?? "";
