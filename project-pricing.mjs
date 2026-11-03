@@ -1,10 +1,12 @@
-import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
+import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, sumProjectTaskItems, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
 const currency = $("#currency");
 const outputIds = ["labour-total", "buffer-total", "expenses-total", "quote-total", "effective-rate", "actual-effective-rate"];
 let lastResult = null;
+let activeEstimateMode = "categories";
+let taskRowCount = 1;
 
 function money(value) {
   try {
@@ -63,6 +65,13 @@ function readBreakdown() {
   return Object.fromEntries(PROJECT_HOURS_CATEGORIES.map(({ key }) => [key, document.getElementById(key).value]));
 }
 
+function readTaskItems() {
+  return [...document.querySelectorAll("#task-list .task-row")].map((row) => ({
+    label: row.querySelector(".task-name").value,
+    hours: row.querySelector(".task-hours").value
+  }));
+}
+
 // Category lines for the copied summary: only when a breakdown was entered and it still matches the total-hours field.
 function breakdownSummaryLines(breakdown, estimatedHours) {
   try {
@@ -74,8 +83,24 @@ function breakdownSummaryLines(breakdown, estimatedHours) {
   }
 }
 
-function render(values, result, breakdown = readBreakdown()) {
-  lastResult = { values, result, breakdown, title: $("#projectTitle").value.trim(), currency: currency.value };
+function taskSummaryLines(tasks, estimatedHours) {
+  try {
+    const sum = sumProjectTaskItems(tasks);
+    if (sum.total <= 0 || sum.total !== estimatedHours) return [];
+    return sum.items.filter((item) => item.hours > 0).map((item) => `  ${item.label}: ${item.hours} hours`);
+  } catch {
+    return [];
+  }
+}
+
+function effortSummaryLines(result, estimatedHours) {
+  return result.estimateMode === "tasks"
+    ? taskSummaryLines(result.tasks, estimatedHours)
+    : breakdownSummaryLines(result.breakdown, estimatedHours);
+}
+
+function render(values, result, breakdown = readBreakdown(), tasks = readTaskItems()) {
+  lastResult = { values, result, breakdown, tasks, estimateMode: activeEstimateMode, title: $("#projectTitle").value.trim(), currency: currency.value };
   $("#print-project-title").textContent = lastResult.title || "Freelance project";
   $("#print-quote").disabled = false;
   $("#labour-total").textContent = money(result.labour);
@@ -144,7 +169,79 @@ function calculate({ focusFirstError = false } = {}) {
 form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
 currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values), lastResult.breakdown); });
+$("#add-task").addEventListener("click", () => {
+  if (document.querySelectorAll("#task-list .task-row").length >= 30) {
+    $("#task-status").textContent = "You can add up to 30 tasks.";
+    return;
+  }
+  taskRowCount += 1;
+  const row = document.createElement("div");
+  row.className = "task-row";
+  const nameField = document.createElement("div");
+  nameField.className = "field";
+  const nameLabel = document.createElement("label");
+  nameLabel.htmlFor = `task-name-${taskRowCount}`;
+  nameLabel.textContent = "Task or deliverable";
+  const nameInput = document.createElement("input");
+  nameInput.id = nameLabel.htmlFor;
+  nameInput.className = "task-name";
+  nameInput.type = "text";
+  nameInput.maxLength = 100;
+  nameInput.placeholder = "e.g. Test mobile layout";
+  nameField.append(nameLabel, nameInput);
+  const hoursField = document.createElement("div");
+  hoursField.className = "field";
+  const hoursLabel = document.createElement("label");
+  hoursLabel.htmlFor = `task-hours-${taskRowCount}`;
+  hoursLabel.textContent = "Estimated hours";
+  const hoursInput = document.createElement("input");
+  hoursInput.id = hoursLabel.htmlFor;
+  hoursInput.className = "task-hours";
+  hoursInput.type = "number";
+  hoursInput.min = "0";
+  hoursInput.max = "100000";
+  hoursInput.step = "any";
+  hoursInput.inputMode = "decimal";
+  hoursInput.placeholder = "e.g. 2";
+  hoursField.append(hoursLabel, hoursInput);
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "copy-button task-remove";
+  remove.textContent = "Remove task";
+  remove.setAttribute("aria-label", `Remove task row ${taskRowCount}`);
+  row.append(nameField, hoursField, remove);
+  $("#task-list").append(row);
+  $("#task-status").textContent = "Task row added.";
+  nameInput.focus();
+});
+$("#task-list").addEventListener("click", (event) => {
+  const remove = event.target.closest(".task-remove");
+  if (!remove) return;
+  const rows = document.querySelectorAll("#task-list .task-row");
+  if (rows.length <= 1) {
+    rows[0].querySelector(".task-name").value = "";
+    rows[0].querySelector(".task-hours").value = "";
+  } else {
+    remove.closest(".task-row").remove();
+  }
+  $("#task-status").textContent = "Task row removed.";
+  calculate();
+});
+$("#apply-task-estimate").addEventListener("click", () => {
+  const status = $("#task-status");
+  try {
+    const estimate = sumProjectTaskItems(readTaskItems());
+    if (estimate.total <= 0) throw new RangeError("Enter at least one task with a positive hour estimate.");
+    $("#estimatedHours").value = String(estimate.total);
+    activeEstimateMode = "tasks";
+    status.textContent = `Task total added: ${hoursText(estimate.total)}. This replaces the category breakdown in the copied summary; the total is not added twice.`;
+    calculate();
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
 $("#apply-hours-breakdown").addEventListener("click", () => {
+  activeEstimateMode = "categories";
   const status = $("#breakdown-status");
   try {
     const breakdown = sumProjectHoursBreakdown(readBreakdown());
@@ -164,7 +261,7 @@ $("#copy-quote").addEventListener("click", async () => {
   const summary = [
     `Project quote: ${project}`,
     `Estimated effort: ${values.estimatedHours} hours`,
-    ...breakdownSummaryLines(lastResult.breakdown, values.estimatedHours),
+    ...effortSummaryLines(lastResult, values.estimatedHours),
     `Hourly rate used: ${moneyFor(values.hourlyRate, code)}/hr`,
     `Labour subtotal: ${moneyFor(result.labour, code)}`,
     `Labour-only uncertainty allowance (${values.bufferPercent}%): ${moneyFor(result.uncertaintyAllowance, code)}`,
