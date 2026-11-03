@@ -39,6 +39,7 @@ function clearResult() {
   $("#break-even-note").hidden = true;
   $("#break-even-note").textContent = "";
   $("#copy-retainer").disabled = true;
+  $("#print-retainer").disabled = true;
   $("#copy-status").textContent = "";
 }
 
@@ -54,6 +55,9 @@ function usageNote(usage) {
 
 function render(values, result) {
   lastResult = { values, result, name: $("#retainerName").value.trim(), currency: currency.value };
+  $("#print-retainer-title").textContent = lastResult.name || "Freelance retainer";
+  $("#print-retainer-summary").textContent = `Reserved capacity: ${result.monthlyHours} hours per month for ${result.months} ${result.months === 1 ? "month" : "months"}.`;
+  $("#print-reserved-hours").textContent = String(result.monthlyHours);
   $("#full-value").textContent = money(result.fullRateValue);
   $("#discount-total").textContent = `−${money(result.discountAmount)}`;
   $("#retainer-total").textContent = money(result.monthlyRetainer);
@@ -73,6 +77,7 @@ function render(values, result) {
   $("#break-even-note").hidden = !showBreakEven;
   $("#retainer-summary").textContent = `Based on ${result.monthlyHours} reserved hours per month at ${money(result.hourlyRate)}/hr, a ${result.discountPercent}% retainer discount, over ${result.months} ${result.months === 1 ? "month" : "months"}.`;
   $("#copy-retainer").disabled = false;
+  $("#print-retainer").disabled = false;
   $("#copy-status").textContent = "";
 }
 
@@ -108,6 +113,7 @@ function calculate({ focusFirstError = false } = {}) {
 form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
 currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateRetainer(lastResult.values)); });
+$("#print-retainer").addEventListener("click", () => { if (lastResult) window.print(); });
 $("#copy-retainer").addEventListener("click", async () => {
   if (!lastResult) return;
   const { values, result, name, currency: code } = lastResult;
