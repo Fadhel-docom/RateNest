@@ -1,4 +1,5 @@
 import { calculateRetainer, validateRetainer } from "./retainer-pricing-calculator.mjs";
+import { formatCurrency } from "./calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#retainer-form");
@@ -8,8 +9,7 @@ const outputIds = ["full-value", "discount-total", "retainer-total", "effective-
 let lastResult = null;
 
 function moneyFor(value, code) {
-  try { return new Intl.NumberFormat("en-US", { style: "currency", currency: code, maximumFractionDigits: 2 }).format(value); }
-  catch { return `${code} ${Number(value).toFixed(2)}`; }
+  return formatCurrency(value, code, "en-US");
 }
 const money = (value) => moneyFor(value, currency.value);
 
