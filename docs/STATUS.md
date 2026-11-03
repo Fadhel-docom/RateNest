@@ -1,3 +1,10 @@
+## 2026-11-03 — ChatGPT: تحقق دقة العملات وبوابة أمان التضمين
+- PR #102 مدمج في main بالالتزام 06c94c0. GitHub Actions #330 على PR و#331 بعد الدمج نجحا؛ GitHub Pages deployment #92 نجح. Cloudflare Pages check على main ما زال in_progress عند آخر فحص.
+- راجعت مسارات formatter: الصفحة الرئيسية (الشاشة والنسخ)، project pricing (الشاشة والنسخ والطباعة)، retainer pricing (الشاشة والنسخ والطباعة) تستخدم formatter مشتركًا. تحقق Intl للست عملات: TND ثلاث منازل؛ USD/EUR/GBP/CAD/AUD منزلتان. لم أختبر متصفحًا أو طباعة فعلية.
+- حاجز التضمين: _headers في main يمنع framing افتراضيًا عبر frame-ancestors 'none' وX-Frame-Options: DENY. لم أتحقق من الترويسات الحية التي يقدمها Cloudflare؛ أداة الفحص غير متاحة في هذه الجلسة. لا تنشئ /embed/hourly أو استثناء framing قبل إثبات القيم الحية على صفحة عادية.
+- الإجراء التالي: Claude يختبر TND في الشاشة والنسخ والطباعة، ويختبر Print / Save as PDF على متصفح/Android. المالك يرسل صورة أو قيم فحص الترويسات الحية قبل البدء في embed.
+- لا توجد ادعاءات بفهرسة أو ظهور أو نشر Cloudflare مكتمل. نشر GitHub Pages الاحتياطي لا يثبت نشر Cloudflare الأساسي.
+
 ## 2026-11-03 — ChatGPT: إعادة تأسيس تصحيح دقة العملات على أحدث main
 - الحاجة: RateNest يتيح اختيار TND، لكن formatter في الصفحة الرئيسية وحاسبتي المشروع والاشتراك كان يفرض منزلتين عشريتين، بينما TND يتطلب ثلاث منازل لعرض أصغر وحداته بدقة.
 - ما أُنجز: يستخرج formatCurrency الآن عدد المنازل من Intl.NumberFormat لكل عملة؛ حافظت على compact whole-number output، ووحّدت الشاشة والطباعة في حاسبتي المشروع والاشتراك على formatter المشترك.
