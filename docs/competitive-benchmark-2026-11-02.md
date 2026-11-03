@@ -45,29 +45,31 @@
 
 Priorities reflect visitor value, evidence, effort and risk—not competitor count.
 
-### P0 — Strengthen the existing project quote workflow with an optional hours breakdown
+### P0 — Optional project-hours breakdown — completed (PR #73)
 
-**Evidence:** TNAADO separates production, meetings, revisions and admin/project management. The 2026-10-31 scan also observed task-level estimates and contingency/deposit concepts on FreeToolCabin and itemized quote flows on other pages.
+**Evidence:** TNAADO separates production, meetings, revisions and admin/project management. RateNest now offers five optional categories: discovery/planning, production/delivery, meetings/communication, revisions/QA, and project management/admin.
 
-**Current gap:** RateNest accepts one total estimated-hours number. Users may omit discovery, calls, project management, feedback rounds and revisions.
+**Delivered:** category values can be summed into the existing estimated-hours field; blank categories count as zero; no default hours or silent inflation; simple total-hours mode remains available. The copied quote includes category details only when their sum still matches the total.
 
-**Proposed improvement:** Add optional categories: discovery/planning, production, meetings/communication, revisions/QA and project management. Sum them into the existing estimated-hours calculation. Preserve simple total-hours mode. No default hours or silent inflation; categories are prompts, not universal percentages.
+**Verification boundary:** unit/static checks are documented in PR #73. Do not claim a live mobile/keyboard audit unless separately tested.
 
-**Acceptance:** category sum equals total; empty categories equal zero; no hidden double counting; copy summary includes breakdown only when used; tests cover decimals, zero, maximums and rounding; mobile/keyboard checks.
+### P1 — Custom task-level estimate list — in progress (branch `feature/custom-project-task-estimator-20261103-v2`)
 
-### P1 — Client-ready project quote output without an account
+**Evidence:** A fixed category list helps users remember broad work types, but some projects need deliverable-specific estimates such as design homepage, build checkout, mobile QA, or client handover.
 
-**Evidence:** Freelero advertises print/Save as PDF for its retainer tool and invoice PDF generation; the prior scan observed itemized/copyable quote outputs elsewhere.
+**Proposed improvement:** allow up to 30 user-named tasks, each with a non-negative hour estimate. Blank rows are ignored; partially completed rows are rejected; the sum is applied to the existing total-hours field. This is an alternative to the five-category breakdown, never an additional charge or automatic buffer.
 
-**Current gap:** RateNest copies a short summary but has no dedicated print-friendly quote sheet.
+**Acceptance:** decimal sums and limits tested; no double counting with the category breakdown; copied and printable quote show task names only when the task sum matches the current total; accessible labels, remove controls and responsive mobile layout; existing total-hours workflow and quote math unchanged.
 
-**Proposed improvement:** Browser print / Save as PDF view for project name, assumptions, labour, buffer, expenses, total, exclusions and scope/revision reminder. No server, stored customer data, legal contract or external dependency.
+### P1 — Client-ready project quote output without an account — completed (PR #74)
 
-**Acceptance:** print preview hides controls/navigation; currency and totals match live results; optional actual-hours scenario is labelled internal analysis, not a client charge; privacy note remains accurate.
+**Evidence and delivered value:** Browser print / Save as PDF sheet for the project name, quote total, cost breakdown and scope/payment/tax caveats. Internal actual-hours analysis and freelancer-only guidance are excluded from the client-facing print view. The copied summary remains available.
+
+**Follow-up:** PR #93 added a complete worked example that connects labour, buffer, direct expenses, entered payout fees, client quote, estimated amount remaining and the effective rate at estimated versus actual hours. The example is checked against the production calculation function. Do not claim that a browser print dialog was manually tested unless that test is separately recorded.
 
 ### P1 — Make project estimates harder to undercount
 
-After P0, consider a lightweight task/phase list or editable line items. Do not build a full proposal/CRM system.
+The broad category prompts are complete in PR #73. The next incremental improvement is the custom task-level estimate list described above. Do not build a full proposal/CRM system or add default time estimates.
 
 ### P2 — Optional fee and payout-cost modelling
 
@@ -108,12 +110,14 @@ These are strategic opportunities inferred from product positioning, not allegat
 
 ## 5. Execution sequence
 
-1. Merge this benchmark as a shared reference after partner review.
-2. First feature PR: optional project-hours breakdown, backward-compatible with the current total-hours input.
-3. Second feature PR: print-friendly project quote / Save as PDF, local-only.
-4. Third: optional user-entered payout/fee layer if formula and need are validated.
-5. Research before market data or role presets: establish source quality and geography.
-6. Measure when GSC/Bing data becomes available: queries, impressions, clicks and page performance. No analytics/tracking without separate owner approval. Until then, use functional tests and user feedback; do not claim SEO or revenue impact.
+1. Completed: optional project-hours breakdown (PR #73), backward-compatible with the current total-hours input.
+2. Completed: print-friendly project quote / Save as PDF (PR #74), local-only.
+3. Completed: optional user-entered payout-fee gross-up model (PR #77), with no provider defaults.
+4. Completed: complete project quote worked example (PR #93), checked against the production calculation function.
+5. In progress: custom task-level estimate list, as an optional alternative to broad hour categories.
+6. Continue only after responsive-layout, accessibility, unit/static CI and independent partner review. Do not claim a live print/mobile audit unless performed.
+7. Research before market data or role presets: establish source quality and geography.
+8. Measure when GSC/Bing data becomes available: queries, impressions, clicks and page performance. No analytics/tracking without separate owner approval. Until then, use functional tests and user feedback; do not claim SEO or revenue impact.
 
 ## 6. Limitations and next audit requirements
 
