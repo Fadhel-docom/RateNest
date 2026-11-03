@@ -123,11 +123,12 @@ export function formatCurrency(value, currency, locale, { compact = false } = {}
   if (typeof value !== "number" || !Number.isFinite(value)) return "—";
   try {
     const wholeOnly = compact && Number.isInteger(value);
+    const currencyDigits = new Intl.NumberFormat(locale, { style: "currency", currency }).resolvedOptions().maximumFractionDigits;
     return new Intl.NumberFormat(locale, {
       style: "currency",
       currency,
-      minimumFractionDigits: wholeOnly ? 0 : 2,
-      maximumFractionDigits: wholeOnly ? 0 : 2
+      minimumFractionDigits: wholeOnly ? 0 : currencyDigits,
+      maximumFractionDigits: wholeOnly ? 0 : currencyDigits
     }).format(value);
   } catch {
     return `${currency} ${value.toFixed(2)}`;
