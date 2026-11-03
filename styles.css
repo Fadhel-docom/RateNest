@@ -77,6 +77,13 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
 .hours-breakdown .field-row .field label,.payout-fees .field-row .field label{display:block;min-height:0}
 #fee-note{margin:0 0 15px}
 .hours-breakdown .copy-button{color:var(--ink);border-color:#9bb3a6}
+.task-estimate .task-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;align-items:end;gap:12px;margin:0 0 12px}
+.task-estimate .task-row .field{min-width:0;margin:0}
+.task-estimate .task-row label{display:block;min-height:0}
+.task-estimate .task-remove{white-space:nowrap;min-height:44px;margin-bottom:0}
+.task-estimate .copy-button{color:var(--ink);border-color:#9bb3a6}
+.task-estimate .copy-status{color:var(--ink);text-align:left}
+@media(max-width:520px){.task-estimate .task-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.task-estimate .task-remove{grid-column:1/-1;justify-self:start}}
 .hours-breakdown .copy-status{color:var(--ink);text-align:left}
 
 /* Printable client-facing project quote: keep internal actual-hours analysis off the shared sheet. */
