@@ -124,6 +124,34 @@ These are strategic opportunities inferred from product positioning, not allegat
 - A deeper audit should test the same tasks on each tool: assumptions, validation, formulas, edge cases, mobile, keyboard/screen-reader, privacy/network behavior, copy/print/export, and distinctions between revenue, profit, tax and take-home pay.
 - No search-volume, traffic, conversion, revenue or market-share figures are claimed.
 
+## 7. Focused competitor watchlist recheck — 2026-11-03
+
+This is a follow-up page review, not a replacement for the curated 20-product benchmark and not a global ranking. Pages were opened on 2026-11-03; interactive calculations, network behavior and mobile accessibility were not independently tested.
+
+| Product | Observed strengths on the reviewed page | Evidence limits and RateNest lesson |
+|---|---|---|
+| WhatShouldICharge (whatshouldicharge.io) | Hourly/project/retainer pricing; BLS OEWS May 2024 occupation/metro wage percentiles; BEA regional price parity; visible floor formula; skill and work-complexity multipliers; AI-tool cost/time-saved discussion; linked methodology and related tools. | Its methodology is explicit, but BLS OEWS measures wage-and-salary employees and excludes self-employed workers. Treat the data as employee-wage context, not direct freelance transaction rates. The homepage also displayed zero counters for data points/metros/professions while elsewhere claiming 150,000+ records and 391 metros; record this as an observed page inconsistency, not proof the underlying data is absent. RateNest must not copy market-rate claims without source/methodology fit. |
+| FreelancerMetrics (freelancermetrics.com) | One landing page presents hourly, project, target-income and platform-fee calculators, shareable reports, country/industry/experience/urgency inputs, and many niche pricing tools and guides. | Claims 51,208 freelancers priced and 140+ countries; the reviewed page did not expose enough methodology to verify those counts or the market-rate table. Treat as product-page claims only. Lesson: cross-tool navigation and shareable results are useful patterns, but not proof of actual adoption. |
+| Hour Cap (hourcap.com) | Explicit formula for take-home income, expenses, billable days/hours, tax, overhead and profit; break-even output, worked example, benchmark ranges, plus time-tracking/retainer/Xero product path. | The displayed tax/overhead/profit ranges are planning guidance, not universal standards. Its formula and worked example make assumptions inspectable. RateNest should preserve the distinction between user inputs, estimates and professional tax advice. |
+| RateClarity (rateclarity.net) | A small connected set of hourly, project, retainer, effective-rate, day-rate and client-profitability calculators; visible assumptions, transparent calculations, free/browser-based positioning and linked guides. | The page describes its product and privacy posture; this review did not independently test network traffic or calculator behavior. Lesson: a coherent family of tools and concise guides helps users move between related pricing decisions. |
+
+### Primary-source checks and implications
+
+- BLS OEWS overview: https://www.bls.gov/oes/oes_emp.htm — the survey covers wage-and-salary workers and excludes self-employed workers and owners/partners in unincorporated firms. This is a critical caveat when any product presents OEWS as freelance-rate data.
+- WhatShouldICharge methodology: https://whatshouldicharge.io/methodology — reviewed formula, occupation wage percentiles, BEA RPP and adjustment factors.
+- WhatShouldICharge calculator page: https://whatshouldicharge.io/ — observed 21 professions, market-range presentation, AI-cost/time-saved claims and inconsistent counters.
+- FreelancerMetrics: https://freelancermetrics.com/ — observed multi-tool structure and stated usage/country counts; claims not independently verified.
+- Hour Cap: https://hourcap.com/free-tools/freelance-rate-calculator — observed formula, inputs, worked example and connected product funnel.
+- RateClarity: https://rateclarity.net/ — observed connected calculator catalogue and transparency positioning.
+
+### RateNest decision
+
+1. Do not add a market-rate table or profession multipliers now. No suitable, verified freelance transaction dataset has been established; employee wage data is not a substitute for freelance prices.
+2. Keep RateNest's differentiator grounded in personal cost/capacity math, actual project hours, retainer actual-use/break-even, explicit assumptions, fee modeling and client-ready output.
+3. Use concise worked examples and visible formulas where they close a real visitor question. PR #86 has just corrected the payout-fee FAQ with a checked example.
+4. Revisit market context only after a defensible dataset, sampling method, geography, date, uncertainty and maintenance plan are documented.
+5. No feature is approved by this watchlist alone; apply VALUE-BEFORE-PUBLISHING.md before any visitor-facing change.
+
 ## Sources consulted
 
 Current 2026-11-02 search/product pages: RateLark, Freelero, FreelancerCalculator.com, FreelancerMetrics, WhatToCharge, RateClarity, FreelanceCalc.co, TakeHomeTools, Upwork, Rize, SellerGauge, FreelanceMargin, Tabby, RevenueLab, SEORCE and SaaSHub alternative listings.
