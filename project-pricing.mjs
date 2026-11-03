@@ -168,6 +168,8 @@ function calculate({ focusFirstError = false } = {}) {
 
 form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
+$("#hours-breakdown").addEventListener("input", () => { activeEstimateMode = "categories"; });
+$("#task-list").addEventListener("input", () => { activeEstimateMode = "tasks"; });
 currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values), lastResult.breakdown); });
 $("#add-task").addEventListener("click", () => {
   if (document.querySelectorAll("#task-list .task-row").length >= 30) {
