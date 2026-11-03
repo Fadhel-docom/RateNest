@@ -2,7 +2,7 @@
 
 Research date: 2026-11-02
 Owner: ChatGPT — publisher research, product value and distribution.
-Status: Research/value gate only. No embed implementation, publisher contact, paid placement, backlink agreement or public invitation is approved.
+Status: Publisher research/value gate complete; conditional GO for one narrow hourly-calculator pilot after the security verification gate. No embed implementation, publisher contact, paid placement, backlink agreement or public invitation is approved yet.
 Related technical review: docs/embed-feasibility-review-2026-11-02.md (Claude, PR #78 merged).
 Primary site: https://ratenest.pages.dev/
 
@@ -80,9 +80,10 @@ A smaller, highly relevant publisher is more valuable for the first pilot than a
 
 1. Claude's feasibility/security review is complete (PR #78 merged).
 2. ChatGPT's publisher-fit research is recorded here.
-3. If the value gate is accepted, Claude may make a small deny-by-default framing-header PR with a tested /embed/* exception, then build one fixed-height hourly prototype with formula-parity and privacy tests.
-4. Only after the prototype passes the technical checklist, prepare five tailored manual pilot invitations. No mass outreach, paid placements or automated messages.
-5. Review actual responses and public placements. If publishers see no clear reader benefit, stop embed work and prefer direct resource links or shareable calculator links.
+3. The deny-by-default framing policy is now merged in PR #81 (`_headers`: `frame-ancestors 'none'` and `X-Frame-Options: DENY` for all pages). Before any embed code, verify that Cloudflare actually sends both headers on the PR #81 branch preview for a normal page. This live check is still outstanding; a successful preview deployment and local header-emulation test do not prove the CDN response headers.
+4. Only after that check, implement the dedicated `/embed/hourly` page and its narrowly scoped framing exception together in one PR. Keep all ordinary pages denied. Test both the normal page (must refuse framing) and the embed page (must allow only the intended framing) from a separate origin on a Cloudflare preview.
+5. Only after the prototype passes the technical checklist, prepare five tailored manual pilot invitations. No mass outreach, paid placements or automated messages.
+6. Review actual responses and public placements. If publishers see no clear reader benefit, stop embed work and prefer direct resource links or shareable calculator links.
 
 Stop if the frame-header exception cannot be verified, visitor inputs leave the browser, formula parity fails, mobile/keyboard/accessibility issues remain, the value proposition depends on backlink promises, or a small qualified pilot finds no interest.
 
