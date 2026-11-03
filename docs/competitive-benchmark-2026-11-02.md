@@ -45,15 +45,21 @@
 
 Priorities reflect visitor value, evidence, effort and risk—not competitor count.
 
-### P0 — Strengthen the existing project quote workflow with an optional hours breakdown
+### P0 — Optional project-hours breakdown — completed (PR #73)
 
-**Evidence:** TNAADO separates production, meetings, revisions and admin/project management. The 2026-10-31 scan also observed task-level estimates and contingency/deposit concepts on FreeToolCabin and itemized quote flows on other pages.
+**Evidence:** TNAADO separates production, meetings, revisions and admin/project management. RateNest now offers five optional categories: discovery/planning, production/delivery, meetings/communication, revisions/QA, and project management/admin.
 
-**Current gap:** RateNest accepts one total estimated-hours number. Users may omit discovery, calls, project management, feedback rounds and revisions.
+**Delivered:** category values can be summed into the existing estimated-hours field; blank categories count as zero; no default hours or silent inflation; simple total-hours mode remains available. The copied quote includes category details only when their sum still matches the total.
 
-**Proposed improvement:** Add optional categories: discovery/planning, production, meetings/communication, revisions/QA and project management. Sum them into the existing estimated-hours calculation. Preserve simple total-hours mode. No default hours or silent inflation; categories are prompts, not universal percentages.
+**Verification boundary:** unit/static checks are documented in PR #73. Do not claim a live mobile/keyboard audit unless separately tested.
 
-**Acceptance:** category sum equals total; empty categories equal zero; no hidden double counting; copy summary includes breakdown only when used; tests cover decimals, zero, maximums and rounding; mobile/keyboard checks.
+### P1 — Custom task-level estimate list — in progress (branch `feature/custom-project-task-estimator-20261103-v2`)
+
+**Evidence:** A fixed category list helps users remember broad work types, but some projects need deliverable-specific estimates such as design homepage, build checkout, mobile QA, or client handover.
+
+**Proposed improvement:** allow up to 30 user-named tasks, each with a non-negative hour estimate. Blank rows are ignored; partially completed rows are rejected; the sum is applied to the existing total-hours field. This is an alternative to the five-category breakdown, never an additional charge or automatic buffer.
+
+**Acceptance:** decimal sums and limits tested; no double counting with the category breakdown; copied and printable quote show task names only when the task sum matches the current total; accessible labels, remove controls and responsive mobile layout; existing total-hours workflow and quote math unchanged.
 
 ### P1 — Client-ready project quote output without an account
 
@@ -67,7 +73,7 @@ Priorities reflect visitor value, evidence, effort and risk—not competitor cou
 
 ### P1 — Make project estimates harder to undercount
 
-After P0, consider a lightweight task/phase list or editable line items. Do not build a full proposal/CRM system.
+The broad category prompts are complete in PR #73. The next incremental improvement is the custom task-level estimate list described above. Do not build a full proposal/CRM system or add default time estimates.
 
 ### P2 — Optional fee and payout-cost modelling
 
