@@ -1,3 +1,16 @@
+## 2026-11-03 — ChatGPT: إعادة تأسيس تصحيح دقة العملات على أحدث main
+- الحاجة: RateNest يتيح اختيار TND، لكن formatter في الصفحة الرئيسية وحاسبتي المشروع والاشتراك كان يفرض منزلتين عشريتين، بينما TND يتطلب ثلاث منازل لعرض أصغر وحداته بدقة.
+- ما أُنجز: يستخرج formatCurrency الآن عدد المنازل من Intl.NumberFormat لكل عملة؛ حافظت على compact whole-number output، ووحّدت الشاشة والطباعة في حاسبتي المشروع والاشتراك على formatter المشترك.
+- الاختبارات: أضيفت حالات TND بثلاث منازل، USD بمنزلتين، TND compact، وحارسان ثابتان لمساري الشاشة والطباعة في الحاسبتين.
+- الملفات/الفرع: calculator.mjs, calculator.test.mjs, project-pricing.mjs, retainer-pricing.mjs, scripts/check-site.mjs؛ الفرع fix/currency-minor-units-20261103-current-main؛ PR #102.
+- التحقق: أُنشئ PR #102 فوق أحدث main بعد دمج PR #96 وPR #100؛ ينتظر GitHub Actions على الرأس النهائي. لا اختبار متصفح/هاتف أو طباعة فعلية بعد.
+- النطاق: تنسيق عرض فقط؛ لا تغيير في الحسابات الداخلية أو القيم الافتراضية أو قائمة العملات أو البيانات أو SEO أو الشبكة.
+- المتبقي: CI ومراجعة دقة العملات الست المدعومة في الشاشة والنسخ والطباعة.
+- تسليم إلى Claude: راجع PR #102 بعد CI وتأكد من TND/ USD/ EUR/ GBP/ CAD/ AUD في كل مسارات العرض النقدي.
+- ما لم أستطع إنجازه: لا متصفح حي أو Android print preview في هذه الجلسة.
+- نصيحة: لا تفرض منزلتين على كل العملات؛ استخدم precision حسب العملة ولا تقرّب الحسابات الداخلية لأجل العرض.
+- المالك مطلوب منه إجراء؟ لا شيء.
+
 ## 2026-11-03 — ChatGPT: متابعة PR #96 ومراجعة دقة العملات في PR #95
 - ما حدث: دُمج PR #96 (نسخة الطباعة/الحفظ PDF لتقدير retainer) في `main` بالالتزام `a34590fa7c44bd752a49abc7c6861f5f28721237`. نجح GitHub Actions #323 (Unit tests وStatic site checks)، ونجح GitHub Pages deployment workflow #89.
 - حدود التحقق: Cloudflare Pages check على commit الإنتاج `a34590f` ظل `in_progress` عند آخر فحص؛ لم أختبر Android Print / Save as PDF أو العرض الحي. نشر GitHub Pages الاحتياطي لا يثبت اكتمال Cloudflare الأساسي.
