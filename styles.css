@@ -91,6 +91,7 @@ a:focus-visible,summary:focus-visible{outline:3px solid #176b50;outline-offset:3
   .result-card *{color:#172b25!important}
   .result-top,.copy-button,.copy-status,.internal-stat,#actual-hours-note,.result-tip{display:none!important}
   .print-only{display:block!important}
+  .result-stat.print-only{display:flex!important}
   .quote-document-heading{margin:0 0 20pt;padding-bottom:12pt;border-bottom:2px solid #176b50}
   .quote-document-heading .eyebrow{margin-bottom:4pt}
   .quote-document-heading h2{font-size:22pt;margin:0;overflow-wrap:anywhere}
