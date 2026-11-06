@@ -39,19 +39,19 @@ export function sumProjectHoursBreakdown(raw = {}) {
   return { total: Number(total.toFixed(6)), values };
 }
 
-// Whole cents, matching how the page displays every currency (two decimals). Going through toPrecision(15)
+// Whole minor units of the selected currency (cents for USD/EUR, millimes for TND). Going through toPrecision(15)
 // removes binary noise such as 1.005 * 100 = 100.49999999999999 before rounding.
-function toCents(amount) {
-  return Math.round(Number((amount * 100).toPrecision(15)));
+function toMinorUnits(amount, scale) {
+  return Math.round(Number((amount * scale).toPrecision(15)));
 }
 
 /**
  * Optional user-entered payout fees, model "combined percentage on the client-paid quote + one fixed fee".
  * gross = ceil((target + fixedFee) / (1 - p)); percentageFee = round(gross * p); remaining = gross - percentageFee - fixedFee.
- * Everything is done in integer cents (BigInt for the gross-up), so the remaining amount is never below the
- * target (and at most one cent above it). Both fields blank/zero returns null and the quote is untouched.
+ * Everything is done in integer minor units of the selected currency (BigInt for the gross-up; default 2 digits, 3 for
+ * TND), so the remaining amount is never below the target and at most one minor unit above it. Both fields blank/zero returns null and the quote is untouched.
  */
-export function applyPayoutFees(targetQuote, { feePercent = 0, fixedFee = 0 } = {}) {
+export function applyPayoutFees(targetQuote, { feePercent = 0, fixedFee = 0, minorUnits = 2 } = {}) {
   const target = finiteNumber(targetQuote, "targetQuote");
   const percent = finiteNumber(feePercent, "feePercent");
   const fixed = finiteNumber(fixedFee, "fixedFee");
@@ -59,9 +59,11 @@ export function applyPayoutFees(targetQuote, { feePercent = 0, fixedFee = 0 } = 
   if (Math.abs(percent * 1000 - Math.round(percent * 1000)) > 1e-9) throw new RangeError("feePercent can have at most 3 decimal places");
   if (fixed < 0 || fixed > MAX_FIXED_FEE) throw new RangeError("fixedFee must be between 0 and 1,000,000,000");
   if (target < 0) throw new RangeError("targetQuote cannot be negative");
+  if (!Number.isInteger(minorUnits) || minorUnits < 0 || minorUnits > 3) throw new RangeError("minorUnits must be a whole number from 0 to 3");
   if (percent === 0 && fixed === 0) return null;
-  const targetCents = toCents(target);
-  const fixedCents = toCents(fixed);
+  const scale = 10 ** minorUnits;
+  const targetCents = toMinorUnits(target, scale);
+  const fixedCents = toMinorUnits(fixed, scale);
   if (!Number.isSafeInteger(targetCents) || !Number.isSafeInteger(targetCents + fixedCents)) throw new RangeError("The result is too large to apply fees safely");
   const p = BigInt(Math.round(percent * 1000)); // percent in thousandths of a percent: p / 100000 is the fee rate
   const denominator = 100000n - p;
@@ -71,16 +73,16 @@ export function applyPayoutFees(targetQuote, { feePercent = 0, fixedFee = 0 } = 
   if (gross > BigInt(Number.MAX_SAFE_INTEGER)) throw new RangeError("The result is too large to apply fees safely");
   return {
     feePercent: percent,
-    quoteBeforeFees: targetCents / 100,
-    grossQuote: Number(gross) / 100,
-    percentageFee: Number(percentageFee) / 100,
-    fixedFee: fixedCents / 100,
-    totalDeductions: Number(percentageFee + BigInt(fixedCents)) / 100,
-    estimatedRemaining: Number(remaining) / 100
+    quoteBeforeFees: targetCents / scale,
+    grossQuote: Number(gross) / scale,
+    percentageFee: Number(percentageFee) / scale,
+    fixedFee: fixedCents / scale,
+    totalDeductions: Number(percentageFee + BigInt(fixedCents)) / scale,
+    estimatedRemaining: Number(remaining) / scale
   };
 }
 
-export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0, actualHours = null, feePercent = 0, fixedFee = 0 }) {
+export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpenses = 0, bufferPercent = 0, actualHours = null, feePercent = 0, fixedFee = 0, minorUnits = 2 }) {
   const hours = finiteNumber(estimatedHours, "estimatedHours");
   const rate = finiteNumber(hourlyRate, "hourlyRate");
   const expenses = finiteNumber(directExpenses, "directExpenses");
@@ -92,7 +94,7 @@ export function calculateProjectQuote({ estimatedHours, hourlyRate, directExpens
   const labour = hours * rate;
   const uncertaintyAllowance = labour * buffer / 100;
   const quoteBeforeFees = labour + uncertaintyAllowance + expenses;
-  const fees = applyPayoutFees(quoteBeforeFees, { feePercent, fixedFee });
+  const fees = applyPayoutFees(quoteBeforeFees, { feePercent, fixedFee, minorUnits });
   // With fees, the client pays the grossed-up quote but the freelancer keeps about quoteBeforeFees,
   // so the effective hourly rates are based on the amount remaining after the entered fees.
   const quote = fees ? fees.grossQuote : quoteBeforeFees;

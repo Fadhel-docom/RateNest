@@ -39,3 +39,7 @@ UI wording (binding): percentage field "Percentage fee on the client-paid quote 
 Printed client sheet: shows the client-paid quote, the percentage-fee line and the fixed-fee line so the lines reconcile with the total (to within 1 cent of rounding); the amount remaining stays internal.
 
 Not covered (unchanged exclusions): providers, taxes, FX, recommending a payment service, analytics, storage.
+
+### Update 2026-11-06 — rounding unit follows the currency
+
+The locked model above was written in cents. Since PR #102 the pages display each currency with its own minor-unit digits (TND three, USD/EUR/GBP/CAD/AUD two), so the fee arithmetic now uses the same unit: `minorUnits` comes from `Intl` (`currencyMinorUnits`) and defaults to 2 when omitted. Every statement above holds with "cent" read as "one minor unit of the selected currency": the gross is rounded up to one minor unit, the percentage fee to the nearest one, and the amount remaining is never below the target and at most one minor unit above it (checked for 0, 2 and 3 digits). TND hand case: target 1,350.000, 10%, fixed 5.000 gives a gross of 1,505.556, a percentage fee of 150.556 and 1,350.000 remaining. Changing the currency recomputes the quote with the new unit.

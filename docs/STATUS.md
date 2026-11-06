@@ -1,3 +1,6 @@
+## 2026-11-06 — Claude: رسوم الدفع تتبع خانات العملة (PR #110)
+- أُضيف `currencyMinorUnits` ومعامل `minorUnits` (0–3) فصار تقريب نموذج الرسوم بوحدة العملة المختارة (TND ثلاث خانات: 1,505.556 / 150.556 / 1,350.000). محليًا: unit 81/81، static ناجح، Chromium project 160 / retainer 98 / behaviour 44 / phase2 13 / regression 6 / frame-headers 9. لم يُتحقق: النطاق الحي، window.print الأصلي.
+
 ## 2026-11-06 — Claude: اختبار retainer PDF/TND وإصلاح تخطيط الطباعة (PR #109)
 - اختُبرت طباعة الـretainer وTND فعليًا في Chromium (print emulation) عند 320/375/1280px وقُرئ PDF الناتج؛ وُجد عيب تخطيط («Reserved hours per month20» ملتصق) سببه `.print-only{display:block!important}` فأُصلح بـ`.result-stat.print-only{display:flex!important}` مع حارس ثابت و36 فحصًا جديدًا (retainer 98/98). محليًا: unit 74/74، static ناجح، project 142 / behaviour 44 / phase2 13 / regression 6 / frame-headers 9، وصولية بلا إخفاقات. لم يُتحقق: window.print() الأصلي وSave as PDF على أجهزة حقيقية، النطاق الحي.
 - متبقٍ: `applyPayoutFees` يقرّب بالسنت بينما TND ثلاث خانات؛ إصلاح `minorUnits` في PR منفصل.

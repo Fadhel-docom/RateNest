@@ -119,11 +119,21 @@ export function billableScenarios(values, percents = [40, 60, 80]) {
  * Format an amount as currency; falls back to "CODE 0.00" if the currency or locale is unsupported.
  * With `compact: true`, whole amounts drop the cents (e.g. $66,000) while fractional amounts keep them.
  */
+/** Number of minor-unit digits Intl uses for a currency (USD 2, TND 3, JPY 0). Falls back to 2 for an unknown code. */
+export function currencyMinorUnits(currency, locale = "en-US") {
+  try {
+    const digits = new Intl.NumberFormat(locale, { style: "currency", currency }).resolvedOptions().maximumFractionDigits;
+    return Number.isInteger(digits) && digits >= 0 && digits <= 3 ? digits : 2;
+  } catch {
+    return 2;
+  }
+}
+
 export function formatCurrency(value, currency, locale, { compact = false } = {}) {
   if (typeof value !== "number" || !Number.isFinite(value)) return "—";
   try {
     const wholeOnly = compact && Number.isInteger(value);
-    const currencyDigits = new Intl.NumberFormat(locale, { style: "currency", currency }).resolvedOptions().maximumFractionDigits;
+    const currencyDigits = currencyMinorUnits(currency, locale);
     return new Intl.NumberFormat(locale, {
       style: "currency",
       currency,
