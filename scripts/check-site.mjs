@@ -59,6 +59,7 @@ const catchAll = /^\/\*\s*\n((?:[ \t]+.*\n?)+)/m.exec(headersFile)?.[1] ?? "";
 check("_headers denies framing on every page by default (frame-ancestors 'none' and X-Frame-Options DENY)", /Content-Security-Policy:\s*frame-ancestors 'none'\s*$/m.test(catchAll) && /X-Frame-Options:\s*DENY\s*$/m.test(catchAll));
 check("_headers framing policy sets only frame-ancestors and has no embed exception without an embed page", !/Content-Security-Policy:[^\n]*(?:script-src|default-src|style-src)/i.test(headersFile) && !/\/embed\//.test(headersFile.replace(/^\s*#.*$/gm, "")));
 check("_headers keeps noindex for internal paths", ["/docs/*", "/scripts/*", "/tools/*", "/.github/*"].every((p) => new RegExp(`^${p.replace(/[*.]/g, "\\$&")}\\s*\\n\\s+X-Robots-Tag: noindex, nofollow`, "m").test(headersFile)));
+check("print CSS keeps flex layout for print-only result rows (reserved-hours row must not collapse into its label)", /\.result-stat\.print-only\{display:flex!important\}/.test(projectCss));
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
 const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));
