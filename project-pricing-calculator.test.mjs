@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { currencyMinorUnits } from "./calculator.mjs";
 import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, applyPayoutFees } from "./project-pricing-calculator.mjs";
 
 test("calculates labour, labour-only uncertainty allowance, expenses, and quote", () => {
@@ -229,4 +230,63 @@ test("fee fields validate as form strings: blank is zero, decimals limited, boun
   assert.match(validateProjectQuote({ estimatedHours: "20", hourlyRate: "60", feePercent: "51" }).errors.feePercent, /at most 50%/);
   assert.match(validateProjectQuote({ estimatedHours: "20", hourlyRate: "60", feePercent: "abc" }).errors.feePercent, /valid number/);
   assert.match(validateProjectQuote({ estimatedHours: "20", hourlyRate: "60", fixedFee: "2000000000" }).errors.fixedFee, /at most/);
+});
+
+// --- Payout fees follow the minor units of the selected currency (TND has three digits) ---
+test("currencyMinorUnits reads Intl: USD/EUR 2, TND 3, JPY 0, unknown code falls back to 2", () => {
+  assert.equal(currencyMinorUnits("USD"), 2);
+  assert.equal(currencyMinorUnits("EUR"), 2);
+  assert.equal(currencyMinorUnits("TND"), 3);
+  assert.equal(currencyMinorUnits("JPY"), 0);
+  assert.equal(currencyMinorUnits("NOT-A-CURRENCY"), 2);
+});
+
+test("TND hand case: target 1350, 10% and fixed 5 give gross 1505.556 and leave exactly 1350.000", () => {
+  const fees = applyPayoutFees(1350, { feePercent: 10, fixedFee: 5, minorUnits: 3 });
+  assert.deepEqual(fees, { feePercent: 10, quoteBeforeFees: 1350, grossQuote: 1505.556, percentageFee: 150.556, fixedFee: 5, totalDeductions: 155.556, estimatedRemaining: 1350 });
+  const result = calculateProjectQuote({ ...base, feePercent: 10, fixedFee: 5, minorUnits: 3 });
+  assert.equal(result.quote, 1505.556);
+  assert.equal(result.fees.estimatedRemaining, 1350);
+});
+
+test("omitting minorUnits keeps the two-digit behaviour exactly", () => {
+  assert.deepEqual(applyPayoutFees(1350, { feePercent: 10, fixedFee: 5 }), applyPayoutFees(1350, { feePercent: 10, fixedFee: 5, minorUnits: 2 }));
+  assert.equal(applyPayoutFees(1350, { feePercent: 10, fixedFee: 5 }).grossQuote, 1505.56);
+});
+
+test("whole-unit currencies (0 digits) round the gross up to a whole number and never leave less than the target", () => {
+  const fees = applyPayoutFees(1350, { feePercent: 10, fixedFee: 5, minorUnits: 0 });
+  assert.equal(fees.grossQuote, 1506);
+  assert.equal(fees.percentageFee, 151);
+  assert.equal(fees.estimatedRemaining, 1350);
+});
+
+test("for 0, 2 and 3 minor-unit digits the amount remaining is never below the target and at most one minor unit above it", () => {
+  let seed = 987654;
+  const rand = () => (seed = (seed * 1103515245 + 12345) % 2147483648) / 2147483648;
+  for (const digits of [0, 2, 3]) {
+    const scale = 10 ** digits;
+    for (let i = 0; i < 8000; i++) {
+      const target = Math.round(rand() * 5e6 * scale / 100) / scale;
+      const percent = Math.round(rand() * 50000) / 1000;
+      const fixed = Math.round(rand() * 1e4 * scale / 100) / scale;
+      const fees = applyPayoutFees(target, { feePercent: percent, fixedFee: fixed, minorUnits: digits });
+      if (!fees) continue;
+      const units = (x) => Math.round(x * scale);
+      assert.ok(units(fees.estimatedRemaining) >= units(target), `below target: ${digits} digits ${target} ${percent}% ${fixed}`);
+      assert.ok(units(fees.estimatedRemaining) - units(target) <= 1, `more than 1 unit above: ${digits} digits ${target} ${percent}% ${fixed}`);
+      assert.equal(units(fees.grossQuote) - units(fees.percentageFee) - units(fees.fixedFee), units(fees.estimatedRemaining));
+    }
+  }
+});
+
+test("minorUnits must be a whole number from 0 to 3", () => {
+  for (const bad of [-1, 4, 2.5, "3", NaN]) assert.throws(() => applyPayoutFees(100, { feePercent: 5, minorUnits: bad }), RangeError);
+});
+
+test("effective hourly rates stay equal to the fee-free result for TND too", () => {
+  const plain = calculateProjectQuote({ ...base, actualHours: 30 });
+  const tnd = calculateProjectQuote({ ...base, actualHours: 30, feePercent: 10, fixedFee: 5, minorUnits: 3 });
+  assert.equal(tnd.effectiveHourlyRate, plain.effectiveHourlyRate);
+  assert.equal(tnd.actualUsage.effectiveHourlyRate, plain.actualUsage.effectiveHourlyRate);
 });

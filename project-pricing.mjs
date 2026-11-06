@@ -1,11 +1,13 @@
 import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
-import { formatCurrency } from "./calculator.mjs";
+import { formatCurrency, currencyMinorUnits } from "./calculator.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
 const currency = $("#currency");
 const outputIds = ["labour-total", "buffer-total", "expenses-total", "quote-total", "effective-rate", "actual-effective-rate"];
 let lastResult = null;
+// Fee rounding follows the minor units of the selected currency (TND uses three digits), so the quote is recomputed with it.
+const quoteFor = (values) => calculateProjectQuote({ ...values, minorUnits: currencyMinorUnits(currency.value) });
 
 function money(value) {
   return formatCurrency(value, currency.value, "en-US");
@@ -120,15 +122,15 @@ function calculate({ focusFirstError = false } = {}) {
     return;
   }
   try {
-    render(checked.values, calculateProjectQuote(checked.values), readBreakdown());
+    render(checked.values, quoteFor(checked.values), readBreakdown());
   } catch (error) {
     clearResult();
     // Work out which input made the result unusable: the base quote, the entered fees, or the actual hours.
     let errorField = "estimatedHours";
     const withoutActual = { ...checked.values, actualHours: null };
     try {
-      calculateProjectQuote({ ...withoutActual, feePercent: 0, fixedFee: 0 });
-      try { calculateProjectQuote(withoutActual); errorField = "actualHours"; }
+      quoteFor({ ...withoutActual, feePercent: 0, fixedFee: 0 });
+      try { quoteFor(withoutActual); errorField = "actualHours"; }
       catch { errorField = "feePercent"; }
     } catch { /* The base quote itself is invalid/too large; keep the estimated-hours fallback. */ }
     $(`#${errorField}-error`).textContent = error.message;
@@ -140,7 +142,7 @@ function calculate({ focusFirstError = false } = {}) {
 
 form.addEventListener("submit", (event) => { event.preventDefault(); calculate({ focusFirstError: true }); });
 form.addEventListener("input", () => { calculate(); });
-currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, calculateProjectQuote(lastResult.values), lastResult.breakdown); });
+currency.addEventListener("change", () => { if (lastResult) render(lastResult.values, quoteFor(lastResult.values), lastResult.breakdown); });
 $("#apply-hours-breakdown").addEventListener("click", () => {
   const status = $("#breakdown-status");
   try {

@@ -24,7 +24,7 @@ const check = (label, condition) => {
 
 check("measurement protocol exists and distinguishes search visibility from actual tool use", measurementExists && measurement.includes("completed calculator use") && measurement.includes("actual-use totals are **unknown**"));
 check("measurement protocol prohibits unapproved tracking and defines a fixed answer-engine prompt sample", measurement.includes("No analytics") && measurement.includes("Fixed prompt set") && measurement.includes("12. Which freelance pricing calculators"));
-check("project quote screen and printable quote use the shared currency-aware formatter", projectScript.includes('import { formatCurrency } from "./calculator.mjs";') && projectScript.includes('formatCurrency(value, currency.value, "en-US")') && projectScript.includes('formatCurrency(value, code, "en-US")'));
+check("project quote screen and printable quote use the shared currency-aware formatter", projectScript.includes('import { formatCurrency, currencyMinorUnits } from "./calculator.mjs";') && projectScript.includes('formatCurrency(value, currency.value, "en-US")') && projectScript.includes('formatCurrency(value, code, "en-US")'));
 check("retainer screen and printable retainer use the shared currency-aware formatter", retainerScript.includes('import { formatCurrency } from "./calculator.mjs";') && retainerScript.includes('formatCurrency(value, code, "en-US")'));
 
 const title = /<title>([^<]*)<\/title>/i.exec(html)?.[1] ?? "";
@@ -60,6 +60,7 @@ check("_headers denies framing on every page by default (frame-ancestors 'none' 
 check("_headers framing policy sets only frame-ancestors and has no embed exception without an embed page", !/Content-Security-Policy:[^\n]*(?:script-src|default-src|style-src)/i.test(headersFile) && !/\/embed\//.test(headersFile.replace(/^\s*#.*$/gm, "")));
 check("_headers keeps noindex for internal paths", ["/docs/*", "/scripts/*", "/tools/*", "/.github/*"].every((p) => new RegExp(`^${p.replace(/[*.]/g, "\\$&")}\\s*\\n\\s+X-Robots-Tag: noindex, nofollow`, "m").test(headersFile)));
 check("print CSS keeps flex layout for print-only result rows (reserved-hours row must not collapse into its label)", /\.result-stat\.print-only\{display:flex!important\}/.test(projectCss));
+check("project quote passes the selected currency's minor units to the fee calculation (the only calculateProjectQuote call is the helper)", projectScript.includes("currencyMinorUnits(currency.value)") && (projectScript.match(/calculateProjectQuote\(/g) ?? []).length === 1);
 const projectIds = [...projectHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
 check("project quote page element ids are unique", new Set(projectIds).size === projectIds.length);
 const projectAriaRefs = [...projectHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/));

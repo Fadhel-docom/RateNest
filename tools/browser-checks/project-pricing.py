@@ -183,6 +183,23 @@ try:
         pg.evaluate("document.getElementById('payout-fees').open = true"); pg.fill("#feePercent", "80"); pg.click(".calculate-button"); pg.wait_for_timeout(150)
         ok("fees: submitting with an invalid fee moves focus to that field", pg.evaluate("document.activeElement.id") == "feePercent")
         ctx.close()
+        # Payout fees in TND: three minor-unit digits (the gross-up is rounded to the millime, not the cent).
+        for w in (320, 375, 1280):
+            ctx = b.new_context(viewport={"width": w, "height": 900}); pg = ctx.new_page(); errs = []
+            pg.on("pageerror", lambda e: errs.append(str(e))); pg.on("console", lambda m: errs.append(m.text) if m.type in ("error", "warning") else None)
+            pg.goto(URL); pg.wait_for_timeout(400); t = f"[{w}px] TND fees: "; N = "\u00a0"
+            pg.select_option("#currency", "TND"); pg.wait_for_timeout(200)
+            ok(t + "no fees: quote and effective rate use three decimals", pg.inner_text("#quote-total") == f"TND{N}1,350.000" and pg.inner_text("#effective-rate") == f"TND{N}67.500/hr", pg.inner_text("#quote-total"))
+            pg.evaluate("document.getElementById('payout-fees').open = true"); pg.fill("#feePercent", "10"); pg.fill("#fixedFee", "5"); pg.wait_for_timeout(200)
+            got = (pg.inner_text("#quote-total"), pg.inner_text("#pct-fee-total"), pg.inner_text("#fixed-fee-total"), pg.inner_text("#remaining-total"))
+            ok(t + "10% + 5.000: client quote 1,505.556, fees 150.556 and 5.000, remaining 1,350.000", got == (f"TND{N}1,505.556", f"TND{N}150.556", f"TND{N}5.000", f"TND{N}1,350.000"), str(got))
+            pg.select_option("#currency", "USD"); pg.wait_for_timeout(200)
+            ok(t + "switching to USD recomputes at two decimals ($1,505.56)", pg.inner_text("#quote-total") == "$1,505.56" and pg.inner_text("#remaining-total") == "$1,350.00", pg.inner_text("#quote-total"))
+            pg.select_option("#currency", "TND"); pg.wait_for_timeout(200)
+            ok(t + "switching back to TND recomputes at three decimals", pg.inner_text("#quote-total") == f"TND{N}1,505.556" and pg.inner_text("#remaining-total") == f"TND{N}1,350.000", pg.inner_text("#quote-total"))
+            pg.emulate_media(media="print")
+            ok(t + "PRINT: client sheet shows the three-decimal quote and fee lines", pg.inner_text("#quote-total") == f"TND{N}1,505.556" and pg.inner_text("#pct-fee-total") == f"TND{N}150.556")
+            ok(t + "no console errors/warnings", not errs, str(errs)); ctx.close()
         b.close()
 finally: srv.terminate()
 for n, c, d in r: print(("PASS" if c else "FAIL"), n, (f"[{d}]" if d else ""))
