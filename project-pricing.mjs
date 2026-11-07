@@ -1,5 +1,6 @@
 import { calculateProjectQuote, validateProjectQuote, sumProjectHoursBreakdown, PROJECT_HOURS_CATEGORIES } from "./project-pricing-calculator.mjs";
 import { formatCurrency, currencyMinorUnits } from "./calculator.mjs";
+import { applyIncomingRate } from "./rate-handoff.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#project-form");
@@ -187,4 +188,6 @@ $("#copy-quote").addEventListener("click", async () => {
 function moneyFor(value, code) {
   return formatCurrency(value, code, "en-US");
 }
+// Opt-in hand-off from the hourly calculator (URL fragment only; nothing is sent or stored).
+applyIncomingRate({ hash: location.hash, rateInput: $("#hourlyRate"), currencySelect: currency, note: $("#hourlyRate-carried"), formatMoney: moneyFor });
 calculate();

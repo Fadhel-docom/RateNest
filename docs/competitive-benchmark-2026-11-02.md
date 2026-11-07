@@ -161,3 +161,20 @@ This is a follow-up page review, not a replacement for the curated 20-product be
 Current 2026-11-02 search/product pages: RateLark, Freelero, FreelancerCalculator.com, FreelancerMetrics, WhatToCharge, RateClarity, FreelanceCalc.co, TakeHomeTools, Upwork, Rize, SellerGauge, FreelanceMargin, Tabby, RevenueLab, SEORCE and SaaSHub alternative listings.
 
 Prior 20-page opened scan: docs/chatgpt-review-competitor-scan-20261031.md (2026-10-31), including Calcometry, FreeToolCabin, Hollinlabs, TNAADO, SupaBook, Rize, RateClarity, FreelancerRateKit, MoneySheet, SellerGauge, Vintayz, Kettlehour, CalcoTools, FreelanceMargin and GetRateWorth.
+
+## 8. Rate hand-off check — 2026-11-07
+
+**Visitor question:** "I just calculated my hourly rate — how do I use it in a project quote or a retainer without retyping it?"
+
+**Pages opened on 2026-11-07** (text only; no interactive testing, no network inspection): [freelancepricing-gh.pages.dev/freelance-rate-calculator](https://freelancepricing-gh.pages.dev/freelance-rate-calculator), [freelancekit.it.com hourly-rate-calculator](https://freelancekit.it.com/tools/hourly-rate-calculator), [everhour.com freelance-rate-calculator](https://everhour.com/calculators/freelance-rate-calculator).
+
+| Page | Observed (page text) | Limit |
+|---|---|---|
+| freelancepricing-gh.pages.dev | One calculator computes hourly, day, project and retainer from the same inputs; separate day/project/retainer calculators are linked as related tools; states calculations run in the browser and no data is stored or transmitted. | The text shows no "use this rate" step between the separate calculators; this is not proof that none exists. |
+| freelancekit.it.com | Result page links to other tools (day rate, salary-to-rate, invoice generator); says "no-signup tools". | No statement that the computed rate is passed on; privacy policy contents not seen. |
+| everhour.com | Calculator with links to other calculators and Everhour sign-up buttons. | No statement about passing the rate on; no privacy statement about inputs found. |
+
+**Not verified this cycle:** RateClarity, Freelero and RateLark could not be opened (the session's fetch allowlist refused them), so this check covers **3** pages, not 20. No claim is made about those three.
+
+**Decision (value gate):** the observed pattern is "separate tools linked as related pages" or "one combined form". RateNest's differentiator is an **opt-in, privacy-preserving hand-off** between its separate calculators: one click carries the rate the visitor would quote (base rate, or base plus their own entered fee and buffer) into the project or retainer calculator, in the URL fragment only, never stored or sent, editable on arrival. Implemented in the rate hand-off PR; no market data, tool count or ranking claim is made.
+

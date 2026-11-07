@@ -79,7 +79,8 @@
         </details>
         <div class="field">
           <label for="hourlyRate">Hourly rate to use <span class="required" aria-hidden="true">*</span></label>
-          <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a>. This value is not imported automatically.</p>
+          <p class="field-help" id="hourlyRate-help">Use your own rate, or calculate one with the <a href="./">hourly rate calculator</a> and follow its “at this rate” link to bring the result here. Nothing is imported unless you click that link.</p>
+          <p class="field-help rate-carried" id="hourlyRate-carried" role="status" hidden></p>
           <input id="hourlyRate" name="hourlyRate" type="number" min="0" max="1000000000" step="any" value="60" required inputmode="decimal" aria-describedby="hourlyRate-help hourlyRate-error">
           <p class="field-error" id="hourlyRate-error" hidden></p>
         </div>
