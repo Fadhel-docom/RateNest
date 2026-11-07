@@ -1,5 +1,6 @@
 import { calculateRetainer, validateRetainer } from "./retainer-pricing-calculator.mjs";
 import { formatCurrency } from "./calculator.mjs";
+import { applyIncomingRate } from "./rate-handoff.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#retainer-form");
@@ -137,4 +138,6 @@ $("#copy-retainer").addEventListener("click", async () => {
     $("#copy-status").textContent = "Copy is unavailable in this browser. Select and copy the result details manually.";
   }
 });
+// Opt-in hand-off from the hourly calculator (URL fragment only; nothing is sent or stored).
+applyIncomingRate({ hash: location.hash, rateInput: $("#hourlyRate"), currencySelect: currency, note: $("#hourlyRate-carried"), formatMoney: moneyFor });
 calculate();

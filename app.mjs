@@ -8,8 +8,10 @@ import {
   billableScenarios,
   formulaSteps,
   formatCurrency,
-  formatNumber
+  formatNumber,
+  currencyMinorUnits
 } from "./calculator.mjs";
+import { buildRateHandoff } from "./rate-handoff.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const form = $("#rate-form");
@@ -34,6 +36,11 @@ const adjustedBlock = $("#adjusted-block");
 const adjustedRate = $("#adjusted-rate");
 const bufferAmount = $("#buffer-amount");
 const feeAmount = $("#fee-amount");
+const nextSteps = $("#next-steps");
+const nextProject = $("#next-project");
+const nextRetainer = $("#next-retainer");
+const NEXT_PROJECT_PLAIN = "Quote a fixed project at this rate →";
+const NEXT_RETAINER_PLAIN = "Price a monthly retainer at this rate →";
 
 // Maps calculator field names to the id of their input element.
 const FIELD_IDS = {
@@ -93,8 +100,28 @@ function setRate(text) {
   }
 }
 
+// Opt-in hand-off: the links carry the rate the visitor would quote (base rate, or base + their own fee and buffer)
+// in the URL fragment only. Without a valid result they fall back to the plain page links.
+function updateNextSteps(rate) {
+  const fragment = rate === null ? null : buildRateHandoff(rate, currency.value, currencyMinorUnits(currency.value));
+  if (fragment === null) {
+    nextProject.href = "./project-pricing.html";
+    nextRetainer.href = "./retainer-pricing.html";
+    nextProject.textContent = NEXT_PROJECT_PLAIN;
+    nextRetainer.textContent = NEXT_RETAINER_PLAIN;
+    nextSteps.hidden = rate === null;
+    return;
+  }
+  nextProject.href = `./project-pricing.html#${fragment}`;
+  nextRetainer.href = `./retainer-pricing.html#${fragment}`;
+  nextProject.textContent = `Quote a fixed project at ${money(rate)}/hr →`;
+  nextRetainer.textContent = `Price a monthly retainer at ${money(rate)}/hr →`;
+  nextSteps.hidden = false;
+}
+
 function renderEmpty() {
   lastValid = null;
+  updateNextSteps(null);
   setRate("—");
   rateResult.classList.add("is-empty");
   resultLabel.textContent = "YOUR SUGGESTED RATE";
@@ -160,6 +187,7 @@ function render(values, result, percents) {
     bufferAmount.textContent = `${money(adjustment.bufferPerHour)}/hr`;
     feeAmount.textContent = `${money(adjustment.feePerHour)}/hr`;
   }
+  updateNextSteps(adjustment.isAdjusted ? adjustment.adjustedRate : result.hourlyRate);
   renderSteps(values, result, adjustment, percents);
   renderScenarios(values);
   copyButton.disabled = false;
