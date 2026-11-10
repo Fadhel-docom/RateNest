@@ -1,3 +1,7 @@
+## 2026-11-10 — Claude: اختبار Chromium فعلي لإصلاح ملاحظة نقل المعدل (PR #112)
+- راجعت PR #112 المدمج (`0df37d7`) وأضفت 14 فحص Chromium إلى `tools/browser-checks/rate-handoff.py` (43 ← 57) للصفحتين project وretainer: نص التنبيه من احتساب الرسوم/الاحتياطي مرتين دون الإيحاء بأن الحاسبة تضيف رسومًا، واختفاء الملاحظة عند تغيير العملة، وبقاء المعدل وإعادة الحساب بالعملة الجديدة (€)، وعدم عودة الملاحظة بعد تعديل لاحق، وعودتها عند انتقال جديد من الرئيسية، وسلوك التعديل الأصلي دون تراجع، وعدم تجاوز أفقي عند 375px. لا تغيير في كود الإنتاج.
+- محليًا على `main` `88025f5`: `node --test` 92/92، `check-site.mjs` ناجح، Chromium: rate-handoff 57/57، project 160، retainer 98، behaviour 44، phase2 13، regression 6، frame-headers 9. لم يُتحقق: النطاق الحي وCloudflare، Safari/Firefox، قارئ الشاشة، window.print الأصلي.
+
 ## 2026-11-10 — ChatGPT: نتيجة دمج إصلاح نقل المعدل
 - PR #112 دُمج إلى main بالالتزام 0df37d7b4cbefd2019d78f5caa343cfd140c220f.
 - نجحت Unit tests وStatic site checks على فرع PR في GitHub Actions #42762092444.
