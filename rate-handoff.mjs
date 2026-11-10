@@ -46,11 +46,13 @@ export function applyIncomingRate({ hash, rateInput, currencySelect, note, forma
   if (incoming === null) return false;
   if (incoming.currency !== null) currencySelect.value = incoming.currency;
   rateInput.value = String(incoming.rate);
-  note.textContent = `Rate carried over from the hourly calculator: ${formatMoney(incoming.rate, currencySelect.value)}/hr. Edit it any time.`;
+  note.textContent = `Rate carried over from the hourly calculator: ${formatMoney(incoming.rate, currencySelect.value)}/hr. If you added a fee or buffer there, review any adjustments here to avoid double-counting. Edit it any time.`;
   note.hidden = false;
-  rateInput.addEventListener("input", () => {
+  const dismissNote = () => {
     note.hidden = true;
     note.textContent = "";
-  }, { once: true });
+  };
+  rateInput.addEventListener("input", dismissNote, { once: true });
+  currencySelect.addEventListener("change", dismissNote, { once: true });
   return true;
 }

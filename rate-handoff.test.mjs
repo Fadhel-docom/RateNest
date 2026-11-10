@@ -55,7 +55,11 @@ function fakeForm(options = CURRENCIES, initialCurrency = "USD") {
   const listeners = [];
   return {
     rateInput: { value: "60", addEventListener: (type, fn, opts) => listeners.push({ type, fn, opts }) },
-    currencySelect: { options: options.map((value) => ({ value })), value: initialCurrency },
+    currencySelect: {
+      options: options.map((value) => ({ value })),
+      value: initialCurrency,
+      addEventListener: (type, fn, opts) => listeners.push({ type, fn, opts })
+    },
     note: { hidden: true, textContent: "" },
     formatMoney: (value, code) => `${code} ${value}`,
     listeners
@@ -70,9 +74,26 @@ test("applyIncomingRate fills the rate and currency, shows a note, and hides it 
   assert.equal(form.currencySelect.value, "EUR");
   assert.equal(form.note.hidden, false);
   assert.match(form.note.textContent, /EUR 76\.39\/hr/);
-  assert.equal(form.listeners.length, 1);
-  assert.deepEqual(form.listeners[0].opts, { once: true });
+  assert.equal(form.listeners.length, 2);
+  assert.deepEqual(form.listeners.map(({ type, opts }) => ({ type, opts })), [
+    { type: "input", opts: { once: true } },
+    { type: "change", opts: { once: true } }
+  ]);
   form.listeners[0].fn();
+  assert.equal(form.note.hidden, true);
+  assert.equal(form.note.textContent, "");
+});
+
+
+test("applyIncomingRate hides the carried-rate note when the visitor changes currency", async () => {
+  const { applyIncomingRate } = await import("./rate-handoff.mjs");
+  const form = fakeForm();
+  assert.equal(applyIncomingRate({ hash: "#rate=76.39&currency=EUR", ...form }), true);
+  assert.equal(form.note.hidden, false);
+  form.currencySelect.value = "USD";
+  const change = form.listeners.find((listener) => listener.type === "change");
+  assert.ok(change);
+  change.fn();
   assert.equal(form.note.hidden, true);
   assert.equal(form.note.textContent, "");
 });
