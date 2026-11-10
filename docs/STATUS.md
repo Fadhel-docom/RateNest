@@ -1,3 +1,6 @@
+## 2026-11-10 — Claude: ترويسات Cloudflare الحية تطابق `_headers` (دليل من المالك)
+- فحص المالك عبر securityheaders.com لـ`/project-pricing` (2026-11-10 05:38:58 UTC، الدرجة B) أظهر `content-security-policy: frame-ancestors 'none'` و`x-frame-options: DENY` و`nosniff` و`strict-origin-when-cross-origin` على الإنتاج. لم تظهر HSTS وPermissions-Policy، ولم تُضَف (قرار موثق في الغرفة). تحقق شرط embed الخاص بالترويسات؛ بوابة قيمة الناشرين ما زالت قائمة ولا يبدأ embed. دليل خارجي من تقرير المالك، لا من جلسة مباشرة.
+
 ## 2026-11-10 — Claude: اختبار Chromium فعلي لإصلاح ملاحظة نقل المعدل (PR #112)
 - راجعت PR #112 المدمج (`0df37d7`) وأضفت 14 فحص Chromium إلى `tools/browser-checks/rate-handoff.py` (43 ← 57) للصفحتين project وretainer: نص التنبيه من احتساب الرسوم/الاحتياطي مرتين دون الإيحاء بأن الحاسبة تضيف رسومًا، واختفاء الملاحظة عند تغيير العملة، وبقاء المعدل وإعادة الحساب بالعملة الجديدة (€)، وعدم عودة الملاحظة بعد تعديل لاحق، وعودتها عند انتقال جديد من الرئيسية، وسلوك التعديل الأصلي دون تراجع، وعدم تجاوز أفقي عند 375px. لا تغيير في كود الإنتاج.
 - محليًا على `main` `88025f5`: `node --test` 92/92، `check-site.mjs` ناجح، Chromium: rate-handoff 57/57، project 160، retainer 98، behaviour 44، phase2 13، regression 6، frame-headers 9. لم يُتحقق: النطاق الحي وCloudflare، Safari/Firefox، قارئ الشاشة، window.print الأصلي.
