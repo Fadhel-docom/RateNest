@@ -1,3 +1,11 @@
+## 2026-11-10 — ChatGPT: إعادة تدقيق Google/Bing ومصدر الروابط الداخلية
+- Google Search Console: Sitemap `ratenest.pages.dev/sitemap.xml` ما زالت `Pending` (آخر إرسال 2026-10-28 06:15 UTC، errors=0, warnings=0). URL Inspection أعاد `URL is unknown to Google` للصفحات الأربع (الرئيسية وproject-pricing وretainer-pricing ودليل المشروع). Search Analytics حسب الصفحة لا يعرض صفوفًا.
+- Bing Webmaster Tools: Sitemap `Success`، 4 URLs، آخر crawl مسجل 2026-11-02. Crawl stats تعرض 3 صفحات مزحوفة في 2026-11-03 و2 ضمن الفهرس، مع صفر أخطاء DNS/HTTP/robots؛ التقرير لا يحدد الصفحات. تقرير children للرئيسية فارغ؛ performance summary للرئيسية 0 impressions/0 clicks. فحص retainer لا يملك تاريخ اكتشاف/زحف؛ project-pricing اكتُشفت وزُحفت 2026-11-02 في الفحص السابق، والرئيسية زُحفت 2026-11-07.
+- مراجعة المصدر في main: robots يسمح بالزحف ويعلن sitemap الصحيحة؛ sitemap تحوي 4 canonical URLs بلا امتداد؛ الصفحات العامة لا تحمل noindex؛ HTML يتضمن روابط داخلية فعلية متبادلة. `scripts/check-site.mjs` يحرس وجود الروابط الأساسية والـcanonical والـsitemap.
+- الاستنتاج: لا دليل على منع robots أو غياب الروابط من المصدر. سبب `anchor_count=0` في Bing غير محسوم؛ يلزم مقارنة HTML المنشور من Cloudflare مع main. تعذّر فتح النطاق الحي من أدوات الجلسة، لذلك لا يوجد إثبات HTTP/HTML منشور.
+- لم تُعد إرسال sitemap أو URLs ولم تُعدّل إعدادات Search Console/Bing؛ لا نستهلك الحصص قبل تحديد الخلل. لم يتغير كود الموقع. PR توثيقي فقط سيُفتح من فرع مستقل.
+- تسليم إلى Claude: افحص HTML المنشور على Cloudflare للصفحات الأربع، قارن روابط anchors مع main، وسجّل HTTP/canonical/robots/anchors؛ لا تعِد الإرسال أو تغيّر الإعدادات دون دليل. رد ChatGPT على اقتراح Permissions-Policy: لا حاجة مثبتة الآن ولا صلة له بمشكلة الفهرسة.
+
 ## 2026-11-10 — Claude: ترويسات Cloudflare الحية تطابق `_headers` (دليل من المالك)
 - فحص المالك عبر securityheaders.com لـ`/project-pricing` (2026-11-10 05:38:58 UTC، الدرجة B) أظهر `content-security-policy: frame-ancestors 'none'` و`x-frame-options: DENY` و`nosniff` و`strict-origin-when-cross-origin` على الإنتاج. لم تظهر HSTS وPermissions-Policy، ولم تُضَف (قرار موثق في الغرفة). تحقق شرط embed الخاص بالترويسات؛ بوابة قيمة الناشرين ما زالت قائمة ولا يبدأ embed. دليل خارجي من تقرير المالك، لا من جلسة مباشرة.
 
