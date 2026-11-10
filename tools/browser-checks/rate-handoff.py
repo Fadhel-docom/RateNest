@@ -63,6 +63,26 @@ try:
         ok("project: TND carried: currency select is TND and rate is 57.292", pg.input_value("#currency")=="TND" and pg.input_value("#hourlyRate")=="57.292", pg.input_value("#currency")+"/"+pg.input_value("#hourlyRate"))
         ok("project: TND quote uses three digits (20 h x 57.292 + 150 = 1,295.840)", "1,295.840" in pg.inner_text("#quote-total"), pg.inner_text("#quote-total"))
 
+        # --- note lifecycle (PR #112): the double-counting warning, and dismissal on rate OR currency change
+        for page_file, total_id, label in (("project-pricing.html","#quote-total","project"),("retainer-pricing.html","#retainer-total","retainer")):
+            pg.goto(base+"/index.html"); pg.wait_for_timeout(300)
+            pg.click("#next-project" if label=="project" else "#next-retainer"); pg.wait_for_url(f"**/{page_file}**"); pg.wait_for_timeout(400)
+            note=pg.inner_text("#hourlyRate-carried")
+            ok(f"{label}: note warns about double-counting a fee/buffer and does not claim the calculator adds fees", pg.is_visible("#hourlyRate-carried") and "double-counting" in note and "fee or buffer" in note, note)
+            pg.select_option("#currency","EUR"); pg.wait_for_timeout(250)
+            ok(f"{label}: changing the currency removes the carried-rate note", not pg.is_visible("#hourlyRate-carried") and pg.inner_text("#hourlyRate-carried")=="", repr(pg.inner_text("#hourlyRate-carried")))
+            ok(f"{label}: after the currency change the result is recomputed in the new currency and keeps the rate", pg.input_value("#hourlyRate")=="57.29" and pg.inner_text(total_id).startswith("€"), pg.input_value("#hourlyRate")+" "+pg.inner_text(total_id))
+            ok(f"{label}: no horizontal overflow at 375px after the note is removed", not overflow(pg))
+            # note stays gone, and editing the rate afterwards does not bring it back
+            pg.fill("#hourlyRate","65"); pg.wait_for_timeout(250)
+            ok(f"{label}: note does not reappear after a later rate edit", not pg.is_visible("#hourlyRate-carried"))
+            # a fresh visit from the home page shows the note again (the fragment is the only trigger)
+            pg.goto(base+"/index.html"); pg.wait_for_timeout(300)
+            pg.click("#next-project" if label=="project" else "#next-retainer"); pg.wait_for_url(f"**/{page_file}**"); pg.wait_for_timeout(400)
+            ok(f"{label}: a new hand-off shows the note again", pg.is_visible("#hourlyRate-carried"))
+            pg.fill("#hourlyRate","70"); pg.wait_for_timeout(250)
+            ok(f"{label}: editing the rate still removes the note (regression for the original behaviour)", not pg.is_visible("#hourlyRate-carried"))
+
         # --- tampered or hostile fragments fall back to the normal defaults
         for frag in ("#rate=abc","#rate=-5","#rate=0","#rate=60&currency=XXX","#rate=%3Cscript%3Ealert(1)%3C/script%3E","#rate=99999999999","#nothing"):
             for page,out,default in (("project-pricing.html","#quote-total","$1,350.00"),("retainer-pricing.html","#retainer-total","$1,200.00")):
