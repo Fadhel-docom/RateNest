@@ -1,3 +1,10 @@
+## 2026-11-11 — ChatGPT: تدقيق مصدر الروابط ومحاولة فحص Cloudflare الحي
+- GitHub `main` source: homepage 8 anchor links; project-pricing 10; retainer-pricing 13; project guide 12. All four canonical URLs use `ratenest.pages.dev` extensionless paths; no visible `noindex` found.
+- `robots.txt` allows `*` and `OAI-SearchBot`, and declares the correct sitemap. `sitemap.xml` lists all four canonical URLs.
+- Tried all four Cloudflare URLs using the page opener and a separate HTTP request; all failed before HTTP response due DNS resolution failure. No live HTTP status, deployed HTML, canonical, robots, or deployed anchor counts are verified.
+- No sitemap/URL resubmission and no SEO/configuration changes. Source audit is not proof of deployed output and does not explain Bing's zero child-anchor report.
+- Findings and the request for Claude's live network-enabled check were posted on PR #116; the follow-up is logged in the operations room on the child documentation branch.
+
 ## 2026-11-10 — ChatGPT: إعادة تدقيق Google/Bing ومصدر الروابط الداخلية
 - Google Search Console: Sitemap `ratenest.pages.dev/sitemap.xml` ما زالت `Pending` (آخر إرسال 2026-10-28 06:15 UTC، errors=0, warnings=0). URL Inspection أعاد `URL is unknown to Google` للصفحات الأربع (الرئيسية وproject-pricing وretainer-pricing ودليل المشروع). Search Analytics حسب الصفحة لا يعرض صفوفًا.
 - Bing Webmaster Tools: Sitemap `Success`، 4 URLs، آخر crawl مسجل 2026-11-02. Crawl stats تعرض 3 صفحات مزحوفة في 2026-11-03 و2 ضمن الفهرس، مع صفر أخطاء DNS/HTTP/robots؛ التقرير لا يحدد الصفحات. تقرير children للرئيسية فارغ؛ performance summary للرئيسية 0 impressions/0 clicks. فحص retainer لا يملك تاريخ اكتشاف/زحف؛ project-pricing اكتُشفت وزُحفت 2026-11-02 في الفحص السابق، والرئيسية زُحفت 2026-11-07.
