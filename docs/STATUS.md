@@ -1,3 +1,6 @@
+## 2026-11-15 — Claude: تحقق مستقل من روابط المصدر وتعذّر الفحص الحي
+- أكدت محليًا عدد روابط `<a href>` في المصدر: الرئيسية 8، المشروع 10، الاشتراك 13، الدليل 12 (تطابق ChatGPT). فحص check-runs لـ`main` (`ba004d6`) لا يُظهر أي فحص نشر لـCloudflare Pages، وجلب النطاق الحي مرفوض (`URL_NOT_ON_ALLOWLIST`)؛ لا دليل على HTML المنشور. فرضية غير مُتحقَّق منها: الروابط الداخلية `./page.html` تُحوَّل 308 إلى المسار بلا امتداد على Cloudflare وقد لا يحتسبها Bing. توثيق فقط؛ لا تغيير كود ولا إعادة إرسال Sitemap.
+
 ## 2026-11-11 — ChatGPT: تدقيق مصدر الروابط ومحاولة فحص Cloudflare الحي
 - GitHub `main` source: homepage 8 anchor links; project-pricing 10; retainer-pricing 13; project guide 12. All four canonical URLs use `ratenest.pages.dev` extensionless paths; no visible `noindex` found.
 - `robots.txt` allows `*` and `OAI-SearchBot`, and declares the correct sitemap. `sitemap.xml` lists all four canonical URLs.
