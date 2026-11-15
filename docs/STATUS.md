@@ -2,13 +2,14 @@
 - تأكدت من هوية اتصال Cloudflare وقرأت مشروع Pages `ratenest`: المصدر GitHub، المستودع `Fadhel-docom/RateNest`، production branch `main`، والنطاق `ratenest.pages.dev`.
 - إعدادات البناء فارغة كما يلائم الموقع الثابت: Framework/command/destination/root directory كلها فارغة. Preview deployments مفعّلة لكل الفروع؛ deployments وproduction deployments مفعّلة.
 - GitHub: PR #118 مدمج في `main` بالالتزام `111ab8e` في 2026-11-15؛ لا PRs مفتوحة في نتيجة البحث. PR #117 مغلق دون دمج، وقد حُمِلت مداخل التوثيق عبر #118.
-- Cloudflare API: أحدث production deployment ظاهر `365f4130` بتاريخ 2026-11-07، للالتزام `bc99fcb`، وحالته success. أحدث Preview ظاهر أيضًا بتاريخ 2026-11-07. لا يظهر deployment أحدث في أول 20 سجلًا رغم تقدم `main` إلى `111ab8e`.
+- Cloudflare API: أحدث production deployment ظاهر `365f4130` بتاريخ 2026-11-07، للالتزام `bc99fcb`، وحالته success. أحدث Preview ظاهر أيضًا بتاريخ 2026-11-07. لا يظهر deployment أحدث في أول 20 سجلًا.
+- مقارنة GitHub بين `bc99fcb` المنشور و`111ab8e` الحالي: `main` متقدم بـ10 commits، وتتضمن الملفات المتغيرة `rate-handoff.mjs` و`rate-handoff.test.mjs` و`tools/browser-checks/rate-handoff.py`، إلى جانب docs. بالتالي Cloudflare production أقدم من إصلاح كود ملاحظة نقل المعدل المدمج في 10 نوفمبر؛ هذا فرق فعلي في التطبيق لا مجرد توثيق.
 - GitHub combined status للالتزام `111ab8e` أعاد statuses فارغة؛ لا أستنتج من ذلك فشل CI.
 - فُتح PR #119 (مفتوح، فرع `docs/cloudflare-api-audit-20261115`) لتسجيل التدقيق؛ لا دمج ولا نشر إنتاجي.
 - أُعيد فحص أحدث 5 deployments فور فتح PR #119 ولم يظهر Preview جديد بعد؛ النتيجة فورية وقد تتأخر أحداث البناء.
 - تعذّر فتح `ratenest.pages.dev` و`robots.txt` و`sitemap.xml` عبر أداة الويب؛ لا يوجد تحقق HTTP/HTML حي أو مقارنة anchors.
 - لم أغيّر إعدادات Cloudflare، ولم أعد الربط، ولم أطلق نشرًا يدويًا، ولم أكتب إلى `main`.
-- المتبقي: تفسير غياب deployments بعد 7 نوفمبر، ثم التحقق من HTML المنشور مقارنة بالمصدر. طلبت من Claude مراجعة سجل build/event/webhook دون تغيير الإعدادات.
+- المتبقي: تفسير سبب عدم نشر تغييرات التطبيق المدمجة في 10 نوفمبر؛ لا نطلق نشرًا يدويًا ولا ندمج PR #119 قبل استيفاء مراجعة CI. ثم التحقق من HTML المنشور مقارنة بالمصدر. طلبت من Claude مراجعة سجل build/event/webhook دون تغيير الإعدادات.
 - التغيير توثيقي فقط؛ لا اختبارات تطبيق مدعاة.
 
 ## 2026-11-15 — Claude: تحقق مستقل من روابط المصدر وتعذّر الفحص الحي
