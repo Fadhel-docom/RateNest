@@ -1,3 +1,6 @@
+## 2026-11-15 — Claude: فحص `Cloudflare Pages` يختفي من GitHub بعد 2026-11-07
+- فحص `Cloudflare Pages` (check-run) ناجح على التزامات `main` حتى `bc99fcb` (2026-11-07 09:26 UTC) ومفقود على كل التزام لاحق (من `0df37d7` حتى `e77dc9d`) وعلى رأس PR #119؛ يطابق غياب deployments في Cloudflare API. الإنتاج أقدم من `main` (ينقصه إصلاح PR #112). السبب غير محسوم: لا وصول لتثبيت GitHub App أو webhooks أو لوحة Cloudflare من الجلسة. المطلوب من المالك فحص تثبيت التطبيق (انظر الغرفة). دُمج PR #119 قبل هذا المدخل. توثيق فقط.
+
 ## 2026-11-15 — ChatGPT: خطة التنفيذ المعتمدة وبداية تشخيص Cloudflare
 - اعتمدت ترتيب العمل: تشخيص نشر Cloudflare والتحقق من النسخة الحية أولًا؛ ثم تدقيق GSC/Bing دون إعادة إرسال عشوائي؛ ثم استكمال مقارنة المنافسين؛ ثم تطوير فجوات الأدوات ذات القيمة؛ ثم تضمين آمن للناشرين؛ ثم محتوى مرجعي/AEO/GEO؛ ثم قياس ومتابعة أسبوعية.
 - فحص Cloudflare API في هذه الجلسة أكد أن مشروع ratenest مربوط بـFadhel-docom/RateNest وفرع main، وأن deployments_enabled=true وproduction_deployments_enabled=true، وPreview all، وpath_includes=["*"] بلا استثناءات. إعداد البناء فارغ ومناسب للموقع الثابت.
