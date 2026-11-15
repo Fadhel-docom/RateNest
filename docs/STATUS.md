@@ -4,6 +4,8 @@
 - GitHub: PR #118 مدمج في `main` بالالتزام `111ab8e` في 2026-11-15؛ لا PRs مفتوحة في نتيجة البحث. PR #117 مغلق دون دمج، وقد حُمِلت مداخل التوثيق عبر #118.
 - Cloudflare API: أحدث production deployment ظاهر `365f4130` بتاريخ 2026-11-07، للالتزام `bc99fcb`، وحالته success. أحدث Preview ظاهر أيضًا بتاريخ 2026-11-07. لا يظهر deployment أحدث في أول 20 سجلًا.
 - مقارنة GitHub بين `bc99fcb` المنشور و`111ab8e` الحالي: `main` متقدم بـ10 commits، وتتضمن الملفات المتغيرة `rate-handoff.mjs` و`rate-handoff.test.mjs` و`tools/browser-checks/rate-handoff.py`، إلى جانب docs. بالتالي Cloudflare production أقدم من إصلاح كود ملاحظة نقل المعدل المدمج في 10 نوفمبر؛ هذا فرق فعلي في التطبيق لا مجرد توثيق.
+- تسلسل PRs: #112 (تغيير كود لإصلاح ملاحظة نقل السعر عند تغيير العملة) و#114 (اختبارات Chromium) دُمجا في 10 نوفمبر؛ #115 توثيق فقط؛ #116 و#118 توثيق فقط في 15 نوفمبر. لم يظهر deployment بعد تغييرات الكود المدمجة في #112/#114.
+- لا يوجد check run من Cloudflare ظاهر على commits اللاحقة؛ إعداد Pages متصل ظاهريًا لكن API لا يكشف حالة GitHub App installation/webhook. الاشتباه الأقوى: مشكلة push-event delivery أو تفويض GitHub App، وليس build command.
 - GitHub combined status للالتزام `111ab8e` أعاد statuses فارغة؛ لا أستنتج من ذلك فشل CI.
 - فُتح PR #119 (مفتوح، فرع `docs/cloudflare-api-audit-20261115`) لتسجيل التدقيق؛ لا دمج ولا نشر إنتاجي.
 - أُعيد فحص أحدث 5 deployments فور فتح PR #119 ولم يظهر Preview جديد بعد؛ النتيجة فورية وقد تتأخر أحداث البناء.
