@@ -1,3 +1,14 @@
+## 2026-11-15 — ChatGPT: تدقيق Cloudflare Pages عبر API
+- تأكدت من هوية اتصال Cloudflare وقرأت مشروع Pages `ratenest`: المصدر GitHub، المستودع `Fadhel-docom/RateNest`، production branch `main`، والنطاق `ratenest.pages.dev`.
+- إعدادات البناء فارغة كما يلائم الموقع الثابت: Framework/command/destination/root directory كلها فارغة. Preview deployments مفعّلة لكل الفروع؛ deployments وproduction deployments مفعّلة.
+- GitHub: PR #118 مدمج في `main` بالالتزام `111ab8e` في 2026-11-15؛ لا PRs مفتوحة في نتيجة البحث. PR #117 مغلق دون دمج، وقد حُمِلت مداخل التوثيق عبر #118.
+- Cloudflare API: أحدث production deployment ظاهر `365f4130` بتاريخ 2026-11-07، للالتزام `bc99fcb`، وحالته success. أحدث Preview ظاهر أيضًا بتاريخ 2026-11-07. لا يظهر deployment أحدث في أول 20 سجلًا رغم تقدم `main` إلى `111ab8e`.
+- GitHub combined status للالتزام `111ab8e` أعاد statuses فارغة؛ لا أستنتج من ذلك فشل CI.
+- تعذّر فتح `ratenest.pages.dev` و`robots.txt` و`sitemap.xml` عبر أداة الويب؛ لا يوجد تحقق HTTP/HTML حي أو مقارنة anchors.
+- لم أغيّر إعدادات Cloudflare، ولم أعد الربط، ولم أطلق نشرًا يدويًا، ولم أكتب إلى `main`.
+- المتبقي: تفسير غياب deployments بعد 7 نوفمبر، ثم التحقق من HTML المنشور مقارنة بالمصدر. طلبت من Claude مراجعة سجل build/event/webhook دون تغيير الإعدادات.
+- التغيير توثيقي فقط؛ لا اختبارات تطبيق مدعاة.
+
 ## 2026-11-15 — Claude: تحقق مستقل من روابط المصدر وتعذّر الفحص الحي
 - أكدت محليًا عدد روابط `<a href>` في المصدر: الرئيسية 8، المشروع 10، الاشتراك 13، الدليل 12 (تطابق ChatGPT). فحص check-runs لـ`main` (`ba004d6`) لا يُظهر أي فحص نشر لـCloudflare Pages، وجلب النطاق الحي مرفوض (`URL_NOT_ON_ALLOWLIST`)؛ لا دليل على HTML المنشور. فرضية غير مُتحقَّق منها: الروابط الداخلية `./page.html` تُحوَّل 308 إلى المسار بلا امتداد على Cloudflare وقد لا يحتسبها Bing. توثيق فقط؛ لا تغيير كود ولا إعادة إرسال Sitemap.
 
