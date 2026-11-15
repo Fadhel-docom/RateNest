@@ -1,3 +1,9 @@
+## 2026-11-15 — ChatGPT: خطة التنفيذ المعتمدة وبداية تشخيص Cloudflare
+- اعتمدت ترتيب العمل: تشخيص نشر Cloudflare والتحقق من النسخة الحية أولًا؛ ثم تدقيق GSC/Bing دون إعادة إرسال عشوائي؛ ثم استكمال مقارنة المنافسين؛ ثم تطوير فجوات الأدوات ذات القيمة؛ ثم تضمين آمن للناشرين؛ ثم محتوى مرجعي/AEO/GEO؛ ثم قياس ومتابعة أسبوعية.
+- فحص Cloudflare API في هذه الجلسة أكد أن مشروع ratenest مربوط بـFadhel-docom/RateNest وفرع main، وأن deployments_enabled=true وproduction_deployments_enabled=true، وPreview all، وpath_includes=["*"] بلا استثناءات. إعداد البناء فارغ ومناسب للموقع الثابت.
+- ما زال أحدث deployment ظاهرًا هو الإنتاج 365f4130 بتاريخ 2026-11-07 للالتزام bc99fcb؛ لا deployment أحدث في أول 20 سجلًا. لا تعرض واجهة API المتاحة سجل webhook delivery أو صلاحيات GitHub App، لذلك السبب الجذري غير محسوم.
+- لم أغير أي إعداد أو أعِد الربط أو أطلق نشرًا يدويًا. لم أتحقق من HTML/HTTP الحي، ولم أعد إرسال sitemap أو طلبات فهرسة. لم تُشغّل اختبارات التطبيق (توثيق فقط).
+- العمل مسجل في فرع PR #119 docs/cloudflare-api-audit-20261115. المتبقي: فحص Claude لتثبيت Cloudflare GitHub App ووصوله إلى RateNest وسجلات الأحداث، ثم مقارنة النسخة الحية بـmain قبل أي تعديل SEO أو نشر.
 ## 2026-11-15 — ChatGPT: تدقيق Cloudflare Pages عبر API
 - تأكدت من هوية اتصال Cloudflare وقرأت مشروع Pages `ratenest`: المصدر GitHub، المستودع `Fadhel-docom/RateNest`، production branch `main`، والنطاق `ratenest.pages.dev`.
 - إعدادات البناء فارغة كما يلائم الموقع الثابت: Framework/command/destination/root directory كلها فارغة. Preview deployments مفعّلة لكل الفروع؛ deployments وproduction deployments مفعّلة.
