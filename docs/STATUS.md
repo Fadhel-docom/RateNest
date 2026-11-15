@@ -1,3 +1,11 @@
+## 2026-11-15 — ChatGPT: Cloudflare production متزامن مع main؛ قراءة GSC/Bing محدثة
+- Cloudflare Pages API: أحدث production deployment d8743e9b-d5f1-48f4-91b5-17df152bb9a6 نجح على commit 773f8b21 (دمج PR #122) بتاريخ 09:59 UTC؛ السابق dc09e580 نجح على 6e6dd1c. مشروع Pages مربوط بالمستودع الصحيح وفرع main، وإعداد البناء فارغ.
+- Google Search Console property صحيحة وsiteOwner. Sitemap ما زالت Pending (آخر إرسال 2026-10-28، errors=0, warnings=0). فحص الرئيسية و/project-pricing أعاد URL is unknown to Google؛ لم تُستهلك حصة بفحص بقية الصفحات.
+- Bing sitemap Success (4 URLs، آخر crawl 2026-11-02). Crawl stats حتى 2026-11-11: صفحتان في الفهرس، بلا DNS/HTTP/robots/crawl errors. تقارير top pages/queries فارغة. URL inspection وchildren فشلا بـThrottleIP.
+- تدقيق المصدر في commit المنشور: anchors 8/10/13/12 للصفحات الأربع؛ canonicals والمسارات بلا امتداد متوافقة؛ robots يسمح بـ* وOAI-SearchBot؛ sitemap تسرد 4 URLs؛ لا meta robots noindex ظاهر.
+- لم يمكن جلب HTML الحي أو قياس HTTP/redirects/headers/anchors من هذه البيئة (DNS/allowlist قبل HTTP). المصدر لا يثبت مخرجات الإنتاج. لا إعادة إرسال sitemap/URLs ولا تغييرات إعدادات.
+- التالي: مقارنة HTML الحي إذا توفرت وسيلة وصول موثوقة؛ ثم إعادة قراءة GSC/Bing بعد ذلك. التغيير توثيقي فقط؛ لم تُشغّل اختبارات التطبيق.
+
 ## 2026-11-15 — Claude: نشر Cloudflare عاد (دليل GitHub check-run)
 - فحص `Cloudflare Pages` ناجح على `6e6dd1c` (deployment `dc09e580`، 09:14 UTC) وعلى رأس PR #121؛ النشر يضم كامل `main` (بما فيه إصلاح PR #112) فلا إعادة نقل لازمة. لم يُتحقق: HTML الحي ولا deployments من Cloudflare API ولا سبب العطل (لم يذكره المالك). التالي: مقارنة الحي بـ`main` ثم قراءة جديدة لـSearch Console/Bing. توثيق فقط.
 
