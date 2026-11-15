@@ -1,3 +1,26 @@
+## 2026-11-15 — ChatGPT: خطة التنفيذ المعتمدة وبداية تشخيص Cloudflare
+- اعتمدت ترتيب العمل: تشخيص نشر Cloudflare والتحقق من النسخة الحية أولًا؛ ثم تدقيق GSC/Bing دون إعادة إرسال عشوائي؛ ثم استكمال مقارنة المنافسين؛ ثم تطوير فجوات الأدوات ذات القيمة؛ ثم تضمين آمن للناشرين؛ ثم محتوى مرجعي/AEO/GEO؛ ثم قياس ومتابعة أسبوعية.
+- فحص Cloudflare API في هذه الجلسة أكد أن مشروع ratenest مربوط بـFadhel-docom/RateNest وفرع main، وأن deployments_enabled=true وproduction_deployments_enabled=true، وPreview all، وpath_includes=["*"] بلا استثناءات. إعداد البناء فارغ ومناسب للموقع الثابت.
+- ما زال أحدث deployment ظاهرًا هو الإنتاج 365f4130 بتاريخ 2026-11-07 للالتزام bc99fcb؛ لا deployment أحدث في أول 20 سجلًا. لا تعرض واجهة API المتاحة سجل webhook delivery أو صلاحيات GitHub App، لذلك السبب الجذري غير محسوم.
+- لم أغير أي إعداد أو أعِد الربط أو أطلق نشرًا يدويًا. لم أتحقق من HTML/HTTP الحي، ولم أعد إرسال sitemap أو طلبات فهرسة. لم تُشغّل اختبارات التطبيق (توثيق فقط).
+- العمل مسجل في فرع PR #119 docs/cloudflare-api-audit-20261115. المتبقي: فحص Claude لتثبيت Cloudflare GitHub App ووصوله إلى RateNest وسجلات الأحداث، ثم مقارنة النسخة الحية بـmain قبل أي تعديل SEO أو نشر.
+## 2026-11-15 — ChatGPT: تدقيق Cloudflare Pages عبر API
+- تأكدت من هوية اتصال Cloudflare وقرأت مشروع Pages `ratenest`: المصدر GitHub، المستودع `Fadhel-docom/RateNest`، production branch `main`، والنطاق `ratenest.pages.dev`.
+- إعدادات البناء فارغة كما يلائم الموقع الثابت: Framework/command/destination/root directory كلها فارغة. Preview deployments مفعّلة لكل الفروع؛ deployments وproduction deployments مفعّلة.
+- GitHub: PR #118 مدمج في `main` بالالتزام `111ab8e` في 2026-11-15؛ لا PRs مفتوحة في نتيجة البحث. PR #117 مغلق دون دمج، وقد حُمِلت مداخل التوثيق عبر #118.
+- Cloudflare API: أحدث production deployment ظاهر `365f4130` بتاريخ 2026-11-07، للالتزام `bc99fcb`، وحالته success. أحدث Preview ظاهر أيضًا بتاريخ 2026-11-07. لا يظهر deployment أحدث في أول 20 سجلًا.
+- مقارنة GitHub بين `bc99fcb` المنشور و`111ab8e` الحالي: `main` متقدم بـ10 commits، وتتضمن الملفات المتغيرة `rate-handoff.mjs` و`rate-handoff.test.mjs` و`tools/browser-checks/rate-handoff.py`، إلى جانب docs. بالتالي Cloudflare production أقدم من إصلاح كود ملاحظة نقل المعدل المدمج في 10 نوفمبر؛ هذا فرق فعلي في التطبيق لا مجرد توثيق.
+- تسلسل PRs: #112 (تغيير كود لإصلاح ملاحظة نقل السعر عند تغيير العملة) و#114 (اختبارات Chromium) دُمجا في 10 نوفمبر؛ #115 توثيق فقط؛ #116 و#118 توثيق فقط في 15 نوفمبر. لم يظهر deployment بعد تغييرات الكود المدمجة في #112/#114.
+- لا يوجد check run من Cloudflare ظاهر على commits اللاحقة؛ إعداد Pages متصل ظاهريًا لكن API لا يكشف حالة GitHub App installation/webhook. الاشتباه الأقوى: مشكلة push-event delivery أو تفويض GitHub App، وليس build command.
+- GitHub combined status للالتزام `111ab8e` أعاد statuses فارغة؛ لا أستنتج من ذلك فشل CI.
+- فُتح PR #119 (مفتوح، فرع `docs/cloudflare-api-audit-20261115`) لتسجيل التدقيق؛ لا دمج ولا نشر إنتاجي.
+- أُعيد فحص أحدث 5 deployments فور فتح PR #119 ولم يظهر Preview جديد بعد؛ النتيجة فورية وقد تتأخر أحداث البناء.
+- تعذّر فتح `ratenest.pages.dev` و`robots.txt` و`sitemap.xml` عبر أداة الويب؛ لا يوجد تحقق HTTP/HTML حي أو مقارنة anchors.
+- لم أغيّر إعدادات Cloudflare، ولم أعد الربط، ولم أطلق نشرًا يدويًا، ولم أكتب إلى `main`.
+- المتبقي: تفسير سبب عدم نشر تغييرات التطبيق المدمجة في 10 نوفمبر؛ لا نطلق نشرًا يدويًا ولا ندمج PR #119 قبل استيفاء مراجعة CI. ثم التحقق من HTML المنشور مقارنة بالمصدر. طلبت من Claude مراجعة سجل build/event/webhook دون تغيير الإعدادات.
+- حُوّلت أتمتة فهرسة RateNest من يومية إلى أسبوعية (الأربعاء 09:00 بتوقيت تونس) بناءً على توجيه المالك؛ أتمتتا DevMate كانتا متوقفتين أصلًا.
+- التغيير التوثيقي فقط؛ لا اختبارات تطبيق مدعاة.
+
 ## 2026-11-15 — Claude: تحقق مستقل من روابط المصدر وتعذّر الفحص الحي
 - أكدت محليًا عدد روابط `<a href>` في المصدر: الرئيسية 8، المشروع 10، الاشتراك 13، الدليل 12 (تطابق ChatGPT). فحص check-runs لـ`main` (`ba004d6`) لا يُظهر أي فحص نشر لـCloudflare Pages، وجلب النطاق الحي مرفوض (`URL_NOT_ON_ALLOWLIST`)؛ لا دليل على HTML المنشور. فرضية غير مُتحقَّق منها: الروابط الداخلية `./page.html` تُحوَّل 308 إلى المسار بلا امتداد على Cloudflare وقد لا يحتسبها Bing. توثيق فقط؛ لا تغيير كود ولا إعادة إرسال Sitemap.
 
