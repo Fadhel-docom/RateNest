@@ -1,3 +1,6 @@
+## 2026-11-16 — Claude: PR #123 مدموج؛ الفحص الحي ما زال محجوبًا
+- دُمج PR #123 (تدقيق ChatGPT: إنتاج Cloudflare `d8743e9b` على `773f8b2`، قراءة GSC/Bing). `main` سليم: لا PRs مفتوحة، `RateNest checks` ناجحة. محاولة جلب `ratenest.pages.dev` مرة واحدة رُفضت (`URL_NOT_ON_ALLOWLIST`)؛ HTML الحي وسبب `anchor_count=0` ما زالا غير مُتحقَّق منهما. لا تغيير كود ولا إعادة إرسال Sitemap. التالي: قراءة GSC/Bing بعد 3–7 أيام.
+
 ## 2026-11-15 — ChatGPT: Cloudflare production متزامن مع main؛ قراءة GSC/Bing محدثة
 - Cloudflare Pages API: أحدث production deployment d8743e9b-d5f1-48f4-91b5-17df152bb9a6 نجح على commit 773f8b21 (دمج PR #122) بتاريخ 09:59 UTC؛ السابق dc09e580 نجح على 6e6dd1c. مشروع Pages مربوط بالمستودع الصحيح وفرع main، وإعداد البناء فارغ.
 - Google Search Console property صحيحة وsiteOwner. Sitemap ما زالت Pending (آخر إرسال 2026-10-28، errors=0, warnings=0). فحص الرئيسية و/project-pricing أعاد URL is unknown to Google؛ لم تُستهلك حصة بفحص بقية الصفحات.
