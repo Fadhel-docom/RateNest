@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102c26">
+  <meta name="description" content="Enter your per-word rate, word count and total hours to see what a writing job really pays per hour, and the per-word rate or hours you need to reach your target.">
+  <title>Per-Word Rate to Hourly Calculator for Writers — RateNest</title>
+  <link rel="canonical" href="https://ratenest.pages.dev/per-word-rate-calculator">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="RateNest">
+  <meta property="og:title" content="Per-Word Rate to Hourly Calculator for Writers — RateNest">
+  <meta property="og:description" content="Turn a per-word rate, word count and total hours into your real hourly rate, and see the per-word rate you need to hit your target.">
+  <meta property="og:url" content="https://ratenest.pages.dev/per-word-rate-calculator">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "RateNest Per-Word Rate to Hourly Calculator",
+    "url": "https://ratenest.pages.dev/per-word-rate-calculator",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "Any",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "description": "A free client-side calculator that converts a per-word rate, word count and total hours into an effective hourly rate, and shows the per-word rate needed to reach a target hourly rate."
+  }
+  </script>
+  <script type="module" src="./per-word-rate.mjs"></script>
+</head>
+<body>
+  <a class="skip-link" href="#per-word-form">Skip to the calculator</a>
+  <header class="site-header">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a>
+    <nav aria-label="Pricing tools"><a href="./">Hourly rate calculator</a><a href="./project-pricing.html">Project quote calculator</a><a href="./retainer-pricing.html">Retainer calculator</a><a href="./how-to-price-a-freelance-project.html">Pricing guide</a><span class="header-note">Free tools for freelancers</span></nav>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">FOR FREELANCE WRITERS</p>
+      <h1>What does your per-word rate <br><span>really pay per hour?</span></h1>
+      <p class="hero-copy">A per-word price is easy to quote, but the hours behind it decide whether it is worth taking. Enter the rate, the word count and every hour the piece takes to see your real hourly rate.</p>
+    </section>
+    <noscript><p class="noscript-note">JavaScript is required to calculate a rate. Your numbers are processed locally in your browser.</p></noscript>
+    <section class="calculator-layout" aria-label="Per-word rate to hourly rate calculator">
+      <form id="per-word-form" class="calculator-card" novalidate aria-labelledby="form-title">
+        <div class="section-heading">
+          <div><p class="eyebrow">THE PIECE</p><h2 id="form-title">Describe the job</h2></div>
+          <label class="currency-control" for="currency"><span>Currency</span>
+            <select id="currency" name="currency">
+              <option value="USD">USD</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="TND">TND</option><option value="CAD">CAD</option><option value="AUD">AUD</option>
+            </select>
+          </label>
+        </div>
+        <div class="field">
+          <label for="ratePerWord">Rate per word <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="ratePerWord-help">What the client pays for each word. The starting figure is only an example, not a market rate; enter your own.</p>
+          <input id="ratePerWord" name="ratePerWord" type="number" min="0" max="1000000" step="any" value="0.10" required inputmode="decimal" aria-describedby="ratePerWord-help ratePerWord-error">
+          <p class="field-error" id="ratePerWord-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="words">Paid word count <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="words-help">The number of words you are paid for. Must be greater than zero.</p>
+          <input id="words" name="words" type="number" min="1" max="10000000" step="any" value="1500" required inputmode="decimal" aria-describedby="words-help words-error">
+          <p class="field-error" id="words-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="hours">Total hours for the piece <span class="required" aria-hidden="true">*</span></label>
+          <p class="field-help" id="hours-help">Count everything: research, interviews, outline, drafting, editing, fact-checking, client revisions and messages about the piece. Must be greater than zero.</p>
+          <input id="hours" name="hours" type="number" min="0.01" max="100000" step="any" value="6" required inputmode="decimal" aria-describedby="hours-help hours-error">
+          <p class="field-error" id="hours-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="feePercent">Platform or payment fee (%) <span class="field-help">(optional)</span></label>
+          <p class="field-help" id="feePercent-help">Optional. If a platform or payment service keeps a share of the fee, enter that percentage yourself; nothing is assumed. Starts at 0%; at most 50%.</p>
+          <input id="feePercent" name="feePercent" type="number" min="0" max="50" step="any" value="0" inputmode="decimal" aria-describedby="feePercent-help feePercent-error">
+          <p class="field-error" id="feePercent-error" hidden></p>
+        </div>
+        <div class="field">
+          <label for="targetHourly">Target hourly rate <span class="field-help">(optional)</span></label>
+          <p class="field-help" id="targetHourly-help">Optional. Enter the hourly rate you want to earn to see the per-word rate, writing speed or hours that would reach it. Blank means no target. Calculate a sustainable one with the <a href="./">hourly rate calculator</a>.</p>
+          <input id="targetHourly" name="targetHourly" type="number" min="0.01" max="1000000000" step="any" value="" inputmode="decimal" aria-describedby="targetHourly-help targetHourly-error">
+          <p class="field-error" id="targetHourly-error" hidden></p>
+        </div>
+        <button class="calculate-button" type="submit">Calculate hourly rate <span aria-hidden="true">→</span></button>
+        <p class="privacy-note">Your numbers stay in your browser.</p>
+      </form>
+      <section class="result-card" aria-labelledby="result-heading">
+        <h2 id="result-heading" class="sr-only">What this piece pays</h2>
+        <div class="result-top"><span class="result-icon" aria-hidden="true">↗</span><span class="result-label">THIS PIECE PAYS</span></div>
+        <p id="effective-hourly" class="rate-result">$25.00/hr</p>
+        <p id="piece-summary" class="result-summary">Based on 1,500 words at $0.10 per word, finished in 6 hours.</p>
+        <div class="result-divider"></div>
+        <div class="result-stat"><span>Fee for the piece</span><strong id="gross-fee">$150.00</strong></div>
+        <div class="result-stat"><span>Platform or payment fee</span><strong id="fee-amount">−$0.00</strong></div>
+        <div class="result-stat"><span>You keep</span><strong id="net-fee">$150.00</strong></div>
+        <div class="result-stat"><span>Finished words per hour</span><strong id="words-per-hour">250</strong></div>
+        <div id="target-rows" hidden>
+          <div class="result-stat"><span>Per-word rate for your target</span><strong id="required-rate">—</strong></div>
+          <div class="result-stat"><span>Words per hour needed at this rate</span><strong id="words-needed">—</strong></div>
+          <div class="result-stat"><span>Hours that fit your target at this fee</span><strong id="hours-available">—</strong></div>
+          <p id="target-note" class="result-summary"></p>
+        </div>
+        <div class="result-tip"><span aria-hidden="true">✦</span><p><strong>Remember:</strong> This is a planning estimate based on the hours you enter, so it is only as accurate as your time count. Taxes are excluded, and no platform fee is applied unless you enter one. It does not tell you what clients typically pay.</p></div>
+        <button id="copy-summary" class="copy-button" type="button" disabled>Copy summary</button>
+        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+      </section>
+    </section>
+    <section class="explainer">
+      <p class="eyebrow">A TRANSPARENT FORMULA</p>
+      <h2>How the hourly rate is worked out</h2>
+      <div class="formula"><span>Rate per word × words</span><span class="formula-line" aria-hidden="true">÷</span><span>Total hours</span></div>
+      <ol class="steps">
+        <li><strong>Fee for the piece</strong> = rate per word × paid word count.</li>
+        <li><strong>Platform or payment fee</strong> = fee for the piece × the percentage you enter. It is zero unless you enter one.</li>
+        <li><strong>You keep</strong> = fee for the piece − platform or payment fee.</li>
+        <li><strong>Hourly rate</strong> = what you keep ÷ total hours for the piece.</li>
+        <li><strong>Finished words per hour</strong> = paid word count ÷ total hours.</li>
+        <li><strong>Per-word rate for your target</strong> (optional) = target hourly rate × total hours ÷ (word count × share you keep).</li>
+        <li><strong>Words per hour needed</strong> (optional) = target hourly rate ÷ (rate per word × share you keep).</li>
+        <li><strong>Hours that fit your target</strong> (optional) = what you keep ÷ target hourly rate.</li>
+      </ol>
+      <h3>Worked example: a 1,500-word article</h3>
+      <p>Suppose a client pays $0.10 per word for 1,500 words, and the piece takes 6 hours from first research to final revision. You want to earn $50 per hour.</p>
+      <ul class="steps">
+        <li><strong>Fee for the piece:</strong> 1,500 × $0.10 = <strong>$150</strong>.</li>
+        <li><strong>Hourly rate:</strong> $150 ÷ 6 = <strong>$25 per hour</strong>.</li>
+        <li><strong>Writing speed:</strong> 1,500 ÷ 6 = <strong>250 finished words per hour</strong>.</li>
+        <li><strong>Per-word rate for a $50 target:</strong> $50 × 6 ÷ 1,500 = <strong>$0.20 per word</strong>.</li>
+        <li><strong>Speed needed at $0.10 per word:</strong> $50 ÷ $0.10 = <strong>500 words per hour</strong>.</li>
+        <li><strong>Hours that fit at $150:</strong> $150 ÷ $50 = <strong>3 hours</strong>.</li>
+        <li><strong>If a platform kept 10%:</strong> you keep $135, so the hourly rate is $135 ÷ 6 = <strong>$22.50 per hour</strong>.</li>
+      </ul>
+      <p class="fine-print">This example is illustrative, not a recommended rate or a market price. It excludes taxes and any unpaid time spent finding the work.</p>
+      <p class="fine-print">This tool does not estimate taxes, market rates or demand, and it cannot tell whether a client will accept a price. Its result is only as accurate as the hours you enter.</p>
+      <p><a href="./">Need a target hourly rate? Calculate a sustainable one with the hourly rate calculator.</a></p>
+    </section>
+    <section class="explainer">
+      <p class="eyebrow">COUNT THE WHOLE JOB</p>
+      <h2>Which hours belong in the total?</h2>
+      <p>Writers often count only the drafting time, which makes a per-word rate look better than it is. Add every hour the piece takes:</p>
+      <ul class="steps">
+        <li><strong>Research and reading:</strong> sources, background and checking facts.</li>
+        <li><strong>Interviews:</strong> scheduling, the conversations themselves and transcribing or reviewing notes.</li>
+        <li><strong>Drafting and editing:</strong> outline, first draft, your own edits and a final read.</li>
+        <li><strong>Client rounds:</strong> revision requests, calls and messages about the piece.</li>
+        <li><strong>Admin you can attribute to the job:</strong> sending the invoice, and chasing payment if you want your rate to cover it.</li>
+      </ul>
+      <p class="fine-print">Pitching and finding clients are real work too, but they are hard to attribute to one piece. If you want your rate to cover them, add a share of that time yourself rather than assuming one.</p>
+    </section>
+    <section class="explainer" aria-labelledby="model-fit-heading">
+      <p class="eyebrow">CHOOSE THE RIGHT PRICING MODEL</p>
+      <h2 id="model-fit-heading">When does a per-word rate fit?</h2>
+      <p>A per-word rate is simple for the client to compare, but it prices length, not effort. Check the hourly result above before accepting it, especially on research-heavy or interview-heavy work.</p>
+      <ul class="steps">
+        <li><strong>A per-word rate fits</strong> when the piece is predictable: you know the length and the effort per word is fairly steady.</li>
+        <li><strong>A flat project fee fits better</strong> when the work is difficult to measure in words, such as interviews, heavy research or several rounds of revision. Use the <a href="./project-pricing.html">project quote calculator</a> and the <a href="./how-to-price-a-freelance-project.html">project pricing guide</a> to scope it.</li>
+        <li><strong>A monthly retainer fits</strong> when a client needs regular content over time. See the <a href="./retainer-pricing.html">retainer calculator</a>.</li>
+      </ul>
+    </section>
+    <section class="explainer faq" aria-labelledby="faq-heading">
+      <h2 id="faq-heading">Common questions</h2>
+      <details><summary>What is a good per-word rate?</summary><p>This tool does not know market rates, and rates vary widely by topic, publication, experience and country. A more useful test is your own: does the piece pay at least the hourly rate you need after counting every hour? Enter a target hourly rate to see the per-word rate that would reach it.</p></details>
+      <details><summary>The client offers a flat fee instead of a per-word rate. Can I still use this?</summary><p>Yes. Divide the flat fee by the number of words to get the equivalent per-word rate, enter it here, and add every hour you expect the piece to take. For example, $300 for 1,500 words is $0.20 per word.</p></details>
+      <details><summary>Why is there a fee field?</summary><p>Some platforms and payment services keep a share of what the client pays. If that applies to you, enter the percentage yourself. It starts at 0% because RateNest does not assume any fee rate for you.</p></details>
+      <details><summary>Does the result include tax?</summary><p>No. No tax is calculated or assumed. Rules vary by location, so confirm what applies to you.</p></details>
+      <details><summary>Are my inputs saved or sent anywhere?</summary><p>No. Calculations run in your browser. RateNest does not send or store the values you enter.</p></details>
+    </section>
+  </main>
+  <footer><a class="brand footer-brand" href="./"><span class="brand-mark" aria-hidden="true">R</span> RateNest</a><span>Price smarter. Work better.</span><span>Free pricing tools for freelancers.</span></footer>
+</body>
+</html>
