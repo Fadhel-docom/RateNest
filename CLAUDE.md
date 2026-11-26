@@ -33,12 +33,13 @@ The owner supplied `https://ratenest.pages.dev` and reports that it works. This 
 - `node scripts/check-site.mjs` — static checks (metadata, ids/labels, JSON-LD, static default numbers equal the calculator's output, no built-in fee).
 - Browser checks: `tools/browser-checks/` (local only, needs Playwright; see its README).
 - Local preview must use HTTP (ES modules fail on `file://`): `python3 -m http.server 8000`.
-- Pages workflow publishes only: `index.html project-pricing.html retainer-pricing.html how-to-price-a-freelance-project.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs retainer-pricing.mjs retainer-pricing-calculator.mjs sitemap.xml robots.txt` (see `.github/workflows/pages.yml`; `scripts/check-site.mjs` guards this list). Add new public files to its staging step, or they will not be deployed.
+- Pages workflow publishes only: `index.html project-pricing.html retainer-pricing.html per-word-rate-calculator.html how-to-price-a-freelance-project.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs retainer-pricing.mjs retainer-pricing-calculator.mjs per-word-rate.mjs per-word-rate-calculator.mjs rate-handoff.mjs sitemap.xml robots.txt` (see `.github/workflows/pages.yml`; `scripts/check-site.mjs` guards this list). Add new public files to its staging step, or they will not be deployed.
 
 ## Architecture
 - Project pricing guide: `how-to-price-a-freelance-project.html` is static content (no external scripts or data collection), linked from the homepage and pricing calculators. Its canonical, Open Graph URL and sitemap entry use the extensionless Cloudflare Pages path `/how-to-price-a-freelance-project`; internal links use the `.html` file path.
 `calculator.mjs` pure logic (no DOM) · `app.mjs` UI wiring · `index.html` includes static default numbers for no-JS/SEO that must match the logic · `styles.css` · tests beside the code.
 Phase 4 (retainer): `retainer-pricing-calculator.mjs` (pure logic) · `retainer-pricing.mjs` (UI wiring) · `retainer-pricing.html` (static defaults must match the logic; the discount input must default to 0, guarded by `check-site.mjs`).
+Per-word rate (writers, 2026-11-26): `per-word-rate-calculator.mjs` (pure logic) · `per-word-rate.mjs` (UI wiring) · `per-word-rate-calculator.html` (static defaults must match the logic; fee defaults to 0 and the target hourly rate starts blank, guarded by `check-site.mjs`). Canonical/sitemap use the extensionless `/per-word-rate-calculator`. Value review: `docs/per-word-rate-value-review-2026-11-26.md`.
 Phase 3: `project-pricing-calculator.mjs` (pure logic) · `project-pricing.mjs` (UI wiring) · `project-pricing.html` (static defaults must match the logic; the buffer input must default to 0, guarded by `check-site.mjs`).
 
 ## Environment quirks learned (Claude Code cloud sessions)

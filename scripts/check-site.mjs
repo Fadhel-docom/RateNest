@@ -4,11 +4,13 @@ import { readFileSync, existsSync } from "node:fs";
 import { calculateHourlyRate, billableScenarios, rateEquivalents, formatCurrency, formatNumber } from "../calculator.mjs";
 import { calculateProjectQuote } from "../project-pricing-calculator.mjs";
 import { calculateRetainer } from "../retainer-pricing-calculator.mjs";
+import { calculatePerWordRate } from "../per-word-rate-calculator.mjs";
 
 const html = readFileSync(new URL("../index.html", import.meta.url), "utf8");
 const projectHtml = readFileSync(new URL("../project-pricing.html", import.meta.url), "utf8");
 const projectCss = readFileSync(new URL("../styles.css", import.meta.url), "utf8");
 const retainerHtml = readFileSync(new URL("../retainer-pricing.html", import.meta.url), "utf8");
+const perWordHtml = readFileSync(new URL("../per-word-rate-calculator.html", import.meta.url), "utf8");
 const guideHtml = readFileSync(new URL("../how-to-price-a-freelance-project.html", import.meta.url), "utf8");
 const projectScript = readFileSync(new URL("../project-pricing.mjs", import.meta.url), "utf8");
 const retainerScript = readFileSync(new URL("../retainer-pricing.mjs", import.meta.url), "utf8");
@@ -79,7 +81,7 @@ const projectActualScenario = calculateProjectQuote({ estimatedHours: 20, hourly
 check("project actual-hours input is optional, blank by default, and linked to its error/help text", /<input id="actualHours"[^>]*\svalue=""/.test(projectHtml) && !/<input id="actualHours"[^>]*\srequired/.test(projectHtml) && projectHtml.includes('id="actual-effective-rate">—<') && projectHtml.includes('aria-describedby="actualHours-help actualHours-error"'));
 check("static project actual-hours example output is not assumed", projectActualScenario.actualUsage.effectiveHourlyRate === 45 && projectActualScenario.actualUsage.overEstimate && projectActualScenario.quote === 1350);
 check("project page explains the actual-hours rate and its expense limitation", projectHtml.includes("the unchanged fixed quote ÷ the hours you actually worked") && projectHtml.includes("includes direct expenses; it is not profit or take-home pay"));
-check("Pages workflow stages all public pages and calculator modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html retainer-pricing.html how-to-price-a-freelance-project.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs retainer-pricing.mjs retainer-pricing-calculator.mjs rate-handoff.mjs sitemap.xml robots.txt _site/"));
+check("Pages workflow stages all public pages and calculator modules", readFileSync(new URL("../.github/workflows/pages.yml", import.meta.url), "utf8").includes("cp index.html project-pricing.html retainer-pricing.html per-word-rate-calculator.html how-to-price-a-freelance-project.html styles.css app.mjs calculator.mjs project-pricing.mjs project-pricing-calculator.mjs retainer-pricing.mjs retainer-pricing-calculator.mjs per-word-rate.mjs per-word-rate-calculator.mjs rate-handoff.mjs sitemap.xml robots.txt _site/"));
 
 check("retainer page has a descriptive title", /<title>Freelance Retainer Calculator — RateNest<\/title>/.test(retainerHtml));
 check("retainer page has the Cloudflare canonical and Open Graph URL", /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/retainer-pricing">/.test(retainerHtml) && retainerHtml.includes('<meta property="og:url" content="https://ratenest.pages.dev/retainer-pricing">'));
@@ -175,6 +177,26 @@ check("canonical, Open Graph, JSON-LD and sitemap URLs on the primary host are e
 check("sitemap lists the retainer page", sitemap.includes("<loc>https://ratenest.pages.dev/retainer-pricing</loc>"));
 check("sitemap lists the freelance project pricing guide", sitemap.includes("<loc>https://ratenest.pages.dev/how-to-price-a-freelance-project</loc>"));
 check("sitemap no longer advertises GitHub Pages URLs", !sitemap.includes("fadhel-docom.github.io"));
+
+// --- Per-word rate calculator (writers) ---
+const perWordDefault = calculatePerWordRate({ ratePerWord: 0.1, words: 1500, hours: 6 });
+const perWordExample = calculatePerWordRate({ ratePerWord: 0.1, words: 1500, hours: 6, targetHourly: 50 });
+const perWordFeeExample = calculatePerWordRate({ ratePerWord: 0.1, words: 1500, hours: 6, feePercent: 10 });
+const perWordIds = [...perWordHtml.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+check("per-word page has a descriptive title and extensionless canonical and Open Graph URL", /<title>Per-Word Rate to Hourly Calculator for Writers — RateNest<\/title>/.test(perWordHtml) && /<link rel="canonical" href="https:\/\/ratenest\.pages\.dev\/per-word-rate-calculator">/.test(perWordHtml) && perWordHtml.includes('<meta property="og:url" content="https://ratenest.pages.dev/per-word-rate-calculator">'));
+check("per-word page has exactly one h1 and a calculator form", (perWordHtml.match(/<h1[\s>]/gi) ?? []).length === 1 && /<form[^>]*id="per-word-form"/i.test(perWordHtml));
+check("per-word page element ids are unique and ARIA references exist", new Set(perWordIds).size === perWordIds.length && [...perWordHtml.matchAll(/aria-(?:describedby|labelledby)="([^"]+)"/g)].flatMap((m) => m[1].split(/\s+/)).every((id) => perWordIds.includes(id)));
+check("per-word page inputs/selects have labels", [...perWordHtml.matchAll(/<(?:input|select)[^>]*\sid="([^"]+)"/g)].map((m) => m[1]).every((id) => new RegExp(`<label[^>]*for="${id}"`).test(perWordHtml)));
+check("per-word page local assets and internal links exist", [...perWordHtml.matchAll(/(?:src|href)="(\.\/[^"#]+)"/g)].map((m) => m[1]).every((ref) => existsSync(new URL(`../${ref.slice(2)}`, import.meta.url))));
+check("per-word page is linked from the homepage and the other pages", [html, projectHtml, retainerHtml, guideHtml].every((page) => page.includes('href="./per-word-rate-calculator.html"')));
+check("sitemap lists the per-word rate page", sitemap.includes("<loc>https://ratenest.pages.dev/per-word-rate-calculator</loc>"));
+check("per-word page has no external scripts or stylesheets", ![...perWordHtml.matchAll(/<(?:script|link)[^>]*(?:src|href)="(https?:)?\/\/[^"]*"/gi)].some((m) => !/rel="canonical"/i.test(m[0])));
+check("per-word page canonical, Open Graph and JSON-LD URLs are extensionless", !/https:\/\/ratenest\.pages\.dev\/[^"<\s]*\.html/.test(perWordHtml));
+check("static per-word default matches calculation", Math.abs(perWordDefault.effectiveHourlyRate - 25) < 1e-9 && perWordDefault.wordsPerHour === 250 && perWordHtml.includes('id="effective-hourly" class="rate-result">$25.00/hr<') && perWordHtml.includes('id="gross-fee">$150.00<') && perWordHtml.includes('id="net-fee">$150.00<') && perWordHtml.includes('id="words-per-hour">250<'));
+check("per-word worked example matches calculator formulas and is explained on page", Math.abs(perWordExample.target.requiredRatePerWord - 0.2) < 1e-9 && Math.abs(perWordExample.target.wordsPerHourNeeded - 500) < 1e-9 && Math.abs(perWordExample.target.hoursAvailable - 3) < 1e-9 && Math.abs(perWordFeeExample.effectiveHourlyRate - 22.5) < 1e-9 && perWordHtml.includes("$0.20 per word") && perWordHtml.includes("500 words per hour") && perWordHtml.includes("3 hours") && perWordHtml.includes("$22.50 per hour"));
+check("per-word fee input defaults to 0 and target input starts blank (no assumed fee or goal)", /<input id="feePercent"[^>]*\svalue="0"/.test(perWordHtml) && /<input id="targetHourly"[^>]*\svalue=""/.test(perWordHtml) && !/<input id="targetHourly"[^>]*\srequired/.test(perWordHtml) && perWordDefault.target === null);
+check("per-word page labels its starting rate as an example and not a market rate and states what the tool does not know", perWordHtml.includes("only an example, not a market rate") && perWordHtml.includes("does not estimate taxes, market rates or demand"));
+check("per-word page routes to project, retainer and hourly pricing when per-word pricing does not fit", perWordHtml.includes('id="model-fit-heading"') && perWordHtml.includes('href="./project-pricing.html"') && perWordHtml.includes('href="./retainer-pricing.html"') && perWordHtml.includes('href="./how-to-price-a-freelance-project.html"'));
 
 if (failures.length) {
   console.error(`\n${failures.length} check(s) failed.`);
